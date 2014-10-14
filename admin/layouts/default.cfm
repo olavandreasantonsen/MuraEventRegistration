@@ -176,8 +176,10 @@
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=users.default" class="active">Manage Users</a></li>
 									</ul>
 								</li>
-							</cfif>
-							<cfif Variables.EventCoordinatorRole EQ "true" and Variables.EventPresenterRole EQ "false">
+								<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=sysadmin.default" class="active">System Administration</a>
+
+								</li>
+							<cfelseif Variables.EventCoordinatorRole EQ "true" and Variables.EventPresenterRole EQ "false">
 								<li><a href="" class="active">Event Administration</a>
 									<ul>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:caterers.default" class="active">Manage Catering</a></li>

@@ -12,11 +12,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<cfset Session.FormData = #StructNew()#>
 	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
 </cflock>
-<cfscript>
-	timeConfig = structNew();
-	timeConfig['show24Hours'] = false;
-	timeConfig['showSeconds'] = false;
-</cfscript>
 <cfoutput>
 	<script>
 		$(function() {

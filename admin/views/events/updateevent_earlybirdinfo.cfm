@@ -12,20 +12,20 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<cfset Session.FormData = #StructNew()#>
 	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
 </cflock>
-<cfscript>
-	timeConfig = structNew();
-	timeConfig['show24Hours'] = false;
-	timeConfig['showSeconds'] = false;
-</cfscript>
 <cfoutput>
+	<script>
+		$(function() {
+			$("##EarlyBird_RegistrationDeadline").datepicker();
+		});
+	</script>
 	<h2>Updating Workshop/Event: #Session.UserSuppliedInfo.ShortTitle#</h2>
 	<p class="alert-box notice">Please make changes to the information listed below so this event displays accurate information.</p>
 	<hr>
 	<uForm:form action="" method="Post" id="UpdateEvent" errors="#Session.FormErrors#" errorMessagePlacement="both"
 		commonassetsPath="/properties/uniForm/"
 		showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
-		cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&compactDisplay=false" 
-		submitValue="Update Event" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
+		cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&compactDisplay=false"
+		submitValue="Update Event" loadValidation="true" loadMaskUI="true" loadDateUI="false" loadTimeUI="false">
 		<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
 		<input type="hidden" name="formSubmit" value="true">
 		<input type="hidden" name="PerformAction" value="UpdateEvent">
@@ -58,7 +58,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<uform:field label="NonMember Pricing" name="EarlyBird_NonMemberCost" isRequired="true" type="text" Value="#NumberFormat(Session.UserSuppliedInfo.EarlyBird_NonMemberCost, '9999.99')#" hint="The Early Bird Pricing for NonMember School Districts" />
 			<cfelse>
 				<uform:field label="NonMember Pricing" name="EarlyBird_NonMemberCost" isRequired="true" type="text" Value="#NumberFormat('100.00', '9999.99')#" hint="The Early Bird Pricing for NonMember School Districts" />
-			</cfif>			
+			</cfif>
 		</uForm:fieldset>
 	</uForm:form>
 </cfoutput>

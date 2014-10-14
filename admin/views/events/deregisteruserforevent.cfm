@@ -22,8 +22,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 </cfquery>
 
 <cfquery name="GetRegisteredUsersForEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-	SELECT tusers.Fname, tusers.Lname, eRegistrations.UserID
-	FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.UserID
+	SELECT tusers.Fname, tusers.Lname, eRegistrations.User_ID
+	FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.User_ID
 	WHERE eRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 		eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 	ORDER BY tusers.Lname ASC, tusers.Fname ASC
@@ -66,13 +66,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<cfset CurrentModRow = #GetRegisteredUsersForEvent.CurrentRow# MOD 4>
 									<cfswitch expression="#Variables.CurrentModRow#">
 										<cfcase value="1">
-											<tr width="25%"><td width="25%"><cfoutput><input type="CheckBox" Name="RemoveParticipants" Value="#GetRegisteredUsersForEvent.UserID#">&nbsp;&nbsp;#GetRegisteredUsersForEvent.Lname#, #GetRegisteredUsersForEvent.Fname#</cfoutput></td>
+											<tr width="25%"><td width="25%"><cfoutput><input type="CheckBox" Name="RemoveParticipants" Value="#GetRegisteredUsersForEvent.User_ID#">&nbsp;&nbsp;#GetRegisteredUsersForEvent.Lname#, #GetRegisteredUsersForEvent.Fname#</cfoutput></td>
 										</cfcase>
 										<cfcase value="0">
-											<td width="25%"><cfoutput><input type="CheckBox" Name="RemoveParticipants" Value="#GetRegisteredUsersForEvent.UserID#">&nbsp;&nbsp;#GetRegisteredUsersForEvent.Lname#, #GetRegisteredUsersForEvent.Fname#</cfoutput></td></tr>
+											<td width="25%"><cfoutput><input type="CheckBox" Name="RemoveParticipants" Value="#GetRegisteredUsersForEvent.User_ID#">&nbsp;&nbsp;#GetRegisteredUsersForEvent.Lname#, #GetRegisteredUsersForEvent.Fname#</cfoutput></td></tr>
 										</cfcase>
 										<cfdefaultcase>
-											<td width="25%"><cfoutput><input type="CheckBox" Name="RemoveParticipants" Value="#GetRegisteredUsersForEvent.UserID#">&nbsp;&nbsp;#GetRegisteredUsersForEvent.Lname#, #GetRegisteredUsersForEvent.Fname#</cfoutput></td>
+											<td width="25%"><cfoutput><input type="CheckBox" Name="RemoveParticipants" Value="#GetRegisteredUsersForEvent.User_ID#">&nbsp;&nbsp;#GetRegisteredUsersForEvent.Lname#, #GetRegisteredUsersForEvent.Fname#</cfoutput></td>
 										</cfdefaultcase>
 									</cfswitch>
 									</cfloop>

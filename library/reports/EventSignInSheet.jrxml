@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-10-03T14:08:10 -->
+<!-- 2014-10-14T09:25:47 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="getRegisteredParticipants" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="10601a87-fe87-435b-bb5c-dcfb6a66fa53">
 	<style name="Title" fontName="Serif" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -37,6 +37,7 @@
 	<field name="EventDateFormat" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="NIESCLogoPath" class="java.lang.String"/>
 	<group name="Group1">
 		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/15)]]></groupExpression>
 		<groupHeader>
@@ -67,7 +68,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="160" splitType="Stretch">
+		<band height="174" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<staticText>
 				<reportElement style="Title" x="120" y="0" width="435" height="30" uuid="2e920793-6a25-4289-97e3-7b92a44314c6"/>
@@ -91,15 +92,16 @@
 				<textFieldExpression><![CDATA[$F{ShortTitle}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="3" y="130" width="552" height="20" uuid="7326ccc2-f03a-43eb-b76e-e92a3012189d"/>
+				<reportElement x="3" y="130" width="552" height="40" uuid="7326ccc2-f03a-43eb-b76e-e92a3012189d"/>
 				<textElement textAlignment="Center">
-					<font fontName="Serif" size="12"/>
+					<font fontName="Serif" size="10"/>
 				</textElement>
-				<text><![CDATA[Please check off the Participant's Name when they have signed in to attend this event.]]></text>
+				<text><![CDATA[Please check off the Participant's Name when they have signed in to attend this event.
+If participants need to make changes to Name, Email they must update their account on website.]]></text>
 			</staticText>
 			<image evaluationTime="Report">
 				<reportElement x="3" y="0" width="167" height="130" uuid="87255935-393b-4ff7-a783-d540b1d405f7"/>
-				<imageExpression><![CDATA["/var/www/virtuals/devel.k12eventregistration.ws/www/plugins/EventRegistration/library/images/NIESC_Logo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$F{NIESCLogoPath}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="120" y="33" width="434" height="26" uuid="dc1f72dd-d1e6-4947-8e3f-93f605a52659"/>
@@ -114,14 +116,7 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="16" splitType="Stretch">
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="8389c2a1-a17f-451f-bee4-3144e9d78d8e"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
-		</band>
+		<band height="8" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
 		<band height="50" splitType="Stretch">

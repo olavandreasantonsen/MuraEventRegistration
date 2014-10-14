@@ -66,15 +66,22 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<cfelse>
 		<cfquery name="getRegisteredParticipants" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			SELECT eRegistrations.RequestsMeal, eRegistrations.IVCParticipant, tusers.Fname, tusers.Lname, tusers.Company, tusers.Email, SUBSTRING_INDEX(tusers.Email,"@",-1) AS Domain, eEvents.ShortTitle, Date_FORMAT(eEvents.EventDate, "%a, %M %d, %Y") as EventDateFormat
-			FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.UserID INNER JOIN eEvents ON eEvents.TContent_ID = eRegistrations.EventID
+			FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.User_ID INNER JOIN eEvents ON eEvents.TContent_ID = eRegistrations.EventID
 			WHERE eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
 				eRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 			ORDER BY tusers.Lname ASC, tusers.Fname ASC
 		</cfquery>
+		<cfset LogoPath = ArrayNew(1)>
+		<cfloop from="1" to="#getRegisteredParticipants.RecordCount#" step="1" index="i">
+			<cfset LogoPath[i] = #ExpandPath("/plugins/EventRegistration/library/images/NIESC_Logo.png")#>
+		</cfloop>
+		<cfset temp = QueryAddColumn(getRegisteredParticipants, "NIESCLogoPath", "VarChar", Variables.LogoPath)>
 		<cfset ReportDirectory = #ExpandPath("/plugins/EventRegistration/library/reports/")# >
 		<cfset ReportExportLoc = #ExpandPath("/plugins/EventRegistration/library/ReportExports/")# & #URL.EventID# & "EventSignInSheet.pdf" >
-		<cfimport taglib="/cfjasperreports/tag/cfjasperreport" prefix="jr">
+		<cf_jasperreport jrxml="#ReportDirectory#/EventSignInSheet.jrxml" filename="#ReportExportLoc#" exporttype="pdf" query="#getRegisteredParticipants#" />
+		<!--- <cfimport taglib="/cfjasperreports/tag/cfjasperreport" prefix="jr">
 		<jr:jasperreport jrxml="#ReportDirectory#/EventSignInSheet.jrxml" query="#getRegisteredParticipants#" exportfile="#ReportExportLoc#" exportType="pdf" />
+		--->
 		<embed src="/plugins/EventRegistration/library/ReportExports/#URL.EventID#EventSignInSheet.pdf" width="850" height="650">
 	</cfif>
 </cfoutput>

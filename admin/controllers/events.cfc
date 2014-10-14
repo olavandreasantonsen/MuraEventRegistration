@@ -473,7 +473,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfdump var="#CFCATCH#"><cfabort>
 				</cfcatch>
 			</cftry>
-			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&UserAction=AddedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
+			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&UserAction=AddedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
 		</cfif>
 	</cffunction>
 
@@ -494,7 +494,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif GetSelectedEvent.RecordCount EQ 0>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			<cfelse>
 				<cflock timeout="60" scope="Session" type="Exclusive">
 					<cfset Session.UserSuppliedInfo = StructNew()>
@@ -990,14 +990,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset temp = #StructDelete(Session, "FormData", "True")#>
 					<cfset temp = #StructDelete(Session, "FormErrors", "True")#>
 				</cflock>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&UserAction=UpdatedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&UserAction=UpdatedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
 			<cfelse>
 				<cflock timeout="60" scope="Session" type="Exclusive">
 					<cfset temp = #StructDelete(Session, "UserSuppliedInfo", "True")#>
 					<cfset temp = #StructDelete(Session, "FormData", "True")#>
 					<cfset temp = #StructDelete(Session, "FormErrors", "True")#>
 				</cflock>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			</cfif>
 		<cfelse>
 
@@ -1611,7 +1611,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif GetSelectedEvent.RecordCount EQ 0>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			<cfelse>
 				<cflock timeout="60" scope="Session" type="Exclusive">
 					<cfset Session.UserSuppliedInfo = StructNew()>
@@ -1919,7 +1919,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<cfdump var="#CFCATCH#"><cfabort>
 					</cfcatch>
 				</cftry>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&UserAction=EventCopied&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&UserAction=EventCopied&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
 			</cfif>
 		<cfelse>
 		</cfif>

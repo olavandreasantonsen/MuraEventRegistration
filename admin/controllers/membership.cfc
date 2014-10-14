@@ -93,7 +93,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset Session.UserSuppliedInfo.MemberOrganization.lastUpdated = #getSelectedOrganization.lastUpdated#>
 				</cflock>
 			<cfelse>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=membership&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:membership&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			</cfif>
 
 		</cfif>
@@ -139,7 +139,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset Session.UserSuppliedInfo.MemberOrganization.lastUpdated = #getSelectedOrganization.lastUpdated#>
 				</cflock>
 			<cfelse>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=membership&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:membership&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			</cfif>
 
 		</cfif>
@@ -186,7 +186,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset Session.UserSuppliedInfo.MemberOrganization.lastUpdated = #getSelectedOrganization.lastUpdated#>
 				</cflock>
 			<cfelse>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=membership&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:membership&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			</cfif>
 		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.PerformAction")>
 			<cflock timeout="60" scope="Session" type="Exclusive">

@@ -473,7 +473,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfdump var="#CFCATCH#"><cfabort>
 				</cfcatch>
 			</cftry>
-			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&UserAction=AddedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
+			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&UserAction=AddedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
 		</cfif>
 	</cffunction>
 
@@ -494,7 +494,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif GetSelectedEvent.RecordCount EQ 0>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			<cfelse>
 				<cflock timeout="60" scope="Session" type="Exclusive">
 					<cfset Session.UserSuppliedInfo = StructNew()>
@@ -990,14 +990,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset temp = #StructDelete(Session, "FormData", "True")#>
 					<cfset temp = #StructDelete(Session, "FormErrors", "True")#>
 				</cflock>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&UserAction=UpdatedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&UserAction=UpdatedEvent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
 			<cfelse>
 				<cflock timeout="60" scope="Session" type="Exclusive">
 					<cfset temp = #StructDelete(Session, "UserSuppliedInfo", "True")#>
 					<cfset temp = #StructDelete(Session, "FormData", "True")#>
 					<cfset temp = #StructDelete(Session, "FormErrors", "True")#>
 				</cflock>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			</cfif>
 		<cfelse>
 
@@ -1611,7 +1611,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif GetSelectedEvent.RecordCount EQ 0>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			<cfelse>
 				<cflock timeout="60" scope="Session" type="Exclusive">
 					<cfset Session.UserSuppliedInfo = StructNew()>
@@ -1919,7 +1919,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<cfdump var="#CFCATCH#"><cfabort>
 					</cfcatch>
 				</cftry>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&UserAction=EventCopied&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=events&UserAction=EventCopied&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
 			</cfif>
 		<cfelse>
 		</cfif>
@@ -2014,7 +2014,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfif FORM.CancelEvent EQ "True">
 					<cftry>
 						<cfquery name="checkNumberRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Select UserID
+							Select User_ID
 							From eRegistrations
 							Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 								EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
@@ -2146,7 +2146,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<cfquery name="GetRegisteredUsersForEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select eRegistrations.RegistrationID, eRegistrations.Site_ID, eRegistrations.RegistrationDate, eRegistrations.EventID, eRegistrations.RequestsMeal, eRegistrations.IVCParticipant, eRegistrations.AttendeePrice,
 					eRegistrations.OnWaitingList, eRegistrations.Comments, eRegistrations.WebinarParticipant, tusers.Fname, tusers.Lname, tusers.UserName, tusers.Email
-				FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.UserID
+				FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.User_ID
 				WHERE eRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 					eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
@@ -2366,7 +2366,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset RegistrationID = #CreateUUID()#>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID, WebinarParticipant)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID, WebinarParticipant)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2386,14 +2386,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfif Session.Mura.UserID EQ FORM.additionalParticipants>
 						<cfset Temp = #SendEmailCFC.SendEventRegistrationToSingleParticipant(insertNewRegistration.GENERATED_KEY)#>
 					<cfelse>
-						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+						<cfif FORM.EmailConfirmations EQ 1>
+							<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+						</cfif>
 					</cfif>
 				<cfelseif ListLen(FORM.additionalParticipants) GTE 2>
 					<cfloop list="#FORM.additionalParticipants#" index="i" delimiters=",">
 						<cfset RegistrationID = #CreateUUID()#>
 						<cftry>
 							<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-								insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID, WebinarParticipant)
+								insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID, WebinarParticipant)
 								Values(
 									<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 									<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2410,7 +2412,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 								<cfdump var="#CFCATCH#"><cfabort>
 							</cfcatch>
 						</cftry>
-						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+						<cfif FORM.EmailConfirmations EQ 1>
+							<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+						</cfif>
 					</cfloop>
 				</cfif>
 			</cfif>
@@ -2429,7 +2433,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset RegistrationID = #CreateUUID()#>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2474,7 +2478,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				<cfelse>
 					<cfset RegistrationID = #CreateUUID()#>
 					<cfset NewUserErrors = ArrayNew()>
@@ -2502,7 +2508,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2548,7 +2554,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				</cfif>
 			</cfif>
 
@@ -2565,7 +2573,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset RegistrationID = #CreateUUID()#>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2610,7 +2618,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				<cfelse>
 					<cfset RegistrationID = #CreateUUID()#>
 					<cfset NewUserErrors = ArrayNew()>
@@ -2637,7 +2647,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfquery>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2682,7 +2692,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				</cfif>
 			</cfif>
 
@@ -2699,7 +2711,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset RegistrationID = #CreateUUID()#>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2744,7 +2756,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				<cfelse>
 					<cfset RegistrationID = #CreateUUID()#>
 					<cfset NewUserErrors = ArrayNew()>
@@ -2771,7 +2785,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfquery>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2816,7 +2830,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				</cfif>
 			</cfif>
 
@@ -2833,7 +2849,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset RegistrationID = #CreateUUID()#>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2878,7 +2894,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				<cfelse>
 					<cfset RegistrationID = #CreateUUID()#>
 					<cfset NewUserErrors = ArrayNew()>
@@ -2905,7 +2923,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfquery>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -2950,7 +2968,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				</cfif>
 			</cfif>
 
@@ -2967,7 +2987,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset RegistrationID = #CreateUUID()#>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -3012,7 +3032,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				<cfelse>
 					<cfset RegistrationID = #CreateUUID()#>
 					<cfset NewUserErrors = ArrayNew()>
@@ -3037,7 +3059,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfquery>
 					<cftry>
 						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, UserID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
 							Values(
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
@@ -3082,7 +3104,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfdump var="#CFCATCH#"><cfabort>
 						</cfcatch>
 					</cftry>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					<cfif FORM.EmailConfirmations EQ 1>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+					</cfif>
 				</cfif>
 			</cfif>
 			<cflock scope="Session" type="Exclusive" timeout="60">
@@ -3186,10 +3210,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfif ListLen(FORM.RemoveParticipants) GTE 2>
 					<cfloop list="#FORM.RemoveParticipants#" index="i" delimiters=",">
 						<cfquery name="GetSelectedRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Select RegistrationID, RegistrationDate, UserID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
+							Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
 							From eRegistrations
 							Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-								UserID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar">
+								User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar">
 						</cfquery>
 						<cfset ParticipantInfo = StructNew()>
 						<cfset ParticipantInfo.RegistrationID = #GetSelectedRegistration.RegistrationID#>
@@ -3203,10 +3227,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfloop>
 				<cfelseif ListLen(FORM.RemoveParticipants) EQ 1>
 					<cfquery name="GetSelectedRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Select RegistrationID, RegistrationDate, UserID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
+						Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
 						From eRegistrations
 						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-							UserID = <cfqueryparam value="#FORM.RemoveParticipants#" cfsqltype="cf_sql_varchar">
+							User_ID = <cfqueryparam value="#FORM.RemoveParticipants#" cfsqltype="cf_sql_varchar">
 					</cfquery>
 
 					<cfset ParticipantInfo = StructNew()>
@@ -3222,7 +3246,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 				<!--- Let's check to see if anyone is on the waiting list and let's make them a participant --->
 				<cfquery name="GetEventWaitingList" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-					Select RegistrationID, RegistrationDate, UserID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
+					Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
 					From eRegistrations
 					Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 						EventID = <cfqueryparam value="#GetSelectedRegistration.EventID#" cfsqltype="cf_sql_integer"> and
@@ -3341,7 +3365,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 							Update eRegistrations
 							Set AttendedEvent = 1
 							Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-								UserID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+								User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
 								EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 
@@ -3358,7 +3382,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 							Update eRegistrations
 							Set AttendedEvent = 1
 							Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-								UserID = <cfqueryparam value="#FORM.SignInParticipant#" cfsqltype="cf_sql_varchar"> and
+								User_ID = <cfqueryparam value="#FORM.SignInParticipant#" cfsqltype="cf_sql_varchar"> and
 								EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 

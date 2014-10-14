@@ -32,14 +32,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<h2 align="Center">Registering Participant for Workshop/Event:<br>#Session.UserSuppliedInfo.ShortTitle#</h2>
 		<div class="alert-box notice">Please complete this form to register user(s) to this event.</div>
 		<hr>
-		<uForm:form action="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.registeruserforevent&compactDisplay=false&EventID=#URL.EventID#&EventStatus=CorporationSelected" method="Post" id="RegisterParticipants" errors="#Session.FormErrors#" errorMessagePlacement="both"
+		<uForm:form action="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&compactDisplay=false&EventID=#URL.EventID#&EventStatus=CorporationSelected" method="Post" id="RegisterParticipants" errors="#Session.FormErrors#" errorMessagePlacement="both"
 			commonassetsPath="/properties/uniForm/"
 			showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
-			cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&compactDisplay=false"
+			cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&compactDisplay=false"
 			submitValue="Register Participants" loadValidation="true" loadMaskUI="true" loadDateUI="false" loadTimeUI="false">
 			<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
 			<input type="hidden" name="formSubmit" value="true">
 			<input type="hidden" name="PerformAction" value="ListParticipantsInOrganization">
+			<cfif Session.UserSuppliedInfo.WebinarAvailable EQ 0>
+				<input type="hidden" name="WebinarParticipant" value="0">
+			</cfif>
 			<uForm:fieldset legend="Event Date and Time">
 				<uform:field label="Primary Event Date" name="EventDate" isDisabled="true" value="#DateFormat(Session.UserSuppliedInfo.EventDate, 'mm/dd/yyyy')#" type="text" inputClass="date" hint="Date of Event, First Date if event has multiple dates." />
 				<cfif Session.UserSuppliedInfo.EventSpanDates EQ 1>
@@ -73,6 +76,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</uform:field>
 				</uForm:fieldset>
 			</cfif>
+			<uForm:fieldset legend="Email Confirmation">
+				<uform:field label="Send Email Confirmations" name="EmailConfirmations" type="select" isRequired="true" hint="Do you want to send an email confirmation to participants about registering for this event?">
+						<uform:option display="No" value="0" isSelected="true" />
+						<uform:option display="Yes" value="1" isSelected="false" />
+					</uform:field>
+			</uForm:fieldset>
 			<uForm:fieldset legend="School District">
 				<uform:field label="District Name" name="DistrictName" type="select" isRequired="true" hint="Which School District does user work at?">
 					<uform:option display="Business Organization" value="0" isSelected="true" />
@@ -100,6 +109,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
 			<input type="hidden" name="EventID" value="#Session.UserSuppliedInfo.RecNo#">
 			<input type="hidden" name="formSubmit" value="true">
+			<input type="hidden" name="FacilityParticipant" value="#Session.UserSuppliedInfo.FORMData.FacilityParticipant#">
+			<input type="hidden" name="EmailConfirmations" value="#Session.UserSuppliedInfo.FORMData.EmailConfirmations#">
+			<input type="hidden" name="DistrictName" value="#Session.UserSuppliedInfo.FORMData.DistrictName#">
 			<cfif isDefined("Session.FormData.WebinarParticipant")><input type="Hidden" Name="WebinarParticipant" Value="#Session.FormData.WebinarParticipant#"></cfif>
 			<table class="art-article" border="0" align="center" width="100%" cellspacing="0" cellpadding="0">
 				<tbody>
@@ -127,7 +139,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Select TContent_ID
 											From eRegistrations
 											Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-												UserID = <cfqueryparam value="#GetSelectedAccountsWithinOrganization.UserID#" cfsqltype="cf_sql_varchar"> and
+												User_ID = <cfqueryparam value="#GetSelectedAccountsWithinOrganization.UserID#" cfsqltype="cf_sql_varchar"> and
 												EventID = <cfqueryparam value="#Session.UserSuppliedInfo.RecNo#" cfsqltype="cf_sql_integer">
 										</cfquery>
 										<cfset CurrentModRow = #GetSelectedAccountsWithinOrganization.CurrentRow# MOD 4>

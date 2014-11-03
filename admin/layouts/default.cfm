@@ -168,15 +168,15 @@
 							<cfif Session.Mura.Username EQ "admin">
 								<li><a href="/plugins/EventRegistration/" class="active">Event Administration</a>
 									<ul>
-										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=caterers.default" class="active">Manage Catering</a></li>
-										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=events.default" class="active">Manage Events</a></li>
-										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=facilities.default" class="active">Manage Facilities</a></li>
-										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=membership.default" class="active">Manage Membership</a></li>
-										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=presenters.default" class="active">Manage Presenters</a></li>
-										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=users.default" class="active">Manage Users</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:caterers.default" class="active">Manage Catering</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:events.default" class="active">Manage Events</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:facilities.default" class="active">Manage Facilities</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:membership.default" class="active">Manage Membership</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:presenters.default" class="active">Manage Presenters</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:users.default" class="active">Manage Users</a></li>
 									</ul>
 								</li>
-								<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=sysadmin.default" class="active">System Administration</a>
+								<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:sysadmin.default" class="active">System Administration</a>
 
 								</li>
 							<cfelseif Variables.EventCoordinatorRole EQ "true" and Variables.EventPresenterRole EQ "false">

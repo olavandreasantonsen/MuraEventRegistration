@@ -16,17 +16,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 	</cfif> --->
 </cfif> --->
 
-<cfoutput>
-	<!--- Section of Code is for when a user submits an inquiry successfully it will display a message. --->
-
-	<cfif isDefined("URL.CancelRegistrationSuccessfull")>
-		<cfif URL.CancelRegistrationSuccessfull EQ "true">
-			<cfif isDefined("URL.SingleRegistration")>
-				<cfif URL.SingleRegistration EQ "true">
+<!--- Section of Code is for when a user submits an inquiry successfully it will display a message. --->
+<cfif isDefined("URL.CancelRegistrationSuccessfull")>
+	<cfif URL.CancelRegistrationSuccessfull EQ "true">
+		<cfif isDefined("URL.SingleRegistration")>
+			<cfif URL.SingleRegistration EQ "true">
+				<cfoutput>
 					<div class="alert-box success">Your have successfully cancelled this registration. Within the next few minutes you will receive an email confirmation regarding the cancellation of this registration.</div>
-				</cfif>
+				</cfoutput>
 			</cfif>
 		</cfif>
 	</cfif>
+</cfif>
+<cfoutput>
 	#body#
 </cfoutput>

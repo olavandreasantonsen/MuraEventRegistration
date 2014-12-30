@@ -187,7 +187,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 					Active = <cfqueryparam value="1" cfsqltype="CF_SQL_BIT">
 			</cfquery>
 			<uForm:fieldset legend="Event Caterer Information">
-				<uform:field label="Cost Per Person " name="MealCost_Estimated" isRequired="false" Value="#NumberFormat('0.00', '999.99')#" type="text" hint="The estimated cost per person for providing this meal." />
+				<cfif isDefined("Session.UserSuppliedInfo.MealCost_Estimated")>
+					<uform:field label="Cost Per Person " name="MealCost_Estimated" isRequired="false" Value="#NumberFormat(Session.UserSuppliedInfo.MealCost_Estimated, '999.99')#" type="text" hint="The estimated cost per person for providing this meal." />
+				<cfelse>
+					<uform:field label="Cost Per Person " name="MealCost_Estimated" isRequired="false" Value="#NumberFormat('0.00', '999.99')#" type="text" hint="The estimated cost per person for providing this meal." />
+				</cfif>
 				<uform:field label="Meal Provided By" name="MealProvidedBy" type="select" isRequired="true" hint="Which Caterer is providing this meal?">
 					<cfif getCatererInformation.RecordCount EQ 0>
 						<uform:option display="Please Enter Caterer Information to Database First" value="0" isSelected="true" />

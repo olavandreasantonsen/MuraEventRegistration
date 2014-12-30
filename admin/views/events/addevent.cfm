@@ -9,7 +9,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 --->
 </cfsilent>
-
 <cfimport taglib="/properties/uniForm/tags/" prefix="uForm">
 <cflock timeout="60" scope="SESSION" type="Exclusive">
 	<cfset Session.FormData = #StructNew()#>
@@ -104,9 +103,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 		<uForm:fieldset legend="Event Description">
 			<cfif isDefined("Session.UserSuppliedInfo.ShortTitle")>
-				<uform:field label="Event Short Title" name="ShortTitle" isRequired="true" value="#Session.UserSuppliedInfo.ShortTitle#" maxFieldLength="50" type="text" hint="Short Event Title of Event" />
+				<uform:field label="Event Short Title" name="ShortTitle" isRequired="true" value="#Session.UserSuppliedInfo.ShortTitle#" maxFieldLength="75" type="text" hint="Short Event Title of Event" />
 			<cfelse>
-				<uform:field label="Event Short Title" name="ShortTitle" isRequired="true" maxFieldLength="50" type="text" hint="Short Event Title of Event" />
+				<uform:field label="Event Short Title" name="ShortTitle" isRequired="true" maxFieldLength="75" type="text" hint="Short Event Title of Event" />
 			</cfif>
 			<cfif isDefined("Session.UserSuppliedInfo.LongDescription")>
 				<uform:field label="Event Description" name="LongDescription" isRequired="true" value="#Session.UserSuppliedInfo.LongDescription#" type="textarea" hint="Description of this meeting or event" />

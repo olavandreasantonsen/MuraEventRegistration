@@ -36,6 +36,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 			});
 		});
 	</script>
+
 	<h2>Updating Workshop/Event: #Session.UserSuppliedInfo.ShortTitle#</h2>
 	<p class="alert-box notice">Please make changes to the information listed below so this event displays accurate information.</p>
 	<hr>
@@ -50,9 +51,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<uForm:fieldset legend="Event Date and Time">
 			<uform:field label="Primary Event Date" name="EventDate" isRequired="true" value="#DateFormat(Session.UserSuppliedInfo.EventDate, 'mm/dd/yyyy')#" type="date" inputClass="date" hint="Date of Event, First Date if event has multiple dates." />
 			<uform:field label="Registration Deadline" name="Registration_Deadline" isRequired="true" value="#DateFormat(Session.UserSuppliedInfo.Registration_Deadline, 'mm/dd/yyyy')#" type="date" inputClass="date" hint="Accept Registration up to this date" />
-			<uform:field label="Registration Start Time" name="Registration_BeginTime" isRequired="false" value="#TimeFormat(Session.UserSuppliedInfo.Registration_BeginTime, 'hh:mm tt')#" type="time" pluginSetup="#timeConfig#" hint="The Beginning Time onSite Registration begins" />
-			<uform:field label="Event Start Time" name="Event_StartTime" isRequired="true" type="time" value="#TimeFormat(Session.UserSuppliedInfo.Event_StartTime, 'hh:mm tt')#" pluginSetup="#timeConfig#" hint="The starting time of this event" />
-			<uform:field label="Event End Time" name="Event_EndTime" isRequired="true" type="time" value="#TimeFormat(Session.UserSuppliedInfo.Event_EndTime, 'hh:mm tt')#" pluginSetup="#timeConfig#" hint="The starting time of this event" />
+			<uform:field label="Registration Start Time" name="Registration_BeginTime" isRequired="false" value="#TimeFormat(Session.UserSuppliedInfo.Registration_BeginTime, 'hh:mm tt')#" type="time" hint="The Beginning Time onSite Registration begins" />
+			<uform:field label="Event Start Time" name="Event_StartTime" isRequired="true" type="time" value="#TimeFormat(Session.UserSuppliedInfo.Event_StartTime, 'hh:mm tt')#" hint="The starting time of this event" />
+			<uform:field label="Event End Time" name="Event_EndTime" isRequired="true" type="time" value="#TimeFormat(Session.UserSuppliedInfo.Event_EndTime, 'hh:mm tt')#" hint="The starting time of this event" />
 			<uform:field label="Event Span Dates" name="EventSpanDates" type="select" hint="Does this event span multiple dates">
 				<cfif Session.UserSuppliedInfo.EventSpanDates EQ true>
 					<uform:option display="Yes" value="1" isSelected="true" />

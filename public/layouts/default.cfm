@@ -1,4 +1,5 @@
 <!---
+
 	#rc.pc.getFullPath()# = /var/www/virtuals/devel.niesc.k12.in.us/www/plugins/SchoolMembership
 	#HTMLEditFormat(rc.pc.getPackage())# = SchoolMembership
 	#$.siteConfig('site')# = Default
@@ -6,18 +7,18 @@
 	Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#"
 --->
 <cfif not isDefined("URL.EventRegistrationaction")>
-<cfoutput>#body#</cfoutput>
+	<cfoutput>#body#</cfoutput>
 <cfelseif isDefined("URL.EventRegistrationaction")>
-<cfoutput>
-<!DOCTYPE html>
-<html dir="ltr" lang="en-US">
-	<head>
-		<meta charset="utf-8">
-		<title>Event Registration | Northern Indiana ESC - Administration Page</title>
-		<meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no, width = device-width">
-		<meta name="ROBOTS" CONTENT="INDEX, FOLLOW" />
-		<meta name="Author" content="Graham Pearson, webmaster@yourcfpro.com" />
-		<link rel="shortcut icon" href="/favicon.ico" />
+	<cfoutput>
+	<!DOCTYPE html>
+	<html dir="ltr" lang="en-US">
+		<head>
+			<meta charset="utf-8">
+			<title>Event Registration | Northern Indiana ESC - Administration Page</title>
+			<meta name="viewport" content="initial-scale = 1.0, maximum-scale = 1.0, user-scalable = no, width = device-width">
+			<meta name="ROBOTS" CONTENT="INDEX, FOLLOW" />
+			<meta name="Author" content="Graham Pearson, webmaster@yourcfpro.com" />
+			<link rel="shortcut icon" href="/favicon.ico" />
 
 		<!--[if lt IE 9]><script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">

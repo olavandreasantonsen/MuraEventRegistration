@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 5.6.1.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-10-14T09:25:47 -->
+<!-- 2014-11-07T09:53:34 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="getRegisteredParticipants" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="10601a87-fe87-435b-bb5c-dcfb6a66fa53">
 	<style name="Title" fontName="Serif" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -119,7 +119,7 @@ If participants need to make changes to Name, Email they must update their accou
 		<band height="8" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="50" splitType="Stretch">
+		<band height="234" splitType="Stretch">
 			<textField>
 				<reportElement style="SubTitle" x="0" y="2" width="280" height="20" forecolor="#000000" uuid="2464ab79-a4dc-414b-bea1-386b8960fec7"/>
 				<textElement>
@@ -162,6 +162,11 @@ If participants need to make changes to Name, Email they must update their accou
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
+			<subreport>
+				<reportElement x="406" y="34" width="200" height="200" uuid="397c8e3b-a081-4c71-b7a7-1faddf50cfd7"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["EventWalkInSheet.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<columnFooter>

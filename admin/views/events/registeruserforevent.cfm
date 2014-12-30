@@ -14,25 +14,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
 </cflock>
 
-<cfquery name="GetMembershipOrganizations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-	Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Active
-	From eMembership
-	Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-	Order by OrganizationName
-</cfquery>
-
-<cfscript>
-	timeConfig = structNew();
-	timeConfig['show24Hours'] = false;
-	timeConfig['showSeconds'] = false;
-</cfscript>
-
 <cfoutput>
-	<cfif not isDefined("URL.UserAction") and not isDefined("URL.Records")>
+	<cfif not isDefined("URL.EventStatus") and not isDefined("URL.Records")>
+		<cfquery name="GetMembershipOrganizations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+			Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Active
+			From eMembership
+			Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			Order by OrganizationName
+		</cfquery>
 		<h2 align="Center">Registering Participant for Workshop/Event:<br>#Session.UserSuppliedInfo.ShortTitle#</h2>
 		<div class="alert-box notice">Please complete this form to register user(s) to this event.</div>
 		<hr>
-		<uForm:form action="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.registeruserforevent&compactDisplay=false&EventID=#URL.EventID#&EventStatus=CorporationSelected" method="Post" id="RegisterParticipants" errors="#Session.FormErrors#" errorMessagePlacement="both"
+		<uForm:form action="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=CorporationSelected" method="Post" id="RegisterParticipants" errors="#Session.FormErrors#" errorMessagePlacement="both"
 			commonassetsPath="/properties/uniForm/"
 			showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
 			cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&compactDisplay=false"
@@ -50,11 +43,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<uform:field label="Third Event Date" name="EventDate2" isDisabled="true" value="#DateFormat(Session.UserSuppliedInfo.EventDate2, 'mm/dd/yyyy')#" type="text" inputClass="date" hint="Date of Event, Third Date if event has multiple dates." />
 					<uform:field label="Fourth Event Date" name="EventDate3" isDisabled="true" value="#DateFormat(Session.UserSuppliedInfo.EventDate3, 'mm/dd/yyyy')#" type="text" inputClass="date" hint="Date of Event, Fourth Date if event has multiple dates." />
 					<uform:field label="Fifth Event Date" name="EventDate4" isDisabled="true" value="#DateFormat(Session.UserSuppliedInfo.EventDate4, 'mm/dd/yyyy')#" type="text" inputClass="date" hint="Date of Event, Fifth Date if event has multiple dates." />
+					<uform:field label="Sixth Event Date" name="EventDate5" isDisabled="true" value="#DateFormat(Session.UserSuppliedInfo.EventDate5, 'mm/dd/yyyy')#" type="text" inputClass="date" hint="Date of Event, Sixth Date if event has multiple dates." />
 				</cfif>
 				<uform:field label="Registration Deadline" name="Registration_Deadline" isDisabled="true" value="#DateFormat(Session.UserSuppliedInfo.Registration_Deadline, 'mm/dd/yyyy')#" type="text" inputClass="date" hint="Accept Registration up to this date" />
-				<uform:field label="Registration Start Time" name="Registration_BeginTime" isDisabled="true" value="#TimeFormat(Session.UserSuppliedInfo.Registration_BeginTime, 'hh:mm tt')#" type="text" pluginSetup="#timeConfig#" hint="The Beginning Time onSite Registration begins" />
-				<uform:field label="Event Start Time" name="Event_StartTime" isDisabled="true" type="text" value="#TimeFormat(Session.UserSuppliedInfo.Event_StartTime, 'hh:mm tt')#" pluginSetup="#timeConfig#" hint="The starting time of this event" />
-				<uform:field label="Event End Time" name="Event_EndTime" isDisabled="true" type="text" value="#TimeFormat(Session.UserSuppliedInfo.Event_EndTime, 'hh:mm tt')#" pluginSetup="#timeConfig#" hint="The ending time of this event" />
+				<uform:field label="Registration Start Time" name="Registration_BeginTime" isDisabled="true" value="#TimeFormat(Session.UserSuppliedInfo.Registration_BeginTime, 'hh:mm tt')#" type="text" hint="The Beginning Time onSite Registration begins" />
+				<uform:field label="Event Start Time" name="Event_StartTime" isDisabled="true" type="text" value="#TimeFormat(Session.UserSuppliedInfo.Event_StartTime, 'hh:mm tt')#" hint="The starting time of this event" />
+				<uform:field label="Event End Time" name="Event_EndTime" isDisabled="true" type="text" value="#TimeFormat(Session.UserSuppliedInfo.Event_EndTime, 'hh:mm tt')#" hint="The ending time of this event" />
 			</uForm:fieldset>
 			<uForm:fieldset legend="Event Description">
 				<uform:field label="Event Short Title" name="ShortTitle" isDisabled="true" value="#Session.UserSuppliedInfo.ShortTitle#" maxFieldLength="50" type="text" hint="Short Event Title of Event" />
@@ -91,7 +85,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</uform:field>
 			</uForm:fieldset>
 		</uForm:form>
-
+	<cfelseif isDefined("URL.EventID") and isDefined("URL.EventStatus")>
+		<cfdump var="#Session.UserSuppliedInfo#">
+		<p>registeruserforevent admin view</p>
+	</cfif>
+	<!---
 	<cfelseif isDefined("URL.EventID") and isDefined("URL.EventStatus")>
 		<cfdump var="#FORM#">
 		<cfabort>
@@ -421,5 +419,5 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</tbody>
 			</table>
 		</Form>
-	</cfif>
+	</cfif> --->
 </cfoutput>

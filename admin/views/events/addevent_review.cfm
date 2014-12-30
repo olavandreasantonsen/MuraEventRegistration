@@ -53,10 +53,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 		</uForm:fieldset>
 
 		<uForm:fieldset legend="Event Details">
-			<uform:field label="Event Agenda <a href='#buildURL('admin:events.addevent_step2')#' class='ui-icon ui-icon-pencil'></a>" name="EventAgenda" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventAgenda#" hint="The Agenda if avaialble for this event." />
-			<uform:field label="Event Target Audience <a href='#buildURL('admin:events.addevent_step2')#' class='ui-icon ui-icon-pencil'></a>" name="EventTargetAudience" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventTargetAudience#" hint="The Target Audience for this event. Who should come to this event" />
-			<uform:field label="Event Strategies <a href='#buildURL('admin:events.addevent_step2')#' class='ui-icon ui-icon-pencil'></a>" name="EventStrategies" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventStrategies#" hint="The Strategies of this event, if any." />
-			<uform:field label="Event Special Instructions <a href='#buildURL('admin:events.addevent_step2')#' class='ui-icon ui-icon-pencil'></a>" name="EventSpecialInstructions" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventSpecialInstructions#" hint="If available, any special instructions participants need." />
+			<uform:field label="Event Agenda <a href='#buildURL('admin:events.addevent_review##EditEventAgenda')#' class='ui-icon ui-icon-pencil'></a>" name="EventAgenda" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventAgenda#" hint="The Agenda if avaialble for this event." />
+			<uform:field label="Event Target Audience <a href='#buildURL('admin:events.addevent_review##EditEventTargetAudience')#' class='ui-icon ui-icon-pencil'></a>" name="EventTargetAudience" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventTargetAudience#" hint="The Target Audience for this event. Who should come to this event" />
+			<uform:field label="Event Strategies <a href='#buildURL('admin:events.addevent_review##EditEventStrategies')#' class='ui-icon ui-icon-pencil'></a>" name="EventStrategies" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventStrategies#" hint="The Strategies of this event, if any." />
+			<uform:field label="Event Special Instructions <a href='#buildURL('admin:events.addevent_review##EditEventSpecialInstructions')#' class='ui-icon ui-icon-pencil'></a>" name="EventSpecialInstructions" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.EventSpecialInstructions#" hint="If available, any special instructions participants need." />
 		</uForm:fieldset>
 
 		<uForm:fieldset legend="Event Speaker(s)">
@@ -70,77 +70,76 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</uForm:fieldset>
 
 			<cfif Session.UserSuppliedInfo.ViewSpecialPricing EQ 1>
-			<uForm:fieldset legend="Event Special Pricing Information">
-			<cfif Session.UserSuppliedInfo.ViewSpecialPricing EQ 1><cfset SpecialPrice_AvailableText = "Yes"><cfelse><cfset SpecialPrice_AvailableText = "No"></cfif>
-			<uform:field label="Special Pricing Available <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="ViewSpecialPricing" type="text" isDisabled="true" value="#Variables.SpecialPrice_AvailableText#" hint="Does this event have special pricing available?" />
-			<uform:field label="Requirements" name="SpecialPriceRequirements" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.SpecialPriceRequirements#" hint="The requirements a participant must meet to get this price for this event" />
-			<uform:field label="Member Pricing" name="SpecialMemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.SpecialMemberCost#" hint="The Special Price for this event from a Member School Districts" />
-			<uform:field label="NonMember Pricing" name="SpecialNonMemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.SpecialNonMemberCost#" hint="The Special Price for this event from a NonMember School Districts" />
-			</uForm:fieldset>
+				<uForm:fieldset legend="Event Special Pricing Information">
+				<cfif Session.UserSuppliedInfo.ViewSpecialPricing EQ 1><cfset SpecialPrice_AvailableText = "Yes"><cfelse><cfset SpecialPrice_AvailableText = "No"></cfif>
+				<uform:field label="Special Pricing Available <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="ViewSpecialPricing" type="text" isDisabled="true" value="#Variables.SpecialPrice_AvailableText#" hint="Does this event have special pricing available?" />
+				<uform:field label="Requirements" name="SpecialPriceRequirements" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.SpecialPriceRequirements#" hint="The requirements a participant must meet to get this price for this event" />
+				<uform:field label="Member Pricing" name="SpecialMemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.SpecialMemberCost#" hint="The Special Price for this event from a Member School Districts" />
+				<uform:field label="NonMember Pricing" name="SpecialNonMemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.SpecialNonMemberCost#" hint="The Special Price for this event from a NonMember School Districts" />
+				</uForm:fieldset>
 			</cfif>
 
 			<cfif Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable EQ 1>
-			<uForm:fieldset legend="Event Early Bird Information">
-			<cfif Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable EQ 1><cfset EarlyBird_AvailableText = "Yes"><cfelse><cfset EarlyBird_AvailableText = "No"></cfif>
-			<uform:field label="EarlyBird Registration Available <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="EarlyBird_RegistrationAvailable" type="text" isDisabled="true" value="#Variables.EarlyBird_AvailableText#" hint="Does this event have an EarlyBird Registration Cutoff Date/Price" />
-			<uform:field label="Early Bird Deadline" name="EarlyBird_RegistrationDeadline" isDisabled="true" type="date" value="#Session.UserSuppliedInfo.EarlyBird_RegistrationDeadline#" hint="The early bird deadline date" />
-			<uform:field label="Member Pricing" name="EarlyBird_MemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.EarlyBird_MemberCost#" hint="The Early Bird Price for this event from a Member School Districts" />
-			<uform:field label="NonMember Pricing" name="EarlyBird_NonMemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.EarlyBird_NonMemberCost#" hint="The Early Bird Price for this event from a NonMember School Districts" />
-			</uForm:fieldset>
+				<uForm:fieldset legend="Event Early Bird Information">
+				<cfif Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable EQ 1><cfset EarlyBird_AvailableText = "Yes"><cfelse><cfset EarlyBird_AvailableText = "No"></cfif>
+				<uform:field label="EarlyBird Registration Available <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="EarlyBird_RegistrationAvailable" type="text" isDisabled="true" value="#Variables.EarlyBird_AvailableText#" hint="Does this event have an EarlyBird Registration Cutoff Date/Price" />
+				<uform:field label="Early Bird Deadline" name="EarlyBird_RegistrationDeadline" isDisabled="true" type="date" value="#Session.UserSuppliedInfo.EarlyBird_RegistrationDeadline#" hint="The early bird deadline date" />
+				<uform:field label="Member Pricing" name="EarlyBird_MemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.EarlyBird_MemberCost#" hint="The Early Bird Price for this event from a Member School Districts" />
+				<uform:field label="NonMember Pricing" name="EarlyBird_NonMemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.EarlyBird_NonMemberCost#" hint="The Early Bird Price for this event from a NonMember School Districts" />
+				</uForm:fieldset>
 			</cfif>
 
 			<cfif Session.UserSuppliedInfo.MealProvided EQ 1>
-			<cfquery name="getCatererInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select TContent_ID, FacilityName
-				From eCaterers
-				Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-					Active = <cfqueryparam value="1" cfsqltype="CF_SQL_BIT"> and
-					TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.MealProvidedBy#" cfsqltype="cf_sql_integer">
-			</cfquery>
-			<uForm:fieldset legend="Event Meal Information">
-			<cfif Session.UserSuppliedInfo.MealProvided EQ 1><cfset MealProvided_AvailableText = "Yes"><cfelse><cfset MealProvided_AvailableText = "No"></cfif>
-			<uform:field label="Meal Provided <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="MealProvided" type="text" isDisabled="true" value="#Variables.MealProvided_AvailableText#" hint="Does this event have a meal available to attendee(s)?" />
-			<uform:field label="Cost Per Person " name="MealCost_Estimated" isDisabled="true" value="#Session.UserSuppliedInfo.MealCost_Estimated#" type="text" hint="The estimated cost per person for providing this meal." />
-			<uform:field label="Meal Provided By" name="MealProvidedBy" isDisabled="true" value="#getCatererInformation.FacilityName#" type="text" hint="Which Caterer is providing this meal?" />
-			</uForm:fieldset>
+				<cfquery name="getCatererInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select TContent_ID, FacilityName
+					From eCaterers
+					Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+						Active = <cfqueryparam value="1" cfsqltype="CF_SQL_BIT"> and
+						TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.MealProvidedBy#" cfsqltype="cf_sql_integer">
+				</cfquery>
+				<uForm:fieldset legend="Event Meal Information">
+				<cfif Session.UserSuppliedInfo.MealProvided EQ 1><cfset MealProvided_AvailableText = "Yes"><cfelse><cfset MealProvided_AvailableText = "No"></cfif>
+				<uform:field label="Meal Provided <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="MealProvided" type="text" isDisabled="true" value="#Variables.MealProvided_AvailableText#" hint="Does this event have a meal available to attendee(s)?" />
+				<uform:field label="Cost Per Person " name="MealCost_Estimated" isDisabled="true" value="#Session.UserSuppliedInfo.MealCost_Estimated#" type="text" hint="The estimated cost per person for providing this meal." />
+				<uform:field label="Meal Provided By" name="MealProvidedBy" isDisabled="true" value="#getCatererInformation.FacilityName#" type="text" hint="Which Caterer is providing this meal?" />
+				</uForm:fieldset>
 			</cfif>
 
 			<cfif Session.UserSuppliedInfo.AllowVideoConference EQ 1>
-			<uForm:fieldset legend="Video Conferencing Information">
-			<cfif Session.UserSuppliedInfo.AllowVideoConference EQ 1><cfset AllowVideoConference_AvailableText = "Yes"><cfelse><cfset AllowVideoConference_AvailableText = "No"></cfif>
-			<uform:field label="Allow Video Conference <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="AllowVideoConference" isDisabled="true" type="text" value="#Variables.AllowVideoConference_AvailableText#" hint="Can an attendee participate with Video Conference (IP Video)?" />
-			<uform:field label="Video Conference Details" name="VideoConferenceInfo" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.VideoConferenceInfo#" hint="Information about Video Conference that participants need to know to be able to connect." />
-				<uform:field label="Video Confernece Cost" name="VideoConferenceCost" isDisabled="true" type="text" isRequired="true" value="#Session.UserSuppliedInfo.VideoConferenceCost#" hint="What are the costs for a participant to attend via video conference" />
-			</uForm:fieldset>
+				<uForm:fieldset legend="Video Conferencing Information">
+				<cfif Session.UserSuppliedInfo.AllowVideoConference EQ 1><cfset AllowVideoConference_AvailableText = "Yes"><cfelse><cfset AllowVideoConference_AvailableText = "No"></cfif>
+				<uform:field label="Allow Video Conference <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="AllowVideoConference" isDisabled="true" type="text" value="#Variables.AllowVideoConference_AvailableText#" hint="Can an attendee participate with Video Conference (IP Video)?" />
+				<uform:field label="Video Conference Details" name="VideoConferenceInfo" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.VideoConferenceInfo#" hint="Information about Video Conference that participants need to know to be able to connect." />
+					<uform:field label="Video Confernece Cost" name="VideoConferenceCost" isDisabled="true" type="text" isRequired="true" value="#Session.UserSuppliedInfo.VideoConferenceCost#" hint="What are the costs for a participant to attend via video conference" />
+				</uForm:fieldset>
 			</cfif>
-
 		</cfif>
 
 		<cfif Session.UserSuppliedInfo.EventFeatured EQ 1>
-		<uForm:fieldset legend="Event Featured">
-			<cfif Session.UserSuppliedInfo.EventFeatured EQ 1><cfset EventFeatured_AvailableText = "Yes"><cfelse><cfset EventFeatured_AvailableText = "No"></cfif>
-			<uform:field label="Event Featured <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="EventFeatured" type="text" isDisabled="true" value="#Variables.EventFeatured_AvailableText#" hint="Would this event be featured on the website?" />
-			<uform:field label="Start Date" name="Featured_StartDate" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.Featured_StartDate#" hint="The start date of this event being featured" />
-			<uform:field label="End Date" name="Featured_EndDate" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.Featured_EndDate#" hint="The ending date of this event being featured" />
-		</uForm:fieldset>
+			<uForm:fieldset legend="Event Featured">
+				<cfif Session.UserSuppliedInfo.EventFeatured EQ 1><cfset EventFeatured_AvailableText = "Yes"><cfelse><cfset EventFeatured_AvailableText = "No"></cfif>
+				<uform:field label="Event Featured <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="EventFeatured" type="text" isDisabled="true" value="#Variables.EventFeatured_AvailableText#" hint="Would this event be featured on the website?" />
+				<uform:field label="Start Date" name="Featured_StartDate" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.Featured_StartDate#" hint="The start date of this event being featured" />
+				<uform:field label="End Date" name="Featured_EndDate" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.Featured_EndDate#" hint="The ending date of this event being featured" />
+			</uForm:fieldset>
 		</cfif>
 
 		<cfif Session.UserSuppliedInfo.PGPAvailable EQ 1>
-		<uForm:fieldset legend="Professional Growth Points Information">
-			<cfif Session.UserSuppliedInfo.PGPAvailable EQ 1><cfset PGPAvailable_AvailableText = "Yes"><cfelse><cfset PGPAvailable_AvailableText = "No"></cfif>
-			<uform:field label="PGP Points Available <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="PGPAvailable" type="text" isDisabled="true" value="#Variables.PGPAvailable_AvailableText#" hint="Does this event have PGP Points for Attendee(s)?" />
-			<uform:field label="Number of Points" name="PGPPoints" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.PGPPoints#" hint="The number of PGP Points available to particiapnt upon sucessfull completion of this event." />
-		</uForm:fieldset>
+			<uForm:fieldset legend="Professional Growth Points Information">
+				<cfif Session.UserSuppliedInfo.PGPAvailable EQ 1><cfset PGPAvailable_AvailableText = "Yes"><cfelse><cfset PGPAvailable_AvailableText = "No"></cfif>
+				<uform:field label="PGP Points Available <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="PGPAvailable" type="text" isDisabled="true" value="#Variables.PGPAvailable_AvailableText#" hint="Does this event have PGP Points for Attendee(s)?" />
+				<uform:field label="Number of Points" name="PGPPoints" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.PGPPoints#" hint="The number of PGP Points available to particiapnt upon sucessfull completion of this event." />
+			</uForm:fieldset>
 		</cfif>
 
 		<cfif Session.UserSuppliedInfo.WebinarEvent EQ 1>
-		<uForm:fieldset legend="Event Webinar Information">
-			<cfif Session.UserSuppliedInfo.WebinarEvent EQ 1><cfset WebinarEvent_AvailableText = "Yes"><cfelse><cfset WebinarEvent_AvailableText = "No"></cfif>
-			<uform:field label="Allow Webinar Conference <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="WebinarEvent" isDisabled="true" type="text" value="#Variables.WebinarEvent_AvailableText#" hint="Can an attendee participate with Webinar Technology?" />
-			<uform:field label="Webinar Connection Details" name="WebinarConnectWebInfo" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.WebinarConnectWebInfo#" hint="Provide the details for users to be able to connect to this webinar. Give information just incase user has to get viewing device software installed." />
-			<uform:field label="Webinar Member Cost" name="WebinarMemberCost" type="text" isDisabled="true" Value="#NumberFormat(Session.UserSuppliedInfo.WebinarMemberCost, '9999.99')#" isRequired="true" hint="What is the cost for a member participant to attend via this method" />
-			<uform:field label="Webinar NonMember Cost" name="WebinarNonMemberCost" type="text" isDisabled="true" Value="#NumberFormat(Session.UserSuppliedInfo.WebinarNonMemberCost, '9999.99')#" isRequired="true" hint="What is the cost for a nonmember participant to attend via this method" />
-		</uForm:fieldset>
+			<uForm:fieldset legend="Event Webinar Information">
+				<cfif Session.UserSuppliedInfo.WebinarEvent EQ 1><cfset WebinarEvent_AvailableText = "Yes"><cfelse><cfset WebinarEvent_AvailableText = "No"></cfif>
+				<uform:field label="Allow Webinar Conference <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="WebinarEvent" isDisabled="true" type="text" value="#Variables.WebinarEvent_AvailableText#" hint="Can an attendee participate with Webinar Technology?" />
+				<uform:field label="Webinar Connection Details" name="WebinarConnectWebInfo" isDisabled="true" type="textarea" value="#Session.UserSuppliedInfo.WebinarConnectWebInfo#" hint="Provide the details for users to be able to connect to this webinar. Give information just incase user has to get viewing device software installed." />
+				<uform:field label="Webinar Member Cost" name="WebinarMemberCost" type="text" isDisabled="true" Value="#NumberFormat(Session.UserSuppliedInfo.WebinarMemberCost, '9999.99')#" isRequired="true" hint="What is the cost for a member participant to attend via this method" />
+				<uform:field label="Webinar NonMember Cost" name="WebinarNonMemberCost" type="text" isDisabled="true" Value="#NumberFormat(Session.UserSuppliedInfo.WebinarNonMemberCost, '9999.99')#" isRequired="true" hint="What is the cost for a nonmember participant to attend via this method" />
+			</uForm:fieldset>
 		</cfif>
 
 		<cfif Session.UserSuppliedInfo.WebinarEvent EQ 0>
@@ -176,5 +175,4 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</uform:field>
 		</uForm:fieldset>
 	</uForm:form>
-	<cfdump var="#Session.UserSuppliedInfo#">
 </cfoutput>

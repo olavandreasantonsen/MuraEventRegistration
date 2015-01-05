@@ -300,7 +300,7 @@
 							<cfif DateDiff("d", Now(), getSelectedEvent.Registration_Deadline) GTE 0>
 								<cfif Variables.SeatsLeft GT 0>
 									<cfif Session.Mura.isLoggedIn EQ 0>
-										<a href="/index.cfm?display=login&EventID=#URL.EventID#" class="art-button">Register</a>
+										<a href="#buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
 									<cfelse>
 										<a href="#buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
 									</cfif>

@@ -25,7 +25,6 @@
 </cfif>
 
 
-
 <cfoutput>
 <cfif StructKeyExists(session, "MuraPreviousUser")>
 	<div class="alert-box success">

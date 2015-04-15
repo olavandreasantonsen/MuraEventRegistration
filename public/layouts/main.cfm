@@ -1,12 +1,9 @@
-<!---
-
-	#rc.pc.getFullPath()# = /var/www/virtuals/devel.niesc.k12.in.us/www/plugins/SchoolMembership
-	#HTMLEditFormat(rc.pc.getPackage())# = SchoolMembership
-	#$.siteConfig('site')# = Default
-
-	Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#"
---->
+<cfset request.layout = false>
 <cfoutput>
+	#body#
+</cfoutput>
+
+	<!---
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 	<head>
@@ -17,47 +14,47 @@
 		<meta name="Author" content="Graham Pearson, webmaster@yourcfpro.com" />
 		<link rel="shortcut icon" href="/favicon.ico" />
 
-		<!--[if lt IE 9]><script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="/plugins/EventRegistration/includes/assets/css/ui-custom/jquery-ui-1.10.4.custom.min.css" media="screen">
-		<link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/style.css" media="screen">
-		<!--[if lte IE 7]><link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/style.ie7.css" media="screen" /><![endif]-->
-		<link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/style.responsive.css" media="all">
+	<!--[if lt IE 9]><script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/plugins/EventRegistration/includes/assets/css/ui-custom/jquery-ui-1.10.4.custom.min.css" media="screen">
+	<link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/style.css" media="screen">
+	<!--[if lte IE 7]><link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/style.ie7.css" media="screen" /><![endif]-->
+	<link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/style.responsive.css" media="all">
 
-		<script src="#$.siteConfig('themeAssetPath')#/js/jquery.js"></script>
-		<script src="/plugins/EventRegistration/includes/assets/js/jquery-ui-1.9.2.custom.min.js"></script>
-		<script src="/plugins/EventRegistration/includes/assets/js/jquery-ui-timepicker-addon.js"></script>
-		<script src="#$.siteConfig('themeAssetPath')#/js/script.js"></script>
-		<script src="#$.siteConfig('themeAssetPath')#/js/script.responsive.js"></script>
+	<script src="#$.siteConfig('themeAssetPath')#/js/jquery.js"></script>
+	<script src="/plugins/EventRegistration/includes/assets/js/jquery-ui-1.9.2.custom.min.js"></script>
+	<script src="/plugins/EventRegistration/includes/assets/js/jquery-ui-timepicker-addon.js"></script>
+	<script src="#$.siteConfig('themeAssetPath')#/js/script.js"></script>
+	<script src="#$.siteConfig('themeAssetPath')#/js/script.responsive.js"></script>
 
-		<style>
-			.art-content .art-postcontent-0 .layout-item-0 { padding-right: 5px;padding-left: 5px;  }
-			.ie7 .art-post .art-layout-cell {border:none !important; padding:0 !important; }
-			.ie6 .art-post .art-layout-cell {border:none !important; padding:0 !important; }
-		</style>
-		<style>
-			.alert-box { color:##555; border-radius:10px; font-family:Tohoma,Geneva,Arial,sans-serif; font-size:14px; padding: 10px 10px 10px 36px; margin:10px; }
-			.alert-box span { font-weight: bold; text-transform: uppercase; }
-			.error { background:##ffecec url('#$.siteConfig('themeAssetPath')#/images/alertbox/error.png') no-repeat 10px 50%; border:1px solid ##f5aca6; }
-			.success { background:##e9ffd9 url('#$.siteConfig('themeAssetPath')#/images/alertbox/success.png') no-repeat 10px 50%; border:1px solid ##a6ca8a; }
-			.warning { background:##fff8c4 url('#$.siteConfig('themeAssetPath')#/images/alertbox/warning.png') no-repeat 10px 50%; border:1px solid ##f2c779; }
-			.notice { background:##e3f7fc url('#$.siteConfig('themeAssetPath')#/images/alertbox/notice.png') no-repeat 10px 50%; border:1px solid ##8ed9f6; }
-		</style>
-		<style>
-			.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-			.ui-timepicker-div dl { float: left; text-align: left; }
-			.ui-timepicker-div dl dt { float: left; clear: left; padding: 0 0 0 5px; width: 25%; }
-			.ui-timepicker-div dl dd { float: left; margin: 0 10px 10px 45%; width: 75%; }
-			.ui-timepicker-div td { font-size: 90%; }
-			.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-			.ui-timepicker-rtl{ direction: rtl; }
-			.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
-			.ui-timepicker-rtl dl dt{ float: right; clear: right; }
-			.ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }
-		</style>
-		<!--[if IE]> <link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/subnavbar/subnavbar-ie.css"> <![endif]-->
-	</head>
-	<body>
+	<style>
+		.art-content .art-postcontent-0 .layout-item-0 { padding-right: 5px;padding-left: 5px;  }
+		.ie7 .art-post .art-layout-cell {border:none !important; padding:0 !important; }
+		.ie6 .art-post .art-layout-cell {border:none !important; padding:0 !important; }
+	</style>
+	<style>
+		.alert-box { color:##555; border-radius:10px; font-family:Tohoma,Geneva,Arial,sans-serif; font-size:14px; padding: 10px 10px 10px 36px; margin:10px; }
+		.alert-box span { font-weight: bold; text-transform: uppercase; }
+		.error { background:##ffecec url('#$.siteConfig('themeAssetPath')#/images/alertbox/error.png') no-repeat 10px 50%; border:1px solid ##f5aca6; }
+		.success { background:##e9ffd9 url('#$.siteConfig('themeAssetPath')#/images/alertbox/success.png') no-repeat 10px 50%; border:1px solid ##a6ca8a; }
+		.warning { background:##fff8c4 url('#$.siteConfig('themeAssetPath')#/images/alertbox/warning.png') no-repeat 10px 50%; border:1px solid ##f2c779; }
+		.notice { background:##e3f7fc url('#$.siteConfig('themeAssetPath')#/images/alertbox/notice.png') no-repeat 10px 50%; border:1px solid ##8ed9f6; }
+	</style>
+	<style>
+		.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+		.ui-timepicker-div dl { float: left; text-align: left; }
+		.ui-timepicker-div dl dt { float: left; clear: left; padding: 0 0 0 5px; width: 25%; }
+		.ui-timepicker-div dl dd { float: left; margin: 0 10px 10px 45%; width: 75%; }
+		.ui-timepicker-div td { font-size: 90%; }
+		.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+		.ui-timepicker-rtl{ direction: rtl; }
+		.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+		.ui-timepicker-rtl dl dt{ float: right; clear: right; }
+		.ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }
+	</style>
+	<!--[if IE]> <link rel="stylesheet" href="#$.siteConfig('themeAssetPath')#/css/subnavbar/subnavbar-ie.css"> <![endif]-->
+</head>
+<body>
 	<div id="art-main">
 		<div class="art-sheet clearfix">
 			<header class="art-header">
@@ -251,4 +248,4 @@
 	</div>
 </body>
 </html>
-</cfoutput>
+<cfdump var="#rc#"> --->

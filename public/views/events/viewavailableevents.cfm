@@ -24,11 +24,119 @@
 	</cfif>
 </cfif>
 
+<cfif isDefined("URL.UserAccountPasswordSent")>
+	<cfswitch expression="#URL.UserAccountPasswordSent#">
+		<cfcase value="True">
+			<div class="art-block clearfix">
+				<div class="art-blockheader">
+					<h3 class="t">Account Temporary Password Sent Changed</h3>
+				</div>
+				<div class="art-blockcontent"><p class="alert-box notice">Within the next few minutes you will be receiving an email to the email address on file with a temporary password. Once you get this email you will be able to login to your account and change the password by using the Change Password Link under the Home Tab.</p></div>
+			</div>
+		</cfcase>
+		<cfcase value="False">
+
+		</cfcase>
+	</cfswitch>
+</cfif>
+
+<cfif isDefined("URL.UserPasswordChangeSuccessfull")>
+	<cfswitch expression="#URL.UserPasswordChangeSuccessfull#">
+		<cfcase value="True">
+			<div class="art-block clearfix">
+				<div class="art-blockheader">
+					<h3 class="t">Account Password Changed</h3>
+				</div>
+				<div class="art-blockcontent"><p class="alert-box notice">Your account password has been changed and you will need to use this new password on all future logins at this website.</p></div>
+			</div>
+		</cfcase>
+		<cfcase value="False">
+			<div class="art-block clearfix">
+				<div class="art-blockheader">
+					<h3 class="t">Account Password Not Changed</h3>
+				</div>
+				<div class="art-blockcontent"><p class="alert-box notice">Your account password has not been changed.</p></div>
+			</div>
+		</cfcase>
+	</cfswitch>
+</cfif>
+
+<cfif isDefined("URL.UserProfileUpdateSuccessfull")>
+	<cfswitch expression="#URL.UserProfileUpdateSuccessfull#">
+		<cfcase value="True">
+			<div class="art-block clearfix">
+				<div class="art-blockheader">
+					<h3 class="t">Account Updated</h3>
+				</div>
+				<div class="art-blockcontent"><p class="alert-box notice">Your account has been updated and we appriciate you for keeping correct information on file with us.</p></div>
+			</div>
+		</cfcase>
+	</cfswitch>
+</cfif>
+
+<cfif isDefined("URL.UserRegistrationActive")>
+	<cfswitch expression="#URL.UserRegistrationActive#">
+		<cfcase value="True">
+			<div class="art-block clearfix">
+				<div class="art-blockheader">
+					<h3 class="t">Account Activated</h3>
+				</div>
+				<div class="art-blockcontent"><p class="alert-box notice">Your account has been activated and you are able to login with your username and password to register for upcoming events.</p></div>
+			</div>
+		</cfcase>
+
+		<cfcase value="False">
+			<div class="art-block clearfix">
+				<div class="art-blockheader">
+					<h3 class="t">Account Not Activated</h3>
+				</div>
+				<div class="art-blockcontent"><p class="alert-box notice">Your account has not been activated due to more than 45 minutes have passed since we sent the activation email. Please contact us so that we can activate your account manually.</p></div>
+			</div>
+		</cfcase>
+	</cfswitch>
+</cfif>
+
+<cfif isDefined("URL.UserRegistrationSuccessfull")>
+	<cfswitch expression="#URL.UserRegistrationSuccessfull#">
+		<cfcase value="True">
+			<div class="art-block clearfix">
+				<div class="art-blockheader">
+					<h3 class="t">Account Created</h3>
+				</div>
+				<div class="art-blockcontent"><p class="alert-box notice">Your account has been created successfully. Within the next few minutes, you will be receiving an email message with instructions on how to complete the registration process.</p></div>
+			</div>
+		</cfcase>
+	</cfswitch>
+</cfif>
+
+<cfif isDefined("URL.SentInquiry")>
+	<cfswitch expression="#URL.SentInquiry#">
+		<cfcase value="True">
+			<cfif isDefined("URL.RequestEvent")>
+				<div class="art-block clearfix">
+					<div class="art-blockheader">
+						<h3 class="t">Workshop Request Sent</h3>
+					</div>
+					<div class="art-blockcontent"><p class="alert-box notice">The workshop request has been sent. We will review this information and see who might also be interested in this same event. If we have any questions we will reach out to you with the information provided on the form. Thank you for your request.</p></div>
+				</div>
+			</cfif>
+			<cfif isDefined("URL.CommentSuggestion")>
+				<div class="art-block clearfix">
+					<div class="art-blockheader">
+						<h3 class="t">Comment/Suggestion Sent</h3>
+					</div>
+					<div class="art-blockcontent"><p class="alert-box notice">The comment or suggestion which you filed is being sent. We will review this information and reach out to you depending on the information you sent. We thank you for your request as it helps us to improve the events we offer.</p></div>
+				</div>
+			</cfif>
+		</cfcase>
+	</cfswitch>
+</cfif>
+
 
 <cfoutput>
 <cfif StructKeyExists(session, "MuraPreviousUser")>
 	<div class="alert-box success">
-		<span>Logged In As:</span> #Session.Mura.FName# #Session.Mura.LName#.<br>To return back to your user account, click <a href="#buildURL('public:main.viewavailableevents')#&PerformAction=LogoutUser" class="art-button">here</a>
+		<span>Logged In As:</span> #Session.Mura.FName# #Session.Mura.LName#.<br>To return back to your user account, click <a href="/plugins/#variables.Framework.package##buildURL('public:main.viewavailableevents')#&PerformAction=LogoutUser" class="art-button">here</a>
 	</div>
 </cfif>
 
@@ -133,11 +241,11 @@
 									<cfif Variables.FeatureEventAcceptRegistrations EQ 1>
 										<cfif DateDiff("d", Now(), FeatureEventRegistrationDeadline) GTE 0>
 											<cfif Variables.FeaturedEventSeatsLeft GT 0>
-												<a href="#buildURL('public:registerevent.default')#&EventID=#Variables.FeatureEventRecordID#" class="art-button" alt="Register Event">Register</a>
+												<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#Variables.FeatureEventRecordID#" class="art-button" alt="Register Event">Register</a>
 											</cfif>
 										</cfif>
 									</cfif>
-									<a href="#buildURL('public:main.eventinfo')#&EventID=#Variables.FeatureEventRecordID#" class="art-button">More Info</a>
+									<a href="/plugins/#variables.Framework.package##buildURL('public:main.eventinfo')#&EventID=#Variables.FeatureEventRecordID#" class="art-button">More Info</a>
 								</td>
 								<td style="width: 10%;"></td>
 							</tr>
@@ -206,9 +314,9 @@
 							<td style="width: 20%;">
 								<cfif getNonFeaturedEvents.AcceptRegistrations EQ 1>
 									<cfif Variables.EventSeatsLeft GTE 1>
-										<a href="#buildURL('public:registerevent.default')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button" alt="Register Event">Register</a>
+										<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button" alt="Register Event">Register</a>
 									</cfif>
-								</cfif> &nbsp; <a href="#buildURL('public:main.eventinfo')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
+								</cfif> &nbsp; <a href="/plugins/#variables.Framework.package##buildURL('public:main.eventinfo')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
 							</td>
 							<td style="width: 10%;">
 								<cfif getNonFeaturedEvents.PGPAvailable EQ 1><img src="/plugins/EventRegistration/includes/assets/images/award.png" alt="PGP Certificate" border="0"></cfif>

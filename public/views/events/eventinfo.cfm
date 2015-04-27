@@ -38,7 +38,7 @@
 <cfif StructKeyExists(session, "MuraPreviousUser")>
 	<cfoutput>
 		<div class="alert-box success">
-			<p>You are currently logged in as #Session.Mura.FName# #Session.Mura.LName#.<br>To return back to your user account, click <a href="#buildURL('public:main.default')#&PerformAction=LogoutUser" class="art-button">here</a></div></p>
+			<p>You are currently logged in as #Session.Mura.FName# #Session.Mura.LName#.<br>To return back to your user account, click <a href="/plugins/#variables.Framework.package##buildURL('public:main.default')#&PerformAction=LogoutUser" class="art-button">here</a></div></p>
 		</div>
 	</cfoutput>
 </cfif>
@@ -166,6 +166,7 @@
 					<link rel="stylesheet" href="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet.css" />
 					<!--[if lte IE 8]> <link rel="stylesheet" href="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet.ie.css" /> <![endif]-->
 					<script src="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet.js"></script>
+					<script src="/plugins/#Variables.Framework.Package#/library/LeafLet/KML.js"></script>
 					<div id="map" style="width: 475px; height: 300px;"></div>
 					<script>
 						var facilitymarker;
@@ -176,6 +177,11 @@
 							iconUrl: '/plugins/#Variables.Framework.Package#/library/LeafLet/images/conference.png'
 						});
 						var marker = L.marker([#getEventFacility.GeoCode_Latitude#, #getEventFacility.GeoCode_Longitude#], {icon: FacilityMarker}).addTo(map);
+						var kmlLayer = new L.KML("/plugins/#Variables.Framework.Package#/library/LeafLet/KMLFiles/gz_2010_us_050_00_20m.kml", {async: true});
+						kmlLayer.on("loaded", function(e) {
+							map.fitBounds(e.target.getBounds());
+						});
+						map.addLayer(kmlLayer);
 					</script>
 					</td>
 					</tr>
@@ -292,17 +298,17 @@
 				</tr>
 				<tr>
 					<td style="width: 155px;"><span style="font-weight: bold;">Still Have Questions</span></td>
-					<td colspan="3"><a href="#buildURL('public:main.sendquestionform')#&EventID=#URL.EventID#" class="art-button">Send Questions</a></td>
+					<td colspan="3"><a href="/plugins/#variables.Framework.package##buildURL('public:main.sendquestionform')#&EventID=#URL.EventID#" class="art-button">Send Questions</a></td>
 				</tr>
 				<tr align="right">
-					<td colspan="4"><a href="#buildURL('public:main.viewavailableevents')#" class="art-button">Return to Event Listing</a>
+					<td colspan="4"><a href="/plugins/#variables.Framework.package##buildURL('public:main.viewavailableevents')#" class="art-button">Return to Event Listing</a>
 						<cfif getSelectedEvent.AcceptRegistrations EQ 1>
 							<cfif DateDiff("d", Now(), getSelectedEvent.Registration_Deadline) GTE 0>
 								<cfif Variables.SeatsLeft GT 0>
 									<cfif Session.Mura.isLoggedIn EQ 0>
-										<a href="#buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
+										<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
 									<cfelse>
-										<a href="#buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
+										<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
 									</cfif>
 								</cfif>
 							</cfif>
@@ -327,23 +333,13 @@
 					<td colspan="1" rowspan="4" style="width: 475px; text-align: center; vertical-align: top;">
 					<link rel="stylesheet" href="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet.css" />
 					<!--[if lte IE 8]> <link rel="stylesheet" href="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet.ie.css" /> <![endif]-->
-					<script src="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet.js"></script>
-					<script src="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet-routing-machine.min.js"></script>
+					<!--- <script src="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet-routing-machine.min.js"></script>
 					<script src="/plugins/#Variables.Framework.Package#/library/LeafLet/Control.Geocoder.js"></script>
+					<script src="/plugins/#Variables.Framework.Package#/library/LeafLet/KML.js"></script> --->
+					<script src="/plugins/#Variables.Framework.Package#/library/LeafLet/leaflet.js"></script>
+
 					<div id="map" style="width: 475px; height: 300px;"></div>
-					<script>
-						var facilitymarker;
-						var map = L.map('map');
-						map.setView(new L.LatLng(#getEventFacility.GeoCode_Latitude#, #getEventFacility.GeoCode_Longitude#), 12);
-						L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '', maxZoom: 18 }).addTo(map);
-						var FacilityMarker = L.icon({
-							iconUrl: '/plugins/#Variables.Framework.Package#/library/LeafLet/images/conference.png'
-						});
-						L.Routing.control({
-							waypoints: [L.latLng(#getEventFacility.GeoCode_Latitude#, #getEventFacility.GeoCode_Longitude#) ], geocoder: L.Control.Geocoder.nominatim(), routeWhileDragging: true
-						}).addTo(map);
-						var marker = L.marker([#getEventFacility.GeoCode_Latitude#, #getEventFacility.GeoCode_Longitude#], {icon: FacilityMarker}).addTo(map);
-					</script>
+
 					</td>
 				</tr>
 			</tbody>

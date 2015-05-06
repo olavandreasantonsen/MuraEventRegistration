@@ -164,4 +164,4 @@
 /* ----------------------------------------------------------------------------- */
 	/* initial p.errorField rule added above (~Line 118) ... override margin here */
 .uniForm p.errorField{ margin-left: 0 }
-.uniForm #OKMsg p{ padding-left: 20px; background: #c8ffbf url(../images/uni-form/icon-success.gif) no-repeat; }
+.uniForm #OKMsg p{ padding-left: 20px; background: #c8ffbf url(/plugins/EventRegistration/includes/assets/images/uni-form/icon-success.gif) no-repeat; }

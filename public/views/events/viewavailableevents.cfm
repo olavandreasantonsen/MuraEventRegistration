@@ -134,11 +134,6 @@
 
 
 <cfoutput>
-<cfif StructKeyExists(session, "MuraPreviousUser")>
-	<div class="alert-box success">
-		<span>Logged In As:</span> #Session.Mura.FName# #Session.Mura.LName#.<br>To return back to your user account, click <a href="/plugins/#variables.Framework.package##buildURL('public:main.viewavailableevents')#&PerformAction=LogoutUser" class="art-button">here</a>
-	</div>
-</cfif>
 
 <cfif not isDefined("URL.display")>
 	<!--- Checking to make sure that today's date is within the Featured Events Date Window, Otherwise Update Event to not be featured. --->
@@ -329,6 +324,7 @@
 		</p></div>
 	</div>
 </cfif>
+<cfdump var="#Session#">
 	<!--- <cfset GetAllGroups = #$.getBean( 'userManager' ).getUserGroups( rc.$.siteConfig('siteID'), 1 )#>
 	<cfset GetGroupMembers = #members=$.getBean( 'user' ).loadBy( groupname = 'Event Coordinator' ).getRecordCount()#>
 	<cfset UserSuperUser = #rc.$.getCurrentUser().isSuperUser()#>

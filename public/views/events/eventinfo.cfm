@@ -35,14 +35,6 @@
 	Where UserID = <cfqueryparam value="#getSelectedEvent.Facilitator#" cfsqltype="cf_sql_varchar">
 </cfquery>
 
-<cfif StructKeyExists(session, "MuraPreviousUser")>
-	<cfoutput>
-		<div class="alert-box success">
-			<p>You are currently logged in as #Session.Mura.FName# #Session.Mura.LName#.<br>To return back to your user account, click <a href="/plugins/#variables.Framework.package##buildURL('public:main.default')#&PerformAction=LogoutUser" class="art-button">here</a></div></p>
-		</div>
-	</cfoutput>
-</cfif>
-
 <cfoutput>
 	<cfif not isDefined("URL.DrivingDirections")>
 		<div class="art-blockheader">
@@ -301,7 +293,7 @@
 					<td colspan="3"><a href="/plugins/#variables.Framework.package##buildURL('public:main.sendquestionform')#&EventID=#URL.EventID#" class="art-button">Send Questions</a></td>
 				</tr>
 				<tr align="right">
-					<td colspan="4"><a href="/plugins/#variables.Framework.package##buildURL('public:main.viewavailableevents')#" class="art-button">Return to Event Listing</a>
+					<td colspan="4"><a href="/plugins/#variables.Framework.package##buildURL('public:events.viewavailableevents')#" class="art-button">Return to Event Listing</a>
 						<cfif getSelectedEvent.AcceptRegistrations EQ 1>
 							<cfif DateDiff("d", Now(), getSelectedEvent.Registration_Deadline) GTE 0>
 								<cfif Variables.SeatsLeft GT 0>

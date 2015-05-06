@@ -14,8 +14,8 @@
 			</div>
 			<div class="art-blockcontent"><div class="alert-box notice">Please complete the following information regarding your request for an event or workshop that you would like us to have. We will contact you with any additional information that might be needed from you. Please be detailed as possible to make sure we bring you the event you would like to attend.</div>
 				<hr>
-				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/properties/uniForm/"
-					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:main.viewavailableevents&Return=True"
+				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/plugins/EventRegistration/library/uniForm/"
+					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:events.viewavailableevents&Return=True"
 					submitValue="Send Event Request" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
 					<input type="hidden" name="formSubmit" value="true">
 					<uForm:fieldset legend="Required Fields">
@@ -53,8 +53,8 @@
 			</div>
 			<div class="art-blockcontent"><div class="alert-box notice">Please complete the following information regarding your request for an event or workshop that you would like us to have. We will contact you with any additional information that might be needed from you. Please be detailed as possible to make sure we bring you the event you would like to attend.</div>
 				<hr>
-				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/properties/uniForm/"
-					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:main.viewavailableevents&Return=True"
+				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/plugins/EventRegistration/library/uniForm/"
+					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:events.viewavailableevents&Return=True"
 					submitValue="Send Event Request" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
 					<input type="hidden" name="formSubmit" value="true">
 					<uForm:fieldset legend="Required Fields">

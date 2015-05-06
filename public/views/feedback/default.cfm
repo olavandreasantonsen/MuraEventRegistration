@@ -12,8 +12,8 @@
 				<h3 class="t">Contact Us</h3>
 			</div>
 			<div class="art-blockcontent"><div class="alert-box notice">Please complete the following information to send us feedback regarding your comments about this website.</div>
-				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/properties/uniForm/"
-					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:main.viewavailableevents&Return=True"
+				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/plugins/EventRegistration/library/uniForm/"
+					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:events.viewavailableevents&Return=True"
 					submitValue="Send Comments" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true"
 					class="form-horizontal">
 					<input type="hidden" name="formSubmit" value="true">
@@ -21,7 +21,7 @@
 						<cfif Session.Mura.IsLoggedIn EQ "True">
 							<uForm:field label="Your Name" name="CommentFormName" isRequired="True" isDisabled="False" value="#Session.Mura.FName# #Session.Mura.LName#" maxFieldLength="50" type="text" hint="Your Name" />
 						<cfelse>
-							<uForm:field label="Your Name" name="CommentFormName" isRequired="True" isDisabled="False" maxFieldLength="50" type="text" hint="Your Name" />
+							<uForm:field label="Your Name" name="CommentFormName" isRequired="True" isDisabled="False" maxFieldLength="50" type="text" hint="Your Name"  />
 						</cfif>
 						<cfif Session.Mura.IsLoggedIn EQ "True">
 							<uForm:field label="Your Email Address" name="ContactFormEmail" isRequired="True" isDisabled="False" value="#Session.Mura.EMail#" maxFieldLength="50" type="text" hint="Your Email Address" />
@@ -31,13 +31,13 @@
 						<uForm:field label="Your Contact Number" name="ContactFormNumber" isRequired="True" isDisabled="False"  maxFieldLength="50" mask="(999) 999-9999" type="text" hint="Your Contact Phone Number" />
 					</uForm:fieldset>
 					<uForm:fieldset legend="Best Contact Method">
-						<uForm:field label="Contact Me via" name="ContactBy" type="select" isRequired="true" hint="How would you like to receive a response to your inquiry?">
+						<uForm:field label="Contact Me via" name="ContactBy" type="select" isRequired="true">
 							<uform:option display="Email" value="Reply By Email" isSelected="true" />
 							<uform:option display="Phone" value="Reply By Telephone" />
 						</uForm:field>
 					</uForm:fieldset>
 					<uForm:fieldset legend="Your Comments">
-						<uform:field label="Event Inquiry" name="EventQuestion" isRequired="true" type="textarea" hint="Your Question about this event?" />
+						<uform:field label="Event Inquiry" name="EventQuestion" isRequired="true" type="textarea" />
 						<uform:field name="HumanChecker" isRequired="true" label="Please enter the characters you see below" type="captcha" captchaWidth="800" captchaMinChars="5" captchaMaxChars="8" />
 					</uForm:fieldset>
 				</uForm:form>
@@ -49,8 +49,8 @@
 				<h3 class="t">Contact Us</h3>
 			</div>
 			<div class="art-blockcontent"><div class="alert-box notice">Please complete the following information to send us feedback regarding your comments about this website.</div>
-				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/properties/uniForm/"
-					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:main.viewavailableevents&Return=True"
+				<uForm:form action="" method="Post" id="RegisterEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/plugins/EventRegistration/library/uniForm/"
+					showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/index.cfm?EventRegistrationaction=public:events.viewavailableevents&Return=True"
 					submitValue="Send Comments" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
 					<input type="hidden" name="formSubmit" value="true">
 					<uForm:fieldset legend="Required Fields">

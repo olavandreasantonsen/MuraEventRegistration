@@ -1933,6 +1933,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 
 		<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
+		<cfset Session.FormData = StructNew()>
+		<cfset Session.FormData.PluginInfo = StructNew()>
+		<cfset Session.FormData.PluginInfo.DataSource = #rc.$.globalConfig('datasource')#>
+		<cfset Session.FormData.PluginInfo.DBUsername = #rc.$.globalConfig('dbusername')#>
+		<cfset Session.FormData.PluginInfo.DBPassword = #rc.$.globalConfig('dbpassword')#>
+		<cfset Session.FormData.PluginInfo.PackageName = #rc.pc.getPackage()#>
 
 		<cfif isDefined("URL.EventID") and not isDefined("URL.EventStatus")>
 			<cfquery name="GetSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -2055,7 +2061,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 							<cfloop query="checkNumberRegistrations">
 								<cfset Variables.Info = StructNew()>
-								<cfset Variables.Info.RegistrationID = #checkNumberRegistations.RegistrationID#>
+								<cfset Variables.Info.RegistrationID = #checkNumberRegistrations.RegistrationID#>
 								<cfset Variables.Info.UserID = #checkNumberRegistrations.User_ID#>
 								<cfset Temp = SendEmailCFC.SendEventCancellationToSingleParticipant(Variables.Info)>
 							</cfloop>
@@ -2065,10 +2071,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</cfcatch>
 						<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&UserAction=EventCancelled&SiteID=#rc.$.siteConfig('siteID')#&Successful=true" addtoken="false">
 					</cftry>
-
 				</cfif>
 			</cfif>
-
 		</cfif>
 	</cffunction>
 

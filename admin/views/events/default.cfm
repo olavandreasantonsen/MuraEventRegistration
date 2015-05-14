@@ -14,7 +14,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 	Select TContent_ID, ShortTitle, EventDate, LongDescription
 	From eEvents
 	Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-		EventDate >= <cfqueryparam value="#Variables.PriorDate#" cfsqltype="cf_sql_date">
+		EventDate >= <cfqueryparam value="#Variables.PriorDate#" cfsqltype="cf_sql_date"> and
+		EventCancelled = 0
 		Order by EventDate DESC
 </cfquery>
 

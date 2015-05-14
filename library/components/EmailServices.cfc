@@ -29,7 +29,7 @@
 	<cffunction name="SendEventRegistrationToSingleParticipant" returntype="Any" Output="false">
 		<cfargument name="RegistrationRecordID" type="numeric" Required="True">
 
-		<cfset EventServicesComponent = createObject("component","plugins/#Session.FormData.PluginInfo.PackageName#/library/components/EventServices")>
+		<cfset EventServicesComponent = createObject("component","plugins/#HTMLEditFormat(Session.FormData.PluginInfo.PackageName)#/library/components/EventServices")>
 
 		<cfquery name="getRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
 			Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, RegisterByUserID, OnWaitingList, Comments, WebinarParticipant
@@ -334,19 +334,19 @@
 	<cffunction name="SendEventCancellationToSingleParticipant" returntype="Any" Output="false">
 		<cfargument name="Info" type="Struct" Required="True">
 
-		<cfquery name="GetRegisteredEvent" Datasource="#Arguments.Info.FormData.Datasource#" username="#Arguments.Info.FormData.DBUsername#" password="#Arguments.Info.FormData.DBPassword#">
+		<cfquery name="GetRegisteredEvent" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
 			SELECT eEvents.ShortTitle, eEvents.EventDate, eRegistrations.AttendedEvent, eRegistrations.User_ID, eRegistrations.RegistrationID,  eRegistrations.OnWaitingList, eRegistrations.EventID, eEvents.PGPAvailable, eEvents.PGPPoints
 			FROM eRegistrations INNER JOIN eEvents ON eEvents.TContent_ID = eRegistrations.EventID
 			WHERE eRegistrations.RegistrationID = <cfqueryparam value="#Arguments.Info.RegistrationID#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 
-		<cfquery name="getRegisteredUserInfo" Datasource="#Arguments.Info.FormData.Datasource#" username="#Arguments.Info.FormData.DBUsername#" password="#Arguments.Info.FormData.DBPassword#">
+		<cfquery name="getRegisteredUserInfo" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
 			Select Fname, Lname, Email
 			From tusers
 			Where UserID = <cfqueryparam value="#GetRegisteredEvent.User_ID#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 
-		<cfquery name="DeleteRegistration" Datasource="#Arguments.Info.FormData.Datasource#" username="#Arguments.Info.FormData.DBUsername#" password="#Arguments.Info.FormData.DBPassword#">
+		<cfquery name="DeleteRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
 			Delete from eRegistrations
 			Where RegistrationID = <cfqueryparam value="#Arguments.Info.RegistrationID#" cfsqltype="cf_sql_varchar">
 		</cfquery>
@@ -358,19 +358,19 @@
 	<cffunction name="SendEventCancellationByFacilitatorToSingleParticipant" returntype="Any" Output="false">
 		<cfargument name="Info" type="Struct" Required="True">
 
-		<cfquery name="GetRegisteredEvent" Datasource="#Arguments.Info.FormData.Datasource#" username="#Arguments.Info.FormData.DBUsername#" password="#Arguments.Info.FormData.DBPassword#">
+		<cfquery name="GetRegisteredEvent" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
 			SELECT eEvents.ShortTitle, eEvents.EventDate, eRegistrations.AttendedEvent, eRegistrations.User_ID, eRegistrations.RegistrationID,  eRegistrations.OnWaitingList, eRegistrations.EventID, eEvents.PGPAvailable, eEvents.PGPPoints
 			FROM eRegistrations INNER JOIN eEvents ON eEvents.TContent_ID = eRegistrations.EventID
 			WHERE eRegistrations.RegistrationID = <cfqueryparam value="#Arguments.Info.RegistrationID#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 
-		<cfquery name="getRegisteredUserInfo" Datasource="#Arguments.Info.FormData.Datasource#" username="#Arguments.Info.FormData.DBUsername#" password="#Arguments.Info.FormData.DBPassword#">
+		<cfquery name="getRegisteredUserInfo" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
 			Select Fname, Lname, Email
 			From tusers
 			Where UserID = <cfqueryparam value="#GetRegisteredEvent.User_ID#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 
-		<cfquery name="DeleteRegistration" Datasource="#Arguments.Info.FormData.Datasource#" username="#Arguments.Info.FormData.DBUsername#" password="#Arguments.Info.FormData.DBPassword#">
+		<cfquery name="DeleteRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
 			Delete from eRegistrations
 			Where RegistrationID = <cfqueryparam value="#Arguments.Info.RegistrationID#" cfsqltype="cf_sql_varchar">
 		</cfquery>

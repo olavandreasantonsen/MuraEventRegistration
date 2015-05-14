@@ -25,7 +25,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 	SELECT tusers.Fname, tusers.Lname, eRegistrations.User_ID
 	FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.User_ID
 	WHERE eRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-		eRegistrations.EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+		eRegistrations.EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
+		eRegistrations.OnWaitingList = 0
 	ORDER BY tusers.Lname ASC, tusers.Fname ASC
 </cfquery>
 
@@ -84,7 +85,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 												</cfdefaultcase>
 											</cfswitch>
 											</cfloop>
+											<cfoutput>Test: #Variables.CurrentModRow#</cfoutput>
 											<cfswitch expression="#Variables.CurrentModRow#">
+												<cfcase value="2"><td colspan="2">&nbsp;</td></tr></cfcase>
 												<cfcase value="0"></cfcase>
 												<cfcase value="1"><td colspan="3">&nbsp;</td></tr></cfcase>
 												<cfdefaultcase><td width="25%">&nbsp;</td></tr></cfdefaultcase>

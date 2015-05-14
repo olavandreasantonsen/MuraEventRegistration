@@ -2468,6 +2468,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -2597,6 +2598,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -2690,6 +2692,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -2697,7 +2700,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -2713,7 +2716,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -2804,6 +2807,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -2811,7 +2815,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -2827,7 +2831,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -2897,6 +2901,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -2904,7 +2909,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -2920,7 +2925,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3011,6 +3016,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3018,7 +3024,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3034,7 +3040,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3104,6 +3110,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3111,7 +3118,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3127,7 +3134,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3218,6 +3225,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3225,7 +3233,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3241,7 +3249,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3311,6 +3319,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3318,7 +3327,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3334,7 +3343,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3425,6 +3434,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3432,7 +3442,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3448,7 +3458,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3518,6 +3528,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3525,7 +3536,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3541,7 +3552,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3632,6 +3643,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3639,7 +3651,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3655,7 +3667,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3725,6 +3737,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										Select TContent_ID
 										From eRegistrations
 										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+											and OnWaitingList = 0
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
 										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
@@ -3732,7 +3745,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3748,7 +3761,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 												Select TContent_ID
 												From eRegistrations
 												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
 													RegistrationID = "#Variables.RegistrationUUID#"
 											</cfquery>
 											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
@@ -3852,6 +3865,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</cflock>
 		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID") and isDefined("FORM.PerformAction")>
 			<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
+			<cfset Session.FormData = StructNew()>
+			<cfset Session.FormData.PluginInfo = StructNew()>
+			<cfset Session.FormData.PluginInfo.DataSource = #rc.$.globalConfig('datasource')#>
+			<cfset Session.FormData.PluginInfo.DBUsername = #rc.$.globalConfig('dbusername')#>
+			<cfset Session.FormData.PluginInfo.DBPassword = #rc.$.globalConfig('dbpassword')#>
+			<cfset Session.FormData.PluginInfo.PackageName = #rc.pc.getPackage()#>
 
 			<cfif not isDefined("FORM.RemoveParticipants")>
 				<cfscript>
@@ -3878,6 +3897,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<cfset ParticipantInfo.FormData.SiteID = #rc.$.siteConfig('siteID')#>
 						<cfif FORM.SendEmailConfirmation EQ 1>
 							<cfset temp = #SendEMailCFC.SendEventCancellationByFacilitatorToSingleParticipant(Variables.ParticipantInfo)#>
+						<cfelse>
+							<cfquery name="DeleteRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+								Delete from eRegistrations
+								Where RegistrationID = <cfqueryparam value="#GetSelectedRegistration.RegistrationID#" cfsqltype="cf_sql_varchar">
+							</cfquery>
 						</cfif>
 					</cfloop>
 				<cfelseif ListLen(FORM.RemoveParticipants) EQ 1>
@@ -3898,27 +3922,53 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfset ParticipantInfo.FormData.SiteID = #rc.$.siteConfig('siteID')#>
 					<cfif FORM.SendEmailConfirmation EQ 1>
 						<cfset temp = #SendEMailCFC.SendEventCancellationByFacilitatorToSingleParticipant(Variables.ParticipantInfo)#>
+					<cfelse>
+						<cfquery name="DeleteRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+							Delete from eRegistrations
+							Where RegistrationID = <cfqueryparam value="#GetSelectedRegistration.RegistrationID#" cfsqltype="cf_sql_varchar">
+						</cfquery>
 					</cfif>
 				</cfif>
 
-				<!--- Let's check to see if anyone is on the waiting list and let's make them a participant --->
-				<cfquery name="GetEventWaitingList" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-					Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
+				<!--- Let's Check to see how many people are registered for this event --->
+				<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select TContent_ID
 					From eRegistrations
-					Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-						EventID = <cfqueryparam value="#GetSelectedRegistration.EventID#" cfsqltype="cf_sql_integer"> and
-						OnWaitingList = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-					Order By RegistrationDate ASC
+					Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+						and OnWaitingList = 0
 				</cfquery>
 
-				<cfquery name="GetEventMaxParticipants" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-					Select MaxParticipants
-					From eEvents
-					Where TContent_ID = <cfqueryparam value="#GetSelectedRegistration.EventID#" cfsqltype="cf_sql_integer">
-				</cfquery>
-
-				<cfif GetEventWaitingList.RecordCount>
-
+				<cfif GetEventRegistered.RecordCount LT Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+					<!--- Let's check to see if anyone is on the waiting list and let's make them a participant --->
+					<cfquery name="GetEventWaitingList" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
+						From eRegistrations
+						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+							EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
+							OnWaitingList = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+						Order By RegistrationDate ASC
+					</cfquery>
+					<cfif GetEventWaitingList.RecordCount>
+						<cfloop from="#GetEventRegistered.RecordCount#" to="#Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants#" step="1" index="LoopCount">
+							<cfquery name="GetRegistrationToUpgrade" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Select TContent_ID, RegistrationID, User_ID, EventID
+								From eRegistrations
+								Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+									EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
+									OnWaitingList = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+								Order By RegistrationDate ASC
+								Limit 1
+							</cfquery>
+							<cfquery name="UpgradeRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update eRegistrations
+								Set OnWaitingList = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
+								Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+									EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
+									RegistrationID = <cfqueryparam value="#GetRegistrationToUpgrade.RegistrationID#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+							<cfset temp = #SendEMailCFC.SendNoticeToIndividualRegistrationRemovedFromWaitingList(GetRegistrationToUpgrade.TContent_ID)#>
+						</cfloop>
+					</cfif>
 				</cfif>
 				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&SiteID=#rc.$.siteConfig('siteID')#&Successful=true&EventID=#GetSelectedRegistration.EventID#&UserAction=RemoveParticipants" addtoken="false">
 			</cfif>

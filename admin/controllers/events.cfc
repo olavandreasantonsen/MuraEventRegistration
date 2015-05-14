@@ -2449,22 +2449,53 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									<cfelse>
-										<cfset AttendeePrice = #Session.UserSuppliedInfo.PickedEvent.NonMemberCost#>
+										<cfif Session.UserSuppliedInfo.PickedEvent.EarlyBird_RegistrationAvailable EQ 1>
+											<cfif DateDiff("d", DateFormat(Now(), "yyyy-mm-dd"), DateFormat(Session.UserSuppliedInfo.PickedEvent.EarlyBird_RegistrationDeadline, "yyyy-mm-dd")) GTE 0>
+												<cfset AttendeePrice = #Session.UserSuppliedInfo.PickedEvent.EarlyBird_NonMemberCost#>
+											<cfelse>
+												<cfset AttendeePrice = #Session.UserSuppliedInfo.PickedEvent.NonMemberCost#>
+											</cfif>
+										<cfelse>
+											<cfset AttendeePrice = #Session.UserSuppliedInfo.PickedEvent.NonMemberCost#>
+										</cfif>
 										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 											Update eRegistrations
-											Set AttendeePrice =
+											Set AttendeePrice = "#Variables.AttendeePrice#"
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-									<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-										<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-											Select TContent_ID
-											From eRegistrations
-											Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-												User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
-												RegistrationID = "#Variables.RegistrationUUID#"
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+										Select TContent_ID
+										From eRegistrations
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
+									</cfquery>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
-										<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
 									</cfif>
 								</cfif>
 							</cfloop>
@@ -2562,16 +2593,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							<cfelse>
 								<cfset RegistrationUUID = #CreateUUID()#>
@@ -2632,16 +2686,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							</cfif>
 						</cfif>
@@ -2723,16 +2800,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							<cfelse>
 								<cfset RegistrationUUID = #CreateUUID()#>
@@ -2793,16 +2893,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							</cfif>
 						</cfif>
@@ -2884,16 +3007,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							<cfelse>
 								<cfset RegistrationUUID = #CreateUUID()#>
@@ -2954,16 +3100,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							</cfif>
 						</cfif>
@@ -3045,16 +3214,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							<cfelse>
 								<cfset RegistrationUUID = #CreateUUID()#>
@@ -3115,16 +3307,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							</cfif>
 						</cfif>
@@ -3206,16 +3421,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							<cfelse>
 								<cfset RegistrationUUID = #CreateUUID()#>
@@ -3276,16 +3514,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							</cfif>
 						</cfif>
@@ -3367,16 +3628,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#Variables.NewUserAccountID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							<cfelse>
 								<cfset RegistrationUUID = #CreateUUID()#>
@@ -3437,16 +3721,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 											Where RegistrationID = "#Variables.RegistrationUUID#"
 										</cfquery>
 									</cfif>
-								</cfif>
-								<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
-									<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									<cfquery name="GetEventRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										Select TContent_ID
 										From eRegistrations
-										Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-											User_ID = <cfqueryparam value="#CheckAccount.UserID#" cfsqltype="cf_sql_varchar"> and
-											RegistrationID = "#Variables.RegistrationUUID#"
+										Where EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer">
 									</cfquery>
-									<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+									<cfif GetEventRegistered.RecordCount LTE Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									<cfelse>
+										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+											Update eRegistrations
+											Set OnWaitingList = 1
+											Where RegistrationID = "#Variables.RegistrationUUID#"
+										</cfquery>
+										<cfif Session.UserSuppliedInfo.EventRegistration.Step1.EmailConfirmations EQ 1>
+											<cfquery name="GetRegistrationRecordID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+												Select TContent_ID
+												From eRegistrations
+												Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+													User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
+													RegistrationID = "#Variables.RegistrationUUID#"
+											</cfquery>
+											<cfset temp = #Variables.SendEmailCFC.SendEventWaitingListToSingleParticipant(GetRegistrationRecordID.TContent_ID)#>
+										</cfif>
+									</cfif>
 								</cfif>
 							</cfif>
 						</cfif>

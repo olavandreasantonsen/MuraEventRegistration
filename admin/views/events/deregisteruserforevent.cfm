@@ -85,7 +85,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 												</cfdefaultcase>
 											</cfswitch>
 											</cfloop>
-											<cfoutput>Test: #Variables.CurrentModRow#</cfoutput>
 											<cfswitch expression="#Variables.CurrentModRow#">
 												<cfcase value="2"><td colspan="2">&nbsp;</td></tr></cfcase>
 												<cfcase value="0"></cfcase>

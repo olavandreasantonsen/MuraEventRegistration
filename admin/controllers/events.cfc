@@ -3993,69 +3993,83 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 
+			<cfquery name="GetRegisteredUsersForEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				SELECT tusers.Fname, tusers.Lname, eRegistrations.User_ID
+				FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.User_ID
+				WHERE eRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+					eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+					eRegistrations.AttendedEvent = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+				ORDER BY tusers.Lname ASC, tusers.Fname ASC
+			</cfquery>
+
 			<cflock timeout="60" scope="Session" type="Exclusive">
-					<cfset Session.UserSuppliedInfo = StructNew()>
-					<cfset Session.UserSuppliedInfo.RecNo = #GetSelectedEvent.TContent_ID#>
-					<cfset Session.UserSuppliedInfo.ShortTitle = #GetSelectedEvent.ShortTitle#>
-					<cfset Session.UserSuppliedInfo.EventDate = #GetSelectedEvent.EventDate#>
-					<cfset Session.UserSuppliedInfo.EventDate1 = #GetSelectedEvent.EventDate1#>
-					<cfset Session.UserSuppliedInfo.EventDate2 = #GetSelectedEvent.EventDate2#>
-					<cfset Session.UserSuppliedInfo.EventDate3 = #GetSelectedEvent.EventDate3#>
-					<cfset Session.UserSuppliedInfo.EventDate4 = #GetSelectedEvent.EventDate4#>
-					<cfif LEN(GetSelectedEvent.EventDate1) or LEN(GetSelectedEvent.EventDate2) or LEN(GetSelectedEvent.EventDate3) or LEN(GetSelectedEvent.EventDate4)>
-						<cfset Session.UserSuppliedInfo.EventSpanDates = 1>
-					<cfelse>
-						<cfset Session.UserSuppliedInfo.EventSpanDates = 0>
-					</cfif>
-					<cfset Session.UserSuppliedInfo.LongDescription = #GetSelectedEvent.LongDescription#>
-					<cfset Session.UserSuppliedInfo.Event_StartTime = #GetSelectedEvent.Event_StartTime#>
-					<cfset Session.UserSuppliedInfo.Event_EndTime = #GetSelectedEvent.Event_EndTime#>
-					<cfset Session.UserSuppliedInfo.Registration_Deadline = #GetSelectedEvent.Registration_Deadline#>
-					<cfset Session.UserSuppliedInfo.Registration_BeginTime = #GetSelectedEvent.Registration_BeginTime#>
-					<cfset Session.UserSuppliedInfo.Registration_EndTime = #GetSelectedEvent.Registration_EndTime#>
-					<cfset Session.UserSuppliedInfo.EventFeatured = #GetSelectedEvent.EventFeatured#>
-					<cfset Session.UserSuppliedInfo.Featured_StartDate = #GetSelectedEvent.Featured_StartDate#>
-					<cfset Session.UserSuppliedInfo.Featured_EndDate = #GetSelectedEvent.Featured_EndDate#>
-					<cfset Session.UserSuppliedInfo.Featured_SortOrder = #GetSelectedEvent.Featured_SortOrder#>
-					<cfset Session.UserSuppliedInfo.MemberCost = #GetSelectedEvent.MemberCost#>
-					<cfset Session.UserSuppliedInfo.NonMemberCost = #GetSelectedEvent.NonMemberCost#>
-					<cfset Session.UserSuppliedInfo.EarlyBird_RegistrationDeadline = #GetSelectedEvent.EarlyBird_RegistrationDeadline#>
-					<cfset Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable = #GetSelectedEvent.EarlyBird_RegistrationAvailable#>
-					<cfset Session.UserSuppliedInfo.EarlyBird_MemberCost = #GetSelectedEvent.EarlyBird_MemberCost#>
-					<cfset Session.UserSuppliedInfo.EarlyBird_NonMemberCost = #GetSelectedEvent.EarlyBird_NonMemberCost#>
-					<cfset Session.UserSuppliedInfo.ViewSpecialPricing = #GetSelectedEvent.ViewSpecialPricing#>
-					<cfset Session.UserSuppliedInfo.SpecialMemberCost = #GetSelectedEvent.SpecialMemberCost#>
-					<cfset Session.UserSuppliedInfo.SpecialNonMemberCost = #GetSelectedEvent.SpecialNonMemberCost#>
-					<cfset Session.UserSuppliedInfo.SpecialPriceRequirements = #GetSelectedEvent.SpecialPriceRequirements#>
-					<cfset Session.UserSuppliedInfo.PGPAvailable = #GetSelectedEvent.PGPAvailable#>
-					<cfset Session.UserSuppliedInfo.PGPPoints = #GetSelectedEvent.PGPPoints#>
-					<cfset Session.UserSuppliedInfo.MealProvided = #GetSelectedEvent.MealProvided#>
-					<cfset Session.UserSuppliedInfo.MealProvidedBy = #GetSelectedEvent.MealProvidedBy#>
-					<cfset Session.UserSuppliedInfo.MealCost_Estimated = #GetSelectedEvent.MealCost_Estimated#>
-					<cfset Session.UserSuppliedInfo.AllowVideoConference = #GetSelectedEvent.AllowVideoConference#>
-					<cfset Session.UserSuppliedInfo.VideoConferenceInfo = #GetSelectedEvent.VideoConferenceInfo#>
-					<cfset Session.UserSuppliedInfo.VideoConferenceCost = #GetSelectedEvent.VideoConferenceCost#>
-					<cfset Session.UserSuppliedInfo.AcceptRegistrations = #GetSelectedEvent.AcceptRegistrations#>
-					<cfset Session.UserSuppliedInfo.EventAgenda = #GetSelectedEvent.EventAgenda#>
-					<cfset Session.UserSuppliedInfo.EventTargetAudience = #GetSelectedEvent.EventTargetAudience#>
-					<cfset Session.UserSuppliedInfo.EventStrategies = #GetSelectedEvent.EventStrategies#>
-					<cfset Session.UserSuppliedInfo.EventSpecialInstructions = #GetSelectedEvent.EventSpecialInstructions#>
-					<cfset Session.UserSuppliedInfo.Maxparticipants = #GetSelectedEvent.Maxparticipants#>
-					<cfset Session.UserSuppliedInfo.LocationType = #GetSelectedEvent.LocationType#>
-					<cfset Session.UserSuppliedInfo.LocationID = #GetSelectedEvent.LocationID#>
-					<cfset Session.UserSuppliedInfo.LocationRoomID = #GetSelectedEvent.LocationRoomID#>
-					<cfset Session.UserSuppliedInfo.RoomMaxParticipants = #GetSelectedEvent.MaxParticipants#>
-					<cfset Session.UserSuppliedInfo.Presenters = #GetSelectedEvent.Presenters#>
-					<cfset Session.UserSuppliedInfo.Facilitator = #GetSelectedEvent.Facilitator#>
-					<cfset Session.UserSuppliedInfo.dateCreated = #GetSelectedEvent.dateCreated#>
-					<cfset Session.UserSuppliedInfo.lastUpdated = #GetSelectedEvent.lastUpdated#>
-					<cfset Session.UserSuppliedInfo.lastUpdateBy = #GetSelectedEvent.lastUpdateBy#>
-					<cfset Session.UserSuppliedInfo.Active = #GetSelectedEvent.Active#>
-					<cfset Session.UserSuppliedInfo.WebinarAvailable = #GetSelectedEvent.WebinarAvailable#>
-					<cfset Session.UserSuppliedInfo.WebinarConnectInfo = #GetSelectedEvent.WebinarConnectInfo#>
-					<cfset Session.UserSuppliedInfo.WebinarMemberCost = #GetSelectedEvent.WebinarMemberCost#>
-					<cfset Session.UserSuppliedInfo.WebinarNonMemberCost = #GetSelectedEvent.WebinarNonMemberCost#>
-				</cflock>
+				<cfset Session.UserSuppliedInfo = StructNew()>
+				<cfset Session.UserSuppliedInfo.RegisteredParticipants = StructNew()>
+				<cfset Session.UserSuppliedInfo.RegisteredParticipants = StructCopy(GetRegisteredUsersForEvent)>
+				<cfset Session.UserSuppliedInfo.PickedEvent = StructNew()>
+				<cfset Session.UserSuppliedInfo.PickedEvent.RecNo = #GetSelectedEvent.TContent_ID#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.ShortTitle = #GetSelectedEvent.ShortTitle#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate = #GetSelectedEvent.EventDate#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate1 = #GetSelectedEvent.EventDate1#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate2 = #GetSelectedEvent.EventDate2#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate3 = #GetSelectedEvent.EventDate3#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate4 = #GetSelectedEvent.EventDate4#>
+				<cfif LEN(GetSelectedEvent.EventDate1) or LEN(GetSelectedEvent.EventDate2) or LEN(GetSelectedEvent.EventDate3) or LEN(GetSelectedEvent.EventDate4)>
+					<cfset Session.UserSuppliedInfo.PickedEvent.EventSpanDates = 1>
+				<cfelse>
+					<cfset Session.UserSuppliedInfo.PickedEvent.EventSpanDates = 0>
+				</cfif>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LongDescription = #GetSelectedEvent.LongDescription#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Event_StartTime = #GetSelectedEvent.Event_StartTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Event_EndTime = #GetSelectedEvent.Event_EndTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Registration_Deadline = #GetSelectedEvent.Registration_Deadline#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Registration_BeginTime = #GetSelectedEvent.Registration_BeginTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Registration_EndTime = #GetSelectedEvent.Registration_EndTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventFeatured = #GetSelectedEvent.EventFeatured#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Featured_StartDate = #GetSelectedEvent.Featured_StartDate#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Featured_EndDate = #GetSelectedEvent.Featured_EndDate#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Featured_SortOrder = #GetSelectedEvent.Featured_SortOrder#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MemberCost = #GetSelectedEvent.MemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.NonMemberCost = #GetSelectedEvent.NonMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_RegistrationDeadline = #GetSelectedEvent.EarlyBird_RegistrationDeadline#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_RegistrationAvailable = #GetSelectedEvent.EarlyBird_RegistrationAvailable#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_MemberCost = #GetSelectedEvent.EarlyBird_MemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_NonMemberCost = #GetSelectedEvent.EarlyBird_NonMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.ViewSpecialPricing = #GetSelectedEvent.ViewSpecialPricing#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.SpecialMemberCost = #GetSelectedEvent.SpecialMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.SpecialNonMemberCost = #GetSelectedEvent.SpecialNonMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.SpecialPriceRequirements = #GetSelectedEvent.SpecialPriceRequirements#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.PGPAvailable = #GetSelectedEvent.PGPAvailable#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.PGPPoints = #GetSelectedEvent.PGPPoints#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MealProvided = #GetSelectedEvent.MealProvided#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MealProvidedBy = #GetSelectedEvent.MealProvidedBy#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MealCost_Estimated = #GetSelectedEvent.MealCost_Estimated#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.AllowVideoConference = #GetSelectedEvent.AllowVideoConference#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.VideoConferenceInfo = #GetSelectedEvent.VideoConferenceInfo#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.VideoConferenceCost = #GetSelectedEvent.VideoConferenceCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.AcceptRegistrations = #GetSelectedEvent.AcceptRegistrations#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventAgenda = #GetSelectedEvent.EventAgenda#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventTargetAudience = #GetSelectedEvent.EventTargetAudience#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventStrategies = #GetSelectedEvent.EventStrategies#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventSpecialInstructions = #GetSelectedEvent.EventSpecialInstructions#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Maxparticipants = #GetSelectedEvent.Maxparticipants#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LocationType = #GetSelectedEvent.LocationType#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LocationID = #GetSelectedEvent.LocationID#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LocationRoomID = #GetSelectedEvent.LocationRoomID#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants = #GetSelectedEvent.MaxParticipants#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Presenters = #GetSelectedEvent.Presenters#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Facilitator = #GetSelectedEvent.Facilitator#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.dateCreated = #GetSelectedEvent.dateCreated#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.lastUpdated = #GetSelectedEvent.lastUpdated#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.lastUpdateBy = #GetSelectedEvent.lastUpdateBy#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Active = #GetSelectedEvent.Active#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarAvailable = #GetSelectedEvent.WebinarAvailable#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarConnectInfo = #GetSelectedEvent.WebinarConnectInfo#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarMemberCost = #GetSelectedEvent.WebinarMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarNonMemberCost = #GetSelectedEvent.WebinarNonMemberCost#>
+			</cflock>
+
+
 		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID") and isDefined("FORM.PerformAction")>
 			<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
 

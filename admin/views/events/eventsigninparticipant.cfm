@@ -28,7 +28,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<h3 class="t">Sign In Participant for Workshop/Event: #Session.UserSuppliedInfo.PickedEvent.ShortTitle#</h3>
 			</div>
 			<div class="art-blockcontent">
-				<div class="alert-box notice">Please check each participant who was in attendance for this workshop or event. Once this process has been completed they will be able to retrieve their certificate for this if one was made available.</div>
+				<div class="alert-box notice">Please check each participant who was in attendance for this workshop or event. Once this process has been completed they will be able to retrieve a course certificate if one was made available during the creation of this event.</div>
 				<hr>
 				<cfif ArrayLen(Session.FormErrors)>
 					<div class="alert-box error">Please select atleast one participant that needs to be electronically signin to this event.</div>

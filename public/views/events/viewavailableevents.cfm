@@ -240,7 +240,7 @@
 											</cfif>
 										</cfif>
 									</cfif>
-									<a href="/plugins/#variables.Framework.package##buildURL('public:main.eventinfo')#&EventID=#Variables.FeatureEventRecordID#" class="art-button">More Info</a>
+									<a href="/plugins/#variables.Framework.package##buildURL('public:events.eventinfo')#&EventID=#Variables.FeatureEventRecordID#" class="art-button">More Info</a>
 								</td>
 								<td style="width: 10%;"></td>
 							</tr>
@@ -311,7 +311,7 @@
 									<cfif Variables.EventSeatsLeft GTE 1>
 										<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button" alt="Register Event">Register</a>
 									</cfif>
-								</cfif> &nbsp; <a href="/plugins/#variables.Framework.package##buildURL('public:main.eventinfo')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
+								</cfif> &nbsp; <a href="/plugins/#variables.Framework.package##buildURL('public:events.eventinfo')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
 							</td>
 							<td style="width: 10%;">
 								<cfif getNonFeaturedEvents.PGPAvailable EQ 1><img src="/plugins/EventRegistration/includes/assets/images/award.png" alt="PGP Certificate" border="0"></cfif>

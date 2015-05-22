@@ -702,6 +702,22 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<cffile action="copy" source="#Variables.itextFile3Orig#" destination="#Variables.itextFile3Dest#">
 		</cfif>
 
+		<!--- Initiates the User Bean --->
+		<!--- Creates the Group Presenter --->
+		<cfset NewGroupPresenter = #Application.userManager.read("")#>
+		<cfset NewGroupPresenter.setSiteID(Session.SiteID)>
+		<cfset NewGroupPresenter.setGroupName("Presenter")>
+		<cfset NewGroupPresenter.setType(1)>
+		<cfset NewGroupPresenter.setIsPublic(1)>
+		<cfset NewGroupPresneter=#Application.userManager.create(NewGroupPresenter)#>
+
+		<!--- Creates the Group Presenter --->
+		<cfset NewGroupFacilitator = #Application.userManager.read("")#>
+		<cfset NewGroupFacilitator.setSiteID(Session.SiteID)>
+		<cfset NewGroupFacilitator.setGroupName("Event Facilitator")>
+		<cfset NewGroupFacilitator.setType(1)>
+		<cfset NewGroupFacilitator.setIsPublic(1)>
+		<cfset NewGroupFacilitator=#Application.userManager.create(NewGroupFacilitator)#>
 
 	</cffunction>
 

@@ -1,5 +1,5 @@
 <cfif not isDefined("URL.EventID") and not isDefined("URL.RegistrationID") and Session.Mura.IsLoggedIn EQ "False">
-	<cflocation addtoken="true" url="?#HTMLEditFormat(rc.pc.getPackage())#action=public:main.viewavailableevents">
+	<cflocation addtoken="true" url="?#HTMLEditFormat(rc.pc.getPackage())#action=public:events.viewavailableevents">
 <cfelseif not isDefined("URL.EventID") and not isDefined("URL.RegistrationID") and Session.Mura.IsLoggedIn EQ "True">
 	<cflocation addtoken="true" url="?#HTMLEditFormat(rc.pc.getPackage())#action=public:usermenu.default">
 <cfelseif isDefined("URL.EventID") and isDefined("URL.RegistrationID") and Session.Mura.IsLoggedIn EQ "True">
@@ -16,7 +16,7 @@
 			<h2>Cancel Registration</h2>
 			<hr>
 			<uForm:form action="" method="Post" id="CancelEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/properties/uniForm/"
-				showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:main.viewavailableevents&Return=True"
+				showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.viewavailableevents&Return=True"
 				submitValue="Cancel Event" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
 				<input type="hidden" name="formSubmit" value="true">
 				<input type="hidden" name="RegistrationID" value="#URL.RegistrationID#">
@@ -39,7 +39,7 @@
 			<h2>Cancel Registration</h2>
 			<hr>
 			<uForm:form action="" method="Post" id="CancelEvent" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/properties/uniForm/"
-				showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:main.viewavailableevents&Return=True"
+				showCancel="yes" cancelValue="<--- Return to Main Page" cancelName="cancelButton" cancelAction="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.viewavailableevents&Return=True"
 				submitValue="Cancel Event" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
 				<input type="hidden" name="formSubmit" value="true">
 				<input type="hidden" name="RegistrationID" value="#URL.RegistrationID#">

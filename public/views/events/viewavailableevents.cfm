@@ -236,11 +236,11 @@
 									<cfif Variables.FeatureEventAcceptRegistrations EQ 1>
 										<cfif DateDiff("d", Now(), FeatureEventRegistrationDeadline) GTE 0>
 											<cfif Variables.FeaturedEventSeatsLeft GT 0>
-												<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#Variables.FeatureEventRecordID#" class="art-button" alt="Register Event">Register</a>
+												<a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:registerevent.default&EventID=#Variables.FeatureEventRecordID#" class="art-button" alt="Register Event">Register</a>
 											</cfif>
 										</cfif>
 									</cfif>
-									<a href="/plugins/#variables.Framework.package##buildURL('public:events.eventinfo')#&EventID=#Variables.FeatureEventRecordID#" class="art-button">More Info</a>
+									<a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.eventinfo&EventID=#Variables.FeatureEventRecordID#" class="art-button">More Info</a>
 								</td>
 								<td style="width: 10%;"></td>
 							</tr>
@@ -309,9 +309,9 @@
 							<td style="width: 20%;">
 								<cfif getNonFeaturedEvents.AcceptRegistrations EQ 1>
 									<cfif Variables.EventSeatsLeft GTE 1>
-										<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button" alt="Register Event">Register</a>
+										<a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:registerevent.default&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button" alt="Register Event">Register</a>
 									</cfif>
-								</cfif> &nbsp; <a href="/plugins/#variables.Framework.package##buildURL('public:events.eventinfo')#&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
+								</cfif> &nbsp; <a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.eventinfo&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
 							</td>
 							<td style="width: 10%;">
 								<cfif getNonFeaturedEvents.PGPAvailable EQ 1><img src="/plugins/EventRegistration/includes/assets/images/award.png" alt="PGP Certificate" border="0"></cfif>
@@ -324,7 +324,6 @@
 		</p></div>
 	</div>
 </cfif>
-<cfdump var="#Session#">
 	<!--- <cfset GetAllGroups = #$.getBean( 'userManager' ).getUserGroups( rc.$.siteConfig('siteID'), 1 )#>
 	<cfset GetGroupMembers = #members=$.getBean( 'user' ).loadBy( groupname = 'Event Coordinator' ).getRecordCount()#>
 	<cfset UserSuperUser = #rc.$.getCurrentUser().isSuperUser()#>

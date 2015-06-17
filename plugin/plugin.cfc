@@ -201,7 +201,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				// Since the Database Table does not exists, Lets Create it
 				var dbCreateTableUserMatrix = new query();
 				dbCreateTableUserMatrix.setDatasource("#application.configBean.getDatasource()#");
-				dbCreateTableUserMatrix.setSQL("CREATE TABLE `eUserMatrix` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `User_ID` char(35) NOT NULL, `School_District` int(11) NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
+				dbCreateTableUserMatrix.setSQL("CREATE TABLE `eUserMatrix` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `User_ID` char(35) NOT NULL, `School_District` int(11) DEFAULT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
 				var dbCreateTableUserMatrixResult = dbCreateTableUserMatrix.execute();
 			} else {
 				// Database Table Exists, We must Drop it to create it again
@@ -213,7 +213,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				if (len(dbDropTableUserMatrixResult.getResult()) eq 0) {
 					var dbCreateTableUserMatrix = new query();
 					dbCreateTableUserMatrix.setDatasource("#application.configBean.getDatasource()#");
-					dbCreateTableUserMatrix.setSQL("CREATE TABLE `eUserMatrix` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `User_ID` char(35) NOT NULL, `School_District` int(11) NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
+					dbCreateTableUserMatrix.setSQL("CREATE TABLE `eUserMatrix` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `User_ID` char(35) NOT NULL, `School_District` int(11) DEFAULT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
 					var dbCreateTableUserMatrixResult = dbCreateTableUserMatrix.execute();
 				} else {
 				 writedump(dbCreateTableUserMatrixResult.getResult());

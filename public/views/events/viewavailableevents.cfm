@@ -132,6 +132,23 @@
 	</cfswitch>
 </cfif>
 
+<cfif isDefined("URL.RegistrationSuccessfull")>
+	<cfswitch expression="#URL.RegistrationSuccessfull#">
+		<cfcase value="true">
+			<div class="art-block clearfix">
+					<div class="art-blockheader">
+						<h3 class="t">Registration Successfull</h3>
+					</div>
+					<cfif isDefined("URL.SingleRegistration")>
+						<div class="art-blockcontent"><p class="alert-box notice">You have sucessfully registered yourself for the event. You will receive an email confirmation to your email address within the next few minutes regarding the details of this registration.</p></div>
+					<cfelse>
+						<div class="art-blockcontent"><p class="alert-box notice">You have sucessfully registered yourself and others for the event. You will receive an email confirmation to your email address within the next few minutes regarding the details of this registration. You will need to share this information with the other people who you registered at this same time.</p></div>
+					</cfif>
+				</div>
+		</cfcase>
+	</cfswitch>
+</cfif>
+
 
 <cfoutput>
 

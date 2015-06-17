@@ -111,7 +111,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<cflocation url="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.viewavailableevents&RegistrationSuccessfull=True&SingleRegistration=True" addtoken="false">
 					<cfelse>
 						<cfscript>
-							AlreadyRegistered = {property="RegisterAdditionalParticipants",message="You are already registered for this event. Please change this option to register additional participants, or you can cancel your registration by using the appropriate button below"};
+							AlreadyRegistered = {property="RegisterAdditionalParticipants",message="You are already registered for this event. Please change this option to register additional participants."};
 							arrayAppend(Session.FormErrors, AlreadyRegistered);
 						</cfscript>
 						<cfif isDefined("URL.EventID")>

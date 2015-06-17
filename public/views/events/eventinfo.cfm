@@ -136,7 +136,7 @@
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:users.default" class="active">Manage Users</a></li>
 									</ul>
 								</li>
-							<cfelseif Variables.EventCoordinatorRole EQ "false" and Variables.EventPresenterRole EQ "true">
+							<cfelseif Session.Mura.EventCoordinatorRole EQ "false" and Session.Mura.EventPresenterRole EQ "true">
 								<li><a href="" class="active">Presenter Administration</a>
 									<!--- <ul>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:caterers.default" class="active">Manage Catering</a></li>
@@ -455,9 +455,9 @@
 							<cfif DateDiff("d", Now(), getSelectedEvent.Registration_Deadline) GTE 0>
 								<cfif Variables.SeatsLeft GT 0>
 									<cfif Session.Mura.isLoggedIn EQ 0>
-										<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
+										<a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:registerevent.default&EventID=#URL.EventID#" class="art-button">Register</a>
 									<cfelse>
-										<a href="/plugins/#variables.Framework.package##buildURL('public:registerevent.default')#&EventID=#URL.EventID#" class="art-button">Register</a>
+										<a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:registerevent.default&EventID=#URL.EventID#" class="art-button">Register</a>
 									</cfif>
 								</cfif>
 							</cfif>

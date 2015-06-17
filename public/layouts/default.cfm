@@ -136,7 +136,7 @@
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:users.default" class="active">Manage Users</a></li>
 									</ul>
 								</li>
-							<cfelseif Variables.EventCoordinatorRole EQ "false" and Variables.EventPresenterRole EQ "true">
+							<cfelseif Session.Mura.EventCoordinatorRole EQ "false" and Session.Mura.EventPresenterRole EQ "true">
 								<li><a href="" class="active">Presenter Administration</a>
 									<!--- <ul>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:caterers.default" class="active">Manage Catering</a></li>

@@ -149,6 +149,19 @@
 	</cfswitch>
 </cfif>
 
+<cfif isDefined("URL.CancelEventSuccessfull")>
+	<cfswitch expression="#URL.CancelEventSuccessfull#">
+		<cfcase value="True">
+			<div class="art-block clearfix">
+					<div class="art-blockheader">
+						<h3 class="t">Registration Cancelled Successfull</h3>
+					</div>
+					<div class="art-blockcontent"><p class="alert-box notice">You have sucessfully cancelled the registration to attend the event. If this was done by error, you will need to register for the event again.</p></div>
+				</div>
+		</cfcase>
+	</cfswitch>
+</cfif>
+
 
 <cfoutput>
 

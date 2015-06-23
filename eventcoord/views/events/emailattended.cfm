@@ -27,7 +27,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<div class="art-blockcontent">
 			<div class="alert-box notice">Please complete this form to send a message to those who have registered for this event.<br><Strong>Number of Registrations Currently: #Session.EventNumberRegistrations#</Strong></div>
 			<hr>
-			<uForm:form action="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.emailregistered&compactDisplay=false&EventID=#URL.EventID#&EventStatus=EmailParticipants" method="Post" id="EmailEventParticipants" errors="#Session.FormErrors#" errorMessagePlacement="both"
+			<uForm:form action="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.emailattended&compactDisplay=false&EventID=#URL.EventID#&EventStatus=EmailParticipants" method="Post" id="EmailEventParticipants" errors="#Session.FormErrors#" errorMessagePlacement="both"
 				commonassetsPath="/plugins/EventRegistration/library/uniForm/" showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
 				cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&compactDisplay=false"
 				submitValue="Email Event Participants" loadValidation="true" loadMaskUI="true" loadDateUI="false" loadTimeUI="false">

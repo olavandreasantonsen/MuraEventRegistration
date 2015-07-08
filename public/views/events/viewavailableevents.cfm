@@ -1,6 +1,10 @@
 <!---
 
 --->
+
+<cfif isDefined("URL.Info")>
+	<cflocation url="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.eventinfo&EventID=#URL.Info#">
+</cfif>
 <cfif isDefined("Session.Mura")>
 	<cfif Session.Mura.isLoggedIn EQ "true" and isDefined("Session.UserRegistrationInfo")>
 		<!--- Outer CFIF Code Block was added to prevent moving on to another page when user enters wrong password for account --->

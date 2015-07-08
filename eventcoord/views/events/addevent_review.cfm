@@ -27,7 +27,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<div class="art-blockcontent">
 			<div class="alert-box notice">Please review the information listed below from the previous screens to make sure everything is correct.</div>
 			<hr>
-			<uForm:form action="#buildURL('admin:events.addevent_review')#" method="Post" id="AddEvent" errors="#Session.FormErrors#" errorMessagePlacement="both"
+			<uForm:form action="#buildURL('eventcoord:events.addevent_review')#" method="Post" id="AddEvent" errors="#Session.FormErrors#" errorMessagePlacement="both"
 				commonassetsPath="/plugins/EventRegistration/library/uniForm/" showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
 				cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&compactDisplay=false"
 				submitValue="Add New Event" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">

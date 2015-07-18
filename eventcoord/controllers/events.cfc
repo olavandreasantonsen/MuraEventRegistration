@@ -4311,7 +4311,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					WHERE eFacility.Active = <cfqueryparam value="1" cfsqltype="cf_sql_integer"> AND eFacility.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 						AND eFacilityRooms.TContent_ID = <cfqueryparam value="#GetSelectedEvent.LocationRoomID#" cfsqltype="cf_sql_integer">
 				</cfquery>
-
+				<cfset Session.UserSuppliedInfo.EventInfo = #StructCopy(GetSelectedEvent)#>
 				<cfset Session.UserSuppliedInfo.FacilityInfo = #StructCopy(GetFacilityInformation)#>
 			</cfif>
 		<cfelseif not isDefined("Form.PerformAction") and isDefined("URL.EventID") and not isDefined("URL.PerformAction") and isDefined("URL.EventID")>

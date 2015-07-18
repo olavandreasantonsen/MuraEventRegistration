@@ -26,7 +26,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfswitch expression="#URL.UserAction#">
 					<cfcase value="PostToFB">
 						<div class="alert-box success">
-							<p>Your have successfully posted a message regarding <cfoutput>#Session.UserSuppliedInfo.ShortTitle#</cfoutput> to the Organization's Facebook Page.</p>
+							<p>Your have successfully posted a message regarding <cfoutput>#Session.UserSuppliedInfo.PickedEvent.ShortTitle#</cfoutput> to the Organization's Facebook Page.</p>
 						</div>
 					</cfcase>
 					<cfcase value="ParticipantsRegistered">
@@ -139,7 +139,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 									EventID = <cfqueryparam value="#getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer">
 							</cfquery>
 							<tr bgcolor="###iif(currentrow MOD 2,DE('ffffff'),DE('efefef'))#">
-								<td width="50%">#getAvailableEvents.ShortTitle#</td>
+								<td width="50%">(<a href="http://#cgi.server_name#/?Info=#getAvailableEvents.TContent_ID#">#getAvailableEvents.TContent_ID#</a>) / #getAvailableEvents.ShortTitle#</td>
 								<td width="15%">#DateFormat(getAvailableEvents.EventDate, "mmm dd, yy")#</td>
 								<td>
 									<a href="#buildURL('admin:events.updateevent_review')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Update</a>&nbsp;&nbsp;<a href="#buildURL('admin:events.cancelevent')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Cancel</a>&nbsp;&nbsp;<a href="#buildURL('admin:events.emailregistered')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Email Registered</a>&nbsp;&nbsp;<a href="#buildURL('admin:events.emailattended')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Email Attended</a>&nbsp;&nbsp;<a href="#buildURL('admin:events.copypriorevent')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Copy</a><br />

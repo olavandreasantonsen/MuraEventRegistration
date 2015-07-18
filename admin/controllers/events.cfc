@@ -4290,7 +4290,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 		<cfif isDefined("URL.EventID") and isDefined("URL.AutomaticPost")>
 			<cfif URL.AutomaticPost EQ "True">
-
 				<cfquery name="GetSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription,
 						Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime,

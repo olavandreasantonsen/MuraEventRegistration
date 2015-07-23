@@ -342,10 +342,10 @@
 							<td style="width: 20%;">#DateFormat(getNonFeaturedEvents.EventDate, "mmm dd, yy")#</td>
 							<td style="width: 20%;">
 								<cfif getNonFeaturedEvents.AcceptRegistrations EQ 1>
-									<cfif Variables.EventSeatsLeft GTE 1>
-										<a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:registerevent.default&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button" alt="Register Event">Register</a>
+									<cfif Variables.EventSeatsLeft GTE 1 and DateDiff("d", Now(), getNonFeaturedEvents.Registration_Deadline) GTE 0>
+										<a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:registerevent.default&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button" alt="Register Event">Register</a> &nbsp;
 									</cfif>
-								</cfif> &nbsp; <a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.eventinfo&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
+								</cfif><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=public:events.eventinfo&EventID=#getNonFeaturedEvents.TContent_ID#" class="art-button">More Info</a>
 							</td>
 							<td style="width: 10%;">
 								<cfif getNonFeaturedEvents.PGPAvailable EQ 1><img src="/plugins/EventRegistration/includes/assets/images/award.png" alt="PGP Certificate" border="0"></cfif>

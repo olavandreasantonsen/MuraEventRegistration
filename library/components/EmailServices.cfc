@@ -529,6 +529,11 @@
 		<cfinclude template="EmailTemplates/SendEventMessageToParticipantsFromFacilitator.cfm">
 	</cffunction>
 
+	<cffunction name="SendEventMessageToAllAttendedParticipants" returntype="Any" Output="false">
+		<cfargument name="ParticipantInfo" type="struct" Required="True">
+		<cfinclude template="EmailTemplates/SendEventMessageToAttendedParticipantsFromFacilitator.cfm">
+	</cffunction>
+
 	<cffunction name="SendEventWaitingListToSingleParticipant" returntype="Any" Output="false">
 		<cfargument name="RegistrationRecordID" type="numeric" Required="True">
 

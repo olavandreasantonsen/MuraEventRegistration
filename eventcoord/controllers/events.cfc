@@ -4766,7 +4766,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<cfset temp = #SendEMailCFC.SendEventMessageToAllAttendedParticipants(Variables.ParticipantInfo)#>
 					</cfloop>
 				</cfif>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&UserAction=RegistrationsSent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true&EventID=#GetAttendedUsersForEvent.EventID#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&UserAction=AttendedSent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true&EventID=#GetAttendedUsersForEvent.EventID#" addtoken="false">
 			<cfelseif GetAttendedUsersForEvent.RecordCount EQ 0>
 				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&UserAction=NoRegistrations&SiteID=#rc.$.siteConfig('siteID')#&Successful=false&EventID=#GetAttendedUsersForEvent.EventID#" addtoken="false">
 			</cfif>

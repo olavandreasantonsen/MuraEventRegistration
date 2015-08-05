@@ -2543,13 +2543,35 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<cfswitch expression="#FORM.PerformAction#">
 				<cfcase value="ListParticipantsInOrganization">
 					<cfset Session.UserSuppliedInfo.Registration = #StructCopy(FORM)#>
-					<cfquery name="GetSelectedAccountsWithinOrganization" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Select UserID, Fname, Lname, Email
-						From tusers
-						Where SiteID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-							Email LIKE '%#FORM.DistrictName#%'
-						Order by Lname, Fname
-					</cfquery>
+					<cfif FORM.DistrictName EQ 0>
+						<cfquery name="GetSchoolDomains" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Select OrganizationDomainName
+							From eMembership
+							Where Length(OrganizationDomainName) > 0
+						</cfquery>
+						<cfset NumberDomains = #GetSchoolDomains.RecordCount#>
+
+						<cfquery name="GetSelectedAccountsWithinOrganization" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Select UserID, Fname, Lname, Email
+							From tusers
+							WHERE 1 = 1
+							<cfloop query="GetSchoolDomains">
+								AND
+							 SiteID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+								Email NOT LIKE "%#GetSchoolDomains.OrganizationDomainName#%"
+							</cfloop>
+							Order by Lname, Fname
+						</cfquery>
+					<cfelse>
+						<cfquery name="GetSelectedAccountsWithinOrganization" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Select UserID, Fname, Lname, Email
+							From tusers
+							Where SiteID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+								Email LIKE '%#FORM.DistrictName#%'
+							Order by Lname, Fname
+						</cfquery>
+					</cfif>
+
 					<cfquery name="GetOrganizationMembership" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 						Select OrganizationName, StateDOE_IDNumber, StateDOE_State, Active
 						From eMembership

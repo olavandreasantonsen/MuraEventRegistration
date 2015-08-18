@@ -4071,6 +4071,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 							Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
 							From eRegistrations
 							Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+								EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
 								User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar">
 						</cfquery>
 						<cfset ParticipantInfo = StructNew()>
@@ -4095,6 +4096,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
 						From eRegistrations
 						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+							EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
 							User_ID = <cfqueryparam value="#FORM.RemoveParticipants#" cfsqltype="cf_sql_varchar">
 					</cfquery>
 

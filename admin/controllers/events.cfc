@@ -2570,7 +2570,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 								Email LIKE '%#FORM.DistrictName#%'
 							Order by Lname, Fname
 						</cfquery>
-					</cfifr>
+					</cfif>
 					<cfquery name="GetOrganizationMembership" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 						Select OrganizationName, StateDOE_IDNumber, StateDOE_State, Active
 						From eMembership
@@ -4070,11 +4070,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 							Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
 							From eRegistrations
 							Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+								EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
 								User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar">
 						</cfquery>
 						<cfset ParticipantInfo = StructNew()>
 						<cfset ParticipantInfo.RegistrationID = #GetSelectedRegistration.RegistrationID#>
 						<cfset ParticipantInfo.FormData = StructNew()>
+						<cfset ParticipantInfo.SendEmailConfirmations = #FORM.SendEmailConfirmation#>
 						<cfset ParticipantInfo.FormData.Datasource = #rc.$.globalConfig('datasource')#>
 						<cfset ParticipantInfo.FormData.DBUserName = #rc.$.globalConfig('dbusername')#>
 						<cfset ParticipantInfo.FormData.DBPassword = #rc.$.globalConfig('dbpassword')#>
@@ -4094,12 +4096,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 						Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, AttendedEvent, Comments, WebinarParticipant
 						From eRegistrations
 						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+							EventID = <cfqueryparam value="#Session.UserSuppliedInfo.PickedEvent.RecNo#" cfsqltype="cf_sql_integer"> and
 							User_ID = <cfqueryparam value="#FORM.RemoveParticipants#" cfsqltype="cf_sql_varchar">
 					</cfquery>
 
 					<cfset ParticipantInfo = StructNew()>
 					<cfset ParticipantInfo.FormData = StructNew()>
 					<cfset ParticipantInfo.RegistrationID = #GetSelectedRegistration.RegistrationID#>
+					<cfset ParticipantInfo.SendEmailConfirmations = #FORM.SendEmailConfirmation#>
 					<cfset ParticipantInfo.FormData.Datasource = #rc.$.globalConfig('datasource')#>
 					<cfset ParticipantInfo.FormData.DBUserName = #rc.$.globalConfig('dbusername')#>
 					<cfset ParticipantInfo.FormData.DBPassword = #rc.$.globalConfig('dbpassword')#>

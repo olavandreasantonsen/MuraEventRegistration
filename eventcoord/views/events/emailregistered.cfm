@@ -104,5 +104,4 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</uForm:form>
 		</div>
 	</div>
-	<cfdump var="#Session.UserSuppliedInfo#">
 </cfoutput>

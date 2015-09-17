@@ -156,10 +156,10 @@
 				<cfif getSelectedEvent.WebinarAvailable EQ 0>
 					<uForm:fieldset legend="Cost to physically attend Event">
 						<cfif Session.UserRegistrationInfo.SpecialPricingAvailable EQ "True">
-							<cfif UserRegistrationInfo.SpecialPricingAvailable EQ "True"><cfset SpecialPriceAvailable = "Yes"><cfelse><cfset SpecialPriceAvailable = "No"></cfif>
+							<cfif Session.UserRegistrationInfo.SpecialPricingAvailable EQ "True"><cfset SpecialPriceAvailable = "Yes"><cfelse><cfset SpecialPriceAvailable = "No"></cfif>
 							<uForm:field label="Special Price Available" name="SpecialPriceAvailable" isRequired="false" isDisabled="True" value="#Variables.SpecialPriceAvailable#" maxFieldLength="50" type="text" hint="Does Event allow for Special Pricing if Requirements are met?" />
-							<uForm:field label="Special Price Requirements" name="SpecialPriceInfo" isRequired="false" isDisabled="True" value="#Session.UserRegistrationInfo.SpecialPriceRequirement#" type="textarea" hint="Requirements to must be met to receive this special price for attending this event." />
-							<uForm:field label="Special Price for Event" name="SpecialPriceInfo" isRequired="false" isDisabled="True" value="$ #DollarFormat(Session.UserRegistrationInfo.SpecialPriceEventCost)#" maxFieldLength="50" type="text" hint="Event Price if Special Requirements are met" />
+							<uForm:field label="Special Price Requirements" name="SpecialPriceInfo" isRequired="false" isDisabled="True" value="#Session.UserRegistrationInfo.SpecialPriceRequirements#" type="textarea" hint="Requirements to must be met to receive this special price for attending this event." />
+							<uForm:field label="Special Price for Event" name="SpecialPriceInfo" isRequired="false" isDisabled="True" value="#DollarFormat(Session.UserRegistrationInfo.SpecialPriceEventCost)#" maxFieldLength="50" type="text" hint="Event Price if Special Requirements are met" />
 						</cfif>
 						<cfif Session.UserRegistrationInfo.UserGetsEarlyBirdRegistration EQ "True">
 							<uForm:field label="Cost to Participate" name="EventEarlyBirdPrice" isRequired="false" isDisabled="True" value="#DollarFormat(Session.UserRegistrationInfo.UserEventEarlyBirdPrice)#" maxFieldLength="50" type="text" hint="Event Cost to Physically Attend this event at the location where event is to be held" />

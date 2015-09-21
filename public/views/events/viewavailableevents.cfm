@@ -395,30 +395,27 @@
 							<td style="width: 20%;">
 								<cfif DateDiff("d", Now(), getNonFeaturedEvents.EventDate) GT 0 and isDate(getNonFeaturedEvents.EventDate1) eq False>
 									#DateFormat(getNonFeaturedEvents.EventDate, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate1) GT 0 and isDate(getNonFeaturedEvents.EventDate2) eq False>
-									#DateFormat(getNonFeaturedEvents.EventDate1, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate2) GT 0 and isDate(getNonFeaturedEvents.EventDate3) eq False>
-									#DateFormat(getNonFeaturedEvents.EventDate2, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate3) GT 0 and isDate(getNonFeaturedEvents.EventDate4) eq False>
-									#DateFormat(getNonFeaturedEvents.EventDate3, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate4) GT 0 and isDate(getNonFeaturedEvents.EventDate5) eq False>
-									#DateFormat(getNonFeaturedEvents.EventDate4, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate5) GT 0>
-									#DateFormat(getNonFeaturedEvents.EventDate5, "mmm dd, yy")#
+								<cfelseif #Len(getNonFeaturedEvents.EventDate1)#>
+									<cfif DateDiff("d", Now(), getNonFeaturedEvents.EventDate1) GTE 0 and isDate(getNonFeaturedEvents.EventDate2) eq False>
+										#DateFormat(getNonFeaturedEvents.EventDate1, "mmm dd, yy")#
+									</cfif>
+								<cfelseif #Len(getNonFeaturedEvents.EventDate2)#>
+									<cfif DateDiff("d", Now(), getNonFeaturedEvents.EventDate2) GTE 0 and isDate(getNonFeaturedEvents.EventDate3) eq False>
+										#DateFormat(getNonFeaturedEvents.EventDate2, "mmm dd, yy")#
+									</cfif>
+								<cfelseif #Len(getNonFeaturedEvents.EventDate3)#>
+									<cfif DateDiff("d", Now(), getNonFeaturedEvents.EventDate3) GTE 0 and isDate(getNonFeaturedEvents.EventDate4) eq False>
+										#DateFormat(getNonFeaturedEvents.EventDate3, "mmm dd, yy")#
+									</cfif>
+								<cfelseif #Len(getNonFeaturedEvents.EventDate4)#>
+									<cfif DateDiff("d", Now(), getNonFeaturedEvents.EventDate4) GTE 0 and isDate(getNonFeaturedEvents.EventDate5) eq False>
+										#DateFormat(getNonFeaturedEvents.EventDate4, "mmm dd, yy")#
+									</cfif>
+								<cfelseif #Len(getNonFeaturedEvents.EventDate5)#>
+									<cfif DateDiff("d", Now(), getNonFeaturedEvents.EventDate5) GTE 0>
+										#DateFormat(getNonFeaturedEvents.EventDate5, "mmm dd, yy")#
+									</cfif>
 								</cfif>
-								<!--- <cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate) LT 0 and DateDiff("d", Now(), getNonFeaturedEvents.EventDate1) GT 0>
-									#DateFormat(getNonFeaturedEvents.EventDate1, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate1) LT 0 and DateDiff("d", Now(), getNonFeaturedEvents.EventDate2) GT 0>
-									#DateFormat(getNonFeaturedEvents.EventDate2, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate2) LT 0 and DateDiff("d", Now(), getNonFeaturedEvents.EventDate3) GT 0>
-									#DateFormat(getNonFeaturedEvents.EventDate3, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate3) LT 0 and DateDiff("d", Now(), getNonFeaturedEvents.EventDate4) GT 0>
-									#DateFormat(getNonFeaturedEvents.EventDate4, "mmm dd, yy")#
-								<cfelseif DateDiff("d", Now(), getNonFeaturedEvents.EventDate4) LT 0 and DateDiff("d", Now(), getNonFeaturedEvents.EventDate5) GT 0>
-									#DateFormat(getNonFeaturedEvents.EventDate5, "mmm dd, yy")#
-								<cfelse>
-									#DateFormat(getNonFeaturedEvents.EventDate, "mmm dd, yy")#
-								</cfif> --->
 							</td>
 							<td style="width: 20%;">
 								<cfif getNonFeaturedEvents.AcceptRegistrations EQ 1>

@@ -11,7 +11,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 </cfsilent>
 <cfset PriorDate = #DateAdd("m", -2, Now())#>
 <cfquery name="getAvailableEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-	Select TContent_ID, ShortTitle, EventDate, LongDescription
+	Select TContent_ID, ShortTitle, EventDate, LongDescription, PGPAvailable
 	From eEvents
 	Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 		EventDate >= <cfqueryparam value="#Variables.PriorDate#" cfsqltype="cf_sql_date"> and
@@ -24,6 +24,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<cfcase value="true">
 			<cfif isDefined("URL.UserAction")>
 				<cfswitch expression="#URL.UserAction#">
+					<cfcase value="PGPCertificatesSent">
+						<div class="alert-box success">
+							<p>Your have successfully send participants who attended the event titled <cfoutput>#Session.UserSuppliedInfo.PickedEvent.ShortTitle#</cfoutput> professional growth certificates.</p>
+						</div>
+					</cfcase>
 					<cfcase value="AttendedSent">
 						<cfquery name="GetSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 							Select ShortTitle
@@ -161,6 +166,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 										&nbsp;&nbsp;<a href="#buildURL('eventcoord:events.eventsigninsheet')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Sign-In Sheet</a>
 										&nbsp;&nbsp;<a href="#buildURL('eventcoord:events.eventsigninparticipant')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Sign-In Participant</a><br />
 										&nbsp;&nbsp;<a href="#buildURL('eventcoord:events.eventnamebadges')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Participant Name Badges</a><br />
+									</cfif>
+									<cfif getAttendedParticipantsForEvent.RecordCount and getAvailableEvents.PGPAvailable EQ 1>
+										&nbsp;&nbsp;<a href="#buildURL('eventcoord:events.sendpgpcertificates')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Send PGP Certificates</a><br />
 									</cfif>
 									<a href="#buildURL('eventcoord:events.publishtofb')#&EventID=#getAvailableEvents.TContent_ID#" class="art-button">Post to Facebook</a>
 								</td>

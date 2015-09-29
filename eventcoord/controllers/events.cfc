@@ -5241,4 +5241,166 @@ http://www.apache.org/licenses/LICENSE-2.0
 		</cfif>
 	</cffunction>
 
+	<cffunction name="sendpgpcertificates" returntype="any" output="true">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.PerformAction") and isDefined("URL.EventID")>
+			<cfquery name="GetSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription,
+					Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime,
+					EventFeatured, Featured_StartDate, Featured_EndDate, Featured_SortOrder, MemberCost, NonMemberCost,
+					EarlyBird_RegistrationDeadline, EarlyBird_RegistrationAvailable, EarlyBird_MemberCost, EarlyBird_NonMemberCost,
+					ViewSpecialPricing, SpecialMemberCost, SpecialNonMemberCost, SpecialPriceRequirements, PGPAvailable, PGPPoints,
+					MealProvided, MealProvidedBy, MealCost_Estimated, AllowVideoConference, VideoConferenceInfo, VideoConferenceCost,
+					AcceptRegistrations, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, Maxparticipants,
+					LocationType, LocationID, LocationRoomID, MaxParticipants, Presenters, Facilitator, dateCreated, lastUpdated, lastUpdateBy, Active,
+					WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost
+				From eEvents
+				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+
+			<cfquery name="GetSelectedEventRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select Count(RegistrationID) as NumRegistrations
+				From eRegistrations
+				Where EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+
+			<cfquery name="GetNumberCertificatesEventRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select Count(RegistrationID) as NumPGPCertificates
+				From eRegistrations
+				Where EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+					AttendedEvent = <cfqueryparam value="1" cfsqltype="cf_sql_boolean">
+			</cfquery>
+
+			<cfif GetSelectedEventRegistrations.RecordCount><cfset Session.EventNumberRegistrations = #GetSelectedEventRegistrations.NumRegistrations#><cfelse><cfset Session.EventNumberRegistrations = 0></cfif>
+			<cfif GetNumberCertificatesEventRegistrations.RecordCount><cfset Session.EventNumberPGPCertificataes = #GetNumberCertificatesEventRegistrations.NumPGPCertificates#><cfelse><cfset Session.EventNumberPGPCertificataes = 0></cfif>
+
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.UserSuppliedInfo = StructNew()>
+				<cfset Session.UserSuppliedInfo.PickedEvent = StructNew()>
+				<cfset Session.UserSuppliedInfo.PickedEvent.RecNo = #GetSelectedEvent.TContent_ID#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.ShortTitle = #GetSelectedEvent.ShortTitle#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate = #GetSelectedEvent.EventDate#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate1 = #GetSelectedEvent.EventDate1#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate2 = #GetSelectedEvent.EventDate2#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate3 = #GetSelectedEvent.EventDate3#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventDate4 = #GetSelectedEvent.EventDate4#>
+				<cfif LEN(GetSelectedEvent.EventDate1) or LEN(GetSelectedEvent.EventDate2) or LEN(GetSelectedEvent.EventDate3) or LEN(GetSelectedEvent.EventDate4)>
+					<cfset Session.UserSuppliedInfo.PickedEvent.EventSpanDates = 1>
+				<cfelse>
+					<cfset Session.UserSuppliedInfo.PickedEvent.EventSpanDates = 0>
+				</cfif>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LongDescription = #GetSelectedEvent.LongDescription#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Event_StartTime = #GetSelectedEvent.Event_StartTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Event_EndTime = #GetSelectedEvent.Event_EndTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Registration_Deadline = #GetSelectedEvent.Registration_Deadline#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Registration_BeginTime = #GetSelectedEvent.Registration_BeginTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Registration_EndTime = #GetSelectedEvent.Registration_EndTime#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventFeatured = #GetSelectedEvent.EventFeatured#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Featured_StartDate = #GetSelectedEvent.Featured_StartDate#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Featured_EndDate = #GetSelectedEvent.Featured_EndDate#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Featured_SortOrder = #GetSelectedEvent.Featured_SortOrder#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MemberCost = #GetSelectedEvent.MemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.NonMemberCost = #GetSelectedEvent.NonMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_RegistrationDeadline = #GetSelectedEvent.EarlyBird_RegistrationDeadline#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_RegistrationAvailable = #GetSelectedEvent.EarlyBird_RegistrationAvailable#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_MemberCost = #GetSelectedEvent.EarlyBird_MemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EarlyBird_NonMemberCost = #GetSelectedEvent.EarlyBird_NonMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.ViewSpecialPricing = #GetSelectedEvent.ViewSpecialPricing#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.SpecialMemberCost = #GetSelectedEvent.SpecialMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.SpecialNonMemberCost = #GetSelectedEvent.SpecialNonMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.SpecialPriceRequirements = #GetSelectedEvent.SpecialPriceRequirements#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.PGPAvailable = #GetSelectedEvent.PGPAvailable#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.PGPPoints = #GetSelectedEvent.PGPPoints#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MealProvided = #GetSelectedEvent.MealProvided#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MealProvidedBy = #GetSelectedEvent.MealProvidedBy#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.MealCost_Estimated = #GetSelectedEvent.MealCost_Estimated#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.AllowVideoConference = #GetSelectedEvent.AllowVideoConference#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.VideoConferenceInfo = #GetSelectedEvent.VideoConferenceInfo#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.VideoConferenceCost = #GetSelectedEvent.VideoConferenceCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.AcceptRegistrations = #GetSelectedEvent.AcceptRegistrations#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventAgenda = #GetSelectedEvent.EventAgenda#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventTargetAudience = #GetSelectedEvent.EventTargetAudience#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventStrategies = #GetSelectedEvent.EventStrategies#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.EventSpecialInstructions = #GetSelectedEvent.EventSpecialInstructions#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Maxparticipants = #GetSelectedEvent.Maxparticipants#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LocationType = #GetSelectedEvent.LocationType#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LocationID = #GetSelectedEvent.LocationID#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.LocationRoomID = #GetSelectedEvent.LocationRoomID#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.RoomMaxParticipants = #GetSelectedEvent.MaxParticipants#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Presenters = #GetSelectedEvent.Presenters#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Facilitator = #GetSelectedEvent.Facilitator#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.dateCreated = #GetSelectedEvent.dateCreated#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.lastUpdated = #GetSelectedEvent.lastUpdated#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.lastUpdateBy = #GetSelectedEvent.lastUpdateBy#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.Active = #GetSelectedEvent.Active#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarAvailable = #GetSelectedEvent.WebinarAvailable#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarConnectInfo = #GetSelectedEvent.WebinarConnectInfo#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarMemberCost = #GetSelectedEvent.WebinarMemberCost#>
+				<cfset Session.UserSuppliedInfo.PickedEvent.WebinarNonMemberCost = #GetSelectedEvent.WebinarNonMemberCost#>
+			</cflock>
+		<cfelseif isDefined("FORM.PerformAction") and isDefined("URL.EventID")>
+			<cfif LEN(FORM.EmailMsg) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please Enter some text for the participants to ready about this event."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.sendpgpcertificates&SiteID=#rc.$.siteConfig('siteID')#&EventID=#Session.UserSuppliedInfo.PickedEvent.RecNo#" addtoken="false">
+			</cfif>
+
+			<cfquery name="GetSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select TContent_ID, ShortTitle, EventDate, PGPAvailable, PGPPoints
+				From eEvents
+				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+
+			<cfquery name="GetParticipantsToSendPGPCertificates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				SELECT eRegistrations.EventID, eRegistrations.AttendedEvent, tusers.Fname, tusers.Lname, tusers.Email
+				FROM eRegistrations INNER JOIN tusers ON tusers.UserID = eRegistrations.User_ID
+				WHERE eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> AND
+					eRegistrations.AttendedEvent = <cfqueryparam value="1" cfsqltype="cf_sql_boolean">
+			</cfquery>
+
+			<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
+			<cfset CertificateTemplateDir = #Left(ExpandPath("*"), Find("*", ExpandPath("*")) - 1)# & "/library/reports/">
+			<cfset CertificateExportTemplateDir = #Left(ExpandPath("*"), Find("*", ExpandPath("*")) - 1)# & "/library/ReportExports/">
+			<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NIESCRisePGPCertificateTemplate.pdf">
+
+			<cfloop query="GetParticipantsToSendPGPCertificates">
+				<cfset ParticipantName = #GetParticipantsToSendPGPCertificates.FName# & " " & #GetParticipantsToSendPGPCertificates.LName#>
+				<cfset ParticipantFilename = #Replace(Variables.ParticipantName, " ", "", "all")#>
+				<cfset ParticipantFilename = #Replace(Variables.ParticipantFilename, ".", "", "all")#>
+				<cfset PGPEarned = "PGP Earned: " & #NumberFormat(GetSelectedEvent.PGPPoints, "99.9")#>
+				<cfset CertificateCompletedFile = #Variables.CertificateExportTemplateDir# & #GetSelectedEvent.TContent_ID# & "-" & #Variables.ParticipantFilename# & ".pdf">
+
+				<cfscript>
+					PDFCompletedCertificate = CreateObject("java", "java.io.FileOutputStream").init(CertificateCompletedFile);
+					PDFMasterCertificateTemplate = CreateObject("java", "com.itextpdf.text.pdf.PdfReader").init(CertificateMasterTemplate);
+					PDFStamper = CreateObject("java", "com.itextpdf.text.pdf.PdfStamper").init(PDFMasterCertificateTemplate, PDFCompletedCertificate);
+					PDFStamper.setFormFlattening(true);
+					PDFFormFields = PDFStamper.getAcroFields();
+					PDFFormFields.setField("PGPEarned", Variables.PGPEarned);
+					PDFFormFields.setField("ParticipantName", Variables.ParticipantName);
+					PDFFormFields.setField("EventTitle", GetSelectedEvent.ShortTitle);
+					PDFFormFields.setField("EventDate", DateFormat(GetSelectedEvent.EventDate, "full"));
+					PDFFormFields.setField("SignDate", DateFormat(GetSelectedEvent.EventDate, "mm/dd/yyyy"));
+					PDFStamper.close();
+				</cfscript>
+
+				<cfset ParticipantInfo = StructNew()>
+				<cfset ParticipantInfo.FName = #GetParticipantsToSendPGPCertificates.Fname#>
+				<cfset ParticipantInfo.LName = #GetParticipantsToSendPGPCertificates.Lname#>
+				<cfset ParticipantInfo.Email = #GetParticipantsToSendPGPCertificates.Email#>
+				<cfset ParticipantInfo.EventShortTitle = #GetSelectedEvent.ShortTitle#>
+				<cfset ParticipantInfo.EmailMessageBody = #FORM.EmailMsg#>
+				<cfset ParticipantInfo.PackageName = #rc.pc.getPackage()#>
+				<cfset ParticipantInfo.EventID = #GetSelectedEvent.TContent_ID#>
+				<cfset ParticipantInfo.PGPCertificateFilename = #Variables.CertificateCompletedFile#>
+				<cfset ParticipantInfo.NumberPGPPoints = #NumberFormat(GetSelectedEvent.PGPPoints, "99.9")#>
+
+				<cfset temp = #SendEMailCFC.SendPGPCertificateToIndividual(Variables.ParticipantInfo)#>
+			</cfloop>
+			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&UserAction=PGPCertificatesSent&SiteID=#rc.$.siteConfig('siteID')#&Successful=true&EventID=#GetSelectedEvent.TContent_ID#" addtoken="false">
+		</cfif>
+	</cffunction>
 </cfcomponent>

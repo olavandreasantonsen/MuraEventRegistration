@@ -155,6 +155,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 								Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 									EventID = <cfqueryparam value="#getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer">
 							</cfquery>
+							<cfquery name="getAttendedParticipantsForEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Select TContent_ID, User_ID
+								From eRegistrations
+								Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+									EventID = <cfqueryparam value="#getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer"> and
+									AttendedEvent = <cfqueryparam value="1" cfsqltype="cf_sql_boolean">
+							</cfquery>
 							<tr bgcolor="###iif(currentrow MOD 2,DE('ffffff'),DE('efefef'))#">
 								<td width="50%">(<a href="http://#cgi.server_name#/?Info=#getAvailableEvents.TContent_ID#">#getAvailableEvents.TContent_ID#</a>) / #getAvailableEvents.ShortTitle#</td>
 								<td width="15%">#DateFormat(getAvailableEvents.EventDate, "mmm dd, yy")#</td>

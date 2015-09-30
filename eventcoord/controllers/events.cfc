@@ -1094,34 +1094,49 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfset EventEndTimeObject = #CreateTime(Variables.EventEndTimeHours, Variables.EventEndTimeMinutes, 0)#>
 
 				<!--- Create Date Object from User Inputted Time from Registration End Time --->
-				<cfset EventRegistrationEndTime = #TimeFormat(Session.UserSuppliedInfo.Registration_EndTime, "hh:mm tt")#>
-				<cfset EventRegistrationEndTimeHours = #ListFirst(EventRegistrationEndTime, ":")#>
-				<cfset EventRegistrationEndTimeMinutes = #Left(ListLast(EventRegistrationEndTime, ":"), 2)#>
-				<cfset EventRegistrationEndTimeAMPM = #Right(ListLast(EventRegistrationEndTime, ":"), 2)#>
-				<cfif EventRegistrationEndTimeAMPM EQ "PM">
-					<cfswitch expression="#Variables.EventRegistrationEndTimeHours#">
-						<cfcase value="12">
-							<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours#>
-						</cfcase>
-						<cfdefaultcase>
-							<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours# + 12>
-						</cfdefaultcase>
-					</cfswitch>
+				<cfif LEN(Session.UserSuppliedInfo.Registration_EndTime)>
+					<cfset EventRegistrationEndTime = #TimeFormat(Session.UserSuppliedInfo.Registration_EndTime, "hh:mm tt")#>
+					<cfset EventRegistrationEndTimeHours = #ListFirst(EventRegistrationEndTime, ":")#>
+					<cfset EventRegistrationEndTimeMinutes = #Left(ListLast(EventRegistrationEndTime, ":"), 2)#>
+					<cfset EventRegistrationEndTimeAMPM = #Right(ListLast(EventRegistrationEndTime, ":"), 2)#>
+					<cfif EventRegistrationEndTimeAMPM EQ "PM">
+						<cfswitch expression="#Variables.EventRegistrationEndTimeHours#">
+							<cfcase value="12">
+								<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours#>
+							</cfcase>
+							<cfdefaultcase>
+								<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours# + 12>
+							</cfdefaultcase>
+						</cfswitch>
+					</cfif>
+					<cfset EventRegistrationEndTimeObject = #CreateTime(Variables.EventRegistrationEndTimeHours, Variables.EventRegistrationEndTimeMinutes, 0)#>
 				</cfif>
-				<cfset EventRegistrationEndTimeObject = #CreateTime(Variables.EventRegistrationEndTimeHours, Variables.EventRegistrationEndTimeMinutes, 0)#>
 
 				<cftry>
-					<cfquery name="updateEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Update eEvents
-						Set EventDate = <cfqueryparam value="#CreateDate(ListLast(Variables.EventDate, '/'), ListFirst(Variables.EventDate, '/'), ListGetAt(Variables.EventDate, 2, '/'))#" cfsqltype="cf_sql_date">,
-							Registration_Deadline = <cfqueryparam value="#CreateDate(ListLast(Variables.RegistrationDeadline, '/'), ListFirst(Variables.RegistrationDeadline, '/'), ListGetAt(Variables.RegistrationDeadline, 2, '/'))#" cfsqltype="cf_sql_date">,
-							Event_StartTime = <cfqueryparam value="#Session.UserSuppliedInfo.Event_StartTime#" cfsqltype="cf_sql_time">,
-							Event_EndTime = <cfqueryparam value="#Session.UserSuppliedInfo.Event_EndTime#" cfsqltype="cf_sql_time">,
-							Registration_EndTime = #Variables.EventRegistrationEndTimeObject#,
-							lastUpdated = #Now()#,
-							lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
-						Where TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.RecNo#" cfsqltype="cf_sql_integer">
-					</cfquery>
+					<cfif LEN(Session.UserSuppliedInfo.Registration_EndTime)>
+						<cfquery name="updateEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Update eEvents
+							Set EventDate = <cfqueryparam value="#CreateDate(ListLast(Variables.EventDate, '/'), ListFirst(Variables.EventDate, '/'), ListGetAt(Variables.EventDate, 2, '/'))#" cfsqltype="cf_sql_date">,
+								Registration_Deadline = <cfqueryparam value="#CreateDate(ListLast(Variables.RegistrationDeadline, '/'), ListFirst(Variables.RegistrationDeadline, '/'), ListGetAt(Variables.RegistrationDeadline, 2, '/'))#" cfsqltype="cf_sql_date">,
+								Event_StartTime = <cfqueryparam value="#Session.UserSuppliedInfo.Event_StartTime#" cfsqltype="cf_sql_time">,
+								Event_EndTime = <cfqueryparam value="#Session.UserSuppliedInfo.Event_EndTime#" cfsqltype="cf_sql_time">,
+								Registration_EndTime = #Variables.EventRegistrationEndTimeObject#,
+								lastUpdated = #Now()#,
+								lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+							Where TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.RecNo#" cfsqltype="cf_sql_integer">
+						</cfquery>
+					<cfelse>
+						<cfquery name="updateEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Update eEvents
+							Set EventDate = <cfqueryparam value="#CreateDate(ListLast(Variables.EventDate, '/'), ListFirst(Variables.EventDate, '/'), ListGetAt(Variables.EventDate, 2, '/'))#" cfsqltype="cf_sql_date">,
+								Registration_Deadline = <cfqueryparam value="#CreateDate(ListLast(Variables.RegistrationDeadline, '/'), ListFirst(Variables.RegistrationDeadline, '/'), ListGetAt(Variables.RegistrationDeadline, 2, '/'))#" cfsqltype="cf_sql_date">,
+								Event_StartTime = <cfqueryparam value="#Session.UserSuppliedInfo.Event_StartTime#" cfsqltype="cf_sql_time">,
+								Event_EndTime = <cfqueryparam value="#Session.UserSuppliedInfo.Event_EndTime#" cfsqltype="cf_sql_time">,
+								lastUpdated = #Now()#,
+								lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+							Where TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.RecNo#" cfsqltype="cf_sql_integer">
+						</cfquery>
+					</cfif>
 
 					<cfif LEN(Session.UserSuppliedInfo.Registration_BeginTime) GT 3>
 						<cfset EventRegistrationBeginTime = #TimeFormat(Session.UserSuppliedInfo.Registration_BeginTime, "hh:mm tt")#>
@@ -2089,7 +2104,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif GetSelectedEvent.RecordCount EQ 0>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			<cfelse>
 				<cflock timeout="60" scope="Session" type="Exclusive">
 					<cfset Session.UserSuppliedInfo = StructNew()>
@@ -2187,31 +2202,42 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfset EventEndTimeObject = #CreateTime(Variables.EventEndTimeHours, Variables.EventEndTimeMinutes, 0)#>
 
 				<!--- Create Date Object from User Inputted Time from Registration End Time --->
-				<cfset EventRegistrationEndTime = #TimeFormat(Session.UserSuppliedInfo.Registration_EndTime, "hh:mm tt")#>
-				<cfset EventRegistrationEndTimeHours = #ListFirst(EventRegistrationEndTime, ":")#>
-				<cfset EventRegistrationEndTimeMinutes = #Left(ListLast(EventRegistrationEndTime, ":"), 2)#>
-				<cfset EventRegistrationEndTimeAMPM = #Right(ListLast(EventRegistrationEndTime, ":"), 2)#>
-				<cfif EventRegistrationEndTimeAMPM EQ "PM">
-					<cfswitch expression="#Variables.EventRegistrationEndTimeHours#">
-						<cfcase value="12">
-							<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours#>
-						</cfcase>
-						<cfdefaultcase>
-							<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours# + 12>
-						</cfdefaultcase>
-					</cfswitch>
+				<cfif LEN(Session.UserSuppliedInfo.Registration_EndTime)>
+					<cfset EventRegistrationEndTime = #TimeFormat(Session.UserSuppliedInfo.Registration_EndTime, "hh:mm tt")#>
+					<cfset EventRegistrationEndTimeHours = #ListFirst(EventRegistrationEndTime, ":")#>
+					<cfset EventRegistrationEndTimeMinutes = #Left(ListLast(EventRegistrationEndTime, ":"), 2)#>
+					<cfset EventRegistrationEndTimeAMPM = #Right(ListLast(EventRegistrationEndTime, ":"), 2)#>
+					<cfif EventRegistrationEndTimeAMPM EQ "PM">
+						<cfswitch expression="#Variables.EventRegistrationEndTimeHours#">
+							<cfcase value="12">
+								<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours#>
+							</cfcase>
+							<cfdefaultcase>
+								<cfset EventRegistrationEndTimeHours = #Variables.EventRegistrationEndTimeHours# + 12>
+							</cfdefaultcase>
+						</cfswitch>
+					</cfif>
+					<cfset EventRegistrationEndTimeObject = #CreateTime(Variables.EventRegistrationEndTimeHours, Variables.EventRegistrationEndTimeMinutes, 0)#>
+				<cfelse>
+					<cfset EventRegistrationEndTimeObject = "">
 				</cfif>
-				<cfset EventRegistrationEndTimeObject = #CreateTime(Variables.EventRegistrationEndTimeHours, Variables.EventRegistrationEndTimeMinutes, 0)#>
 
 				<cfset EventDate = #DateFormat(Session.UserSuppliedInfo.EventDate, "mm/dd/yyyy")#>
 				<cfset RegistrationDeadline = #DateFormat(Session.UserSuppliedInfo.Registration_Deadline, "mm/dd/yyyy")#>
 				<cfset Session.UserSuppliedInfo.ShortTitle = #Session.UserSuppliedInfo.ShortTitle# & " - Copied">
 
 				<cftry>
-					<cfquery name="insertCopiedEvent" result="insertCopiedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Insert into eEvents(Site_ID, ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_EndTime, EventFeatured, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, ViewSpecialPricing, PGPAvailable, MealProvided, AllowVideoConference, AcceptRegistrations, LocationType, LocationID, LocationRoomID, MaxParticipants, Facilitator, dateCreated)
-						Values ("#rc.$.siteConfig('siteID')#", "#Session.UserSuppliedInfo.ShortTitle#", #CreateDate(ListLast(Variables.EventDate, "/"), ListFirst(Variables.EventDate, "/"), ListGetAt(Variables.EventDate, 2, "/"))#, "#Session.UserSuppliedInfo.LongDescription#", #Variables.EventStartTimeObject#, #Variables.EventEndTimeObject#, #CreateDate(ListLast(Variables.RegistrationDeadline, "/"), ListFirst(Variables.RegistrationDeadline, "/"), ListGetAt(Variables.RegistrationDeadline, 2, "/"))#, #Variables.EventRegistrationEndTimeObject#, #Session.UserSuppliedInfo.EventFeatured#, "#Session.UserSuppliedInfo.MemberCost#", "#Session.UserSuppliedInfo.NonMemberCost#", #Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable#, #Session.UserSuppliedInfo.ViewSpecialPricing#, #Session.UserSuppliedInfo.PGPAvailable#, #Session.UserSuppliedInfo.MealProvided#, #Session.UserSuppliedInfo.AllowVideoConference#, #Session.UserSuppliedInfo.AcceptRegistrations#, "#Session.UserSuppliedInfo.LocationType#", #Session.UserSuppliedInfo.LocationID#, #Session.UserSuppliedInfo.LocationRoomID#, #Session.UserSuppliedInfo.RoomMaxParticipants#, "#Session.UserSuppliedInfo.Facilitator#", #Now()# )
-					</cfquery>
+					<cfif LEN(Session.UserSuppliedInfo.Registration_EndTime)>
+						<cfquery name="insertCopiedEvent" result="insertCopiedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Insert into eEvents(Site_ID, ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_EndTime, EventFeatured, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, ViewSpecialPricing, PGPAvailable, MealProvided, AllowVideoConference, AcceptRegistrations, LocationType, LocationID, LocationRoomID, MaxParticipants, Facilitator, dateCreated)
+							Values ("#rc.$.siteConfig('siteID')#", "#Session.UserSuppliedInfo.ShortTitle#", #CreateDate(ListLast(Variables.EventDate, "/"), ListFirst(Variables.EventDate, "/"), ListGetAt(Variables.EventDate, 2, "/"))#, "#Session.UserSuppliedInfo.LongDescription#", #Variables.EventStartTimeObject#, #Variables.EventEndTimeObject#, #CreateDate(ListLast(Variables.RegistrationDeadline, "/"), ListFirst(Variables.RegistrationDeadline, "/"), ListGetAt(Variables.RegistrationDeadline, 2, "/"))#, #Variables.EventRegistrationEndTimeObject#, #Session.UserSuppliedInfo.EventFeatured#, "#Session.UserSuppliedInfo.MemberCost#", "#Session.UserSuppliedInfo.NonMemberCost#", #Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable#, #Session.UserSuppliedInfo.ViewSpecialPricing#, #Session.UserSuppliedInfo.PGPAvailable#, #Session.UserSuppliedInfo.MealProvided#, #Session.UserSuppliedInfo.AllowVideoConference#, #Session.UserSuppliedInfo.AcceptRegistrations#, "#Session.UserSuppliedInfo.LocationType#", #Session.UserSuppliedInfo.LocationID#, #Session.UserSuppliedInfo.LocationRoomID#, #Session.UserSuppliedInfo.RoomMaxParticipants#, "#Session.UserSuppliedInfo.Facilitator#", #Now()# )
+						</cfquery>
+					<cfelse>
+						<cfquery name="insertCopiedEvent" result="insertCopiedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Insert into eEvents(Site_ID, ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, EventFeatured, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, ViewSpecialPricing, PGPAvailable, MealProvided, AllowVideoConference, AcceptRegistrations, LocationType, LocationID, LocationRoomID, MaxParticipants, Facilitator, dateCreated)
+							Values ("#rc.$.siteConfig('siteID')#", "#Session.UserSuppliedInfo.ShortTitle#", #CreateDate(ListLast(Variables.EventDate, "/"), ListFirst(Variables.EventDate, "/"), ListGetAt(Variables.EventDate, 2, "/"))#, "#Session.UserSuppliedInfo.LongDescription#", #Variables.EventStartTimeObject#, #Variables.EventEndTimeObject#, #CreateDate(ListLast(Variables.RegistrationDeadline, "/"), ListFirst(Variables.RegistrationDeadline, "/"), ListGetAt(Variables.RegistrationDeadline, 2, "/"))#, #Session.UserSuppliedInfo.EventFeatured#, "#Session.UserSuppliedInfo.MemberCost#", "#Session.UserSuppliedInfo.NonMemberCost#", #Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable#, #Session.UserSuppliedInfo.ViewSpecialPricing#, #Session.UserSuppliedInfo.PGPAvailable#, #Session.UserSuppliedInfo.MealProvided#, #Session.UserSuppliedInfo.AllowVideoConference#, #Session.UserSuppliedInfo.AcceptRegistrations#, "#Session.UserSuppliedInfo.LocationType#", #Session.UserSuppliedInfo.LocationID#, #Session.UserSuppliedInfo.LocationRoomID#, #Session.UserSuppliedInfo.RoomMaxParticipants#, "#Session.UserSuppliedInfo.Facilitator#", #Now()# )
+						</cfquery>
+					</cfif>
 
 					<cfif isDefined("Session.UserSuppliedInfo.EventDate1")>
 						<cfif #isDate(Session.UserSuppliedInfo.EventDate1)# EQ 1>

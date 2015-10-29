@@ -2781,7 +2781,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<cfset ParticipantInfo.Email = #GetRegisteredUsersForEvent.Email#>
 						<cfset ParticipantInfo.EventShortTitle = #GetSelectedEvent.ShortTitle#>
 						<cfset ParticipantInfo.EmailMessageBody = #FORM.EmailMsg#>
-						<cfset ParticipantInfo.DocLinksInEmail = #FORM.IncludeFileLinks#>
+						<cfset ParticipantInfo.DocLinksInEmail = 0>
 						<cfset temp = #SendEMailCFC.SendEventMessageToAllParticipants(Variables.ParticipantInfo)#>
 					</cfloop>
 				<cfelse>
@@ -5092,7 +5092,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<cfset ParticipantInfo.Email = #GetAttendedUsersForEvent.Email#>
 						<cfset ParticipantInfo.EventShortTitle = #GetSelectedEvent.ShortTitle#>
 						<cfset ParticipantInfo.EmailMessageBody = #FORM.EmailMsg#>
-						<cfset ParticipantInfo.DocLinksInEmail = #FORM.IncludeFileLinks#>
+						<cfset ParticipantInfo.DocLinksInEmail = 0>
 						<cfset temp = #SendEMailCFC.SendEventMessageToAllAttendedParticipants(Variables.ParticipantInfo)#>
 					</cfloop>
 				<cfelse>

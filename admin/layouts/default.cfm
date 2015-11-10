@@ -169,6 +169,7 @@
 									<ul>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:caterers.default" class="active">Manage Catering</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:events.default" class="active">Manage Events</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:eventexpenses.default" class="active">Manage Event Expenses</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:facilities.default" class="active">Manage Facilities</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:membership.default" class="active">Manage Membership</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:presenters.default" class="active">Manage Presenters</a></li>
@@ -183,6 +184,7 @@
 									<ul>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:caterers.default" class="active">Manage Catering</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:events.default" class="active">Manage Events</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:eventexpenses.default" class="active">Manage Event Expenses</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:facilities.default" class="active">Manage Facilities</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:membership.default" class="active">Manage Membership</a></li>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=eventcoord:presenters.default" class="active">Manage Presenters</a></li>

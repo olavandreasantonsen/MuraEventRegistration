@@ -85,7 +85,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				// Since the Database Table does not exists, Lets Create it
 				var dbCreateTableEventExpenses = new query();
 				dbCreateTableEventExpenses.setDatasource("#application.configBean.getDatasource()#");
-				dbCreateTableEventExpenses.setSQL("CREATE TABLE `eEvent_Expenses` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` varchar(20) NOT NULL, `Event_ID` int(11) NOT NULL, `Cost_Type` int(11) NOT NULL, `Cost_Amount` double(8,2) NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+				dbCreateTableEventExpenses.setSQL("CREATE TABLE `eEvent_Expenses` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` varchar(20) NOT NULL, `Event_ID` int(11) NOT NULL, `Expense_ID` int(11) NOT NULL, `Cost_Amount` double(8,2) NOT NULL, `dateCreated` datetime NOT NULL, `lastUpdated` datetime NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, PRIMARY KEY (`TContent_ID`,`Event_ID`), KEY `Event_ID_Index` (`Event_ID`) ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
 				var dbCreateTableEventExpensesResults = dbCreateTableEventExpenses.execute();
 			} else {
 				// Database Table Exists, We must Drop it to create it again
@@ -97,7 +97,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				if (len(dbDropTableEventExpensesResults.getResult()) eq 0) {
 					var dbCreateTableEventExpenses = new query();
 					dbCreateTableEventExpenses.setDatasource("#application.configBean.getDatasource()#");
-					dbCreateTableEventExpenses.setSQL("CREATE TABLE `eEvent_Expenses` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` varchar(20) NOT NULL, `Event_ID` int(11) NOT NULL, `Cost_Type` int(11) NOT NULL, `Cost_Amount` double(8,2) NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+					dbCreateTableEventExpenses.setSQL("CREATE TABLE `eEvent_Expenses` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` varchar(20) NOT NULL, `Event_ID` int(11) NOT NULL, `Expense_ID` int(11) NOT NULL, `Cost_Amount` double(8,2) NOT NULL, `dateCreated` datetime NOT NULL, `lastUpdated` datetime NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, PRIMARY KEY (`TContent_ID`,`Event_ID`), KEY `Event_ID_Index` (`Event_ID`) ) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
 					var dbCreateTableEventExpensesResults = dbCreateTableEventExpenses.execute();
 				} else {
 				 writedump(dbDropTableEventExpensesResults.getResult());
@@ -143,7 +143,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				// Since the Database Table does not exists, Lets Create it
 				var dbCreateTableEventsMatrix = new query();
 				dbCreateTableEventsMatrix.setDatasource("#application.configBean.getDatasource()#");
-				dbCreateTableEventsMatrix.setSQL("CREATE TABLE `eEventsMatrix` ( `id` int(11) NOT NULL AUTO_INCREMENT, `Event_ID` int(11) NOT NULL, `EventID_AdditionalDates` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;");
+				dbCreateTableEventsMatrix.setSQL("CREATE TABLE `eEventsMatrix` ( `TContent_ID` int(11) NOT NULL auto_increment, `Event_ID` int(11) NOT NULL, `Event_AdditionalDayID` int(11) default NULL, `Event_TotalIncomeFromParticipants` double(12,2) default NULL, `Event_TotalExpensesToHold` double(12,2) default NULL, `Event_CostPerParticipant` double(12,2) default NULL, `Event_RebatePerParticipant` double(6,2) default NULL, PRIMARY KEY  (`TContent_ID`) ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 				var dbCreateTableEventsMatrixResults = dbCreateTableEventsMatrix.execute();
 			} else {
 				// Database Table Exists, We must Drop it to create it again
@@ -155,7 +155,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				if (len(dbDropTableEventsMatrixResults.getResult()) eq 0) {
 					var dbCreateTableEventsMatrix = new query();
 					dbCreateTableEventsMatrix.setDatasource("#application.configBean.getDatasource()#");
-					dbCreateTableEventsMatrix.setSQL("CREATE TABLE `eEventsMatrix` ( `id` int(11) NOT NULL AUTO_INCREMENT, `Event_ID` int(11) NOT NULL, `EventID_AdditionalDates` int(11) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;");
+					dbCreateTableEventsMatrix.setSQL("CREATE TABLE `eEventsMatrix` ( `TContent_ID` int(11) NOT NULL auto_increment, `Event_ID` int(11) NOT NULL, `Event_AdditionalDayID` int(11) default NULL, `Event_TotalIncomeFromParticipants` double(12,2) default NULL, `Event_TotalExpensesToHold` double(12,2) default NULL, `Event_CostPerParticipant` double(12,2) default NULL, `Event_RebatePerParticipant` double(6,2) default NULL, PRIMARY KEY  (`TContent_ID`) ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 					var dbCreateTableEventsMatrixResults = dbCreateTableEventsMatrix.execute();
 				} else {
 				 writedump(dbCreateTableEventsMatrixResults.getResult());
@@ -307,8 +307,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 				 abort;
 				}
 			}
-
-
 		</cfscript>
 
 		<cfscript>

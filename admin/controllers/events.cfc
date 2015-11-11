@@ -5305,6 +5305,235 @@ http://www.apache.org/licenses/LICENSE-2.0
 		</cfif>
 	</cffunction>
 
+	<cffunction name="enterexpenses" returntype="any" output="true">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfif not isDefined("Session.UserSuppliedInfo")>
+					<cfset Session.UserSuppliedInfo = StructNew()>
+				</cfif>
+			</cflock>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="addeventexpenses" returntype="any" output="true">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructNew()#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfif not isDefined("Session.UserSuppliedInfo")><cfset Session.UserSuppliedInfo = #StructNew()#></cfif>
+			</cflock>
+			<cfquery name="Session.getEventExpenseList" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select TContent_ID, Expense_Name
+				From eEvent_ExpenseList
+				Where Active = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+				Order by Expense_Name ASC
+			</cfquery>
+			<cfquery name="Session.getEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select ShortTitle
+				From eEvents
+				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+		<cfelseif isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructCopy(FORM)#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+			</cflock>
+
+			<cfif FORM.EventExpenseID EQ 0>
+				<cfscript>
+					errormsg = {property="EventExpenseID",message="Please Select Event Expense for this event."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.addeventexpenses&EventID=#URL.EventID#&EventStatus=ReEnterForm" addtoken="false">
+			</cfif>
+
+			<cfif not isNumeric(FORM.ExpenseAmount)>
+				<cfscript>
+					errormsg = {property="ExpenseAmount",message="Please Select Event Expense for this event."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.addeventexpenses&EventID=#URL.EventID#&EventStatus=ReEnterForm" addtoken="false">
+			</cfif>
+
+			<cftry>
+				<cfquery name="insertNewEventExpense" result="insertNewEventExpense" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Insert into eEvent_Expenses(Site_ID, Event_ID, Expense_ID, Cost_Amount, dateCreated, lastUpdated, lastUpdateBy)
+					Values(
+					<cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#FORM.EventExpenseID#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#NumberFormat(FORM.ExpenseAmount, '99999.99')#" cfsqltype="CF_SQL_DOUBLE">,
+					<cfqueryparam value="#Now()#" cfsqltype="CF_SQL_DATE">,
+					<cfqueryparam value="#Now()#" cfsqltype="CF_SQL_DATE">,
+					<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+					)
+				</cfquery>
+				<cfcatch type="Database">
+					<cfdump var="#CFCATCH#"><cfabort>
+				</cfcatch>
+			</cftry>
+			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.addeventexpenses&Successful=True&UserAction=AddedEventExpense&EventID=#FORM.EventID#" addtoken="false">
+		</cfif>
+	</cffunction>
+
+	<cffunction name="generateprofitlossreport" returntype="any" output="true">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructNew()#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfif not isDefined("Session.UserSuppliedInfo")><cfset Session.UserSuppliedInfo = #StructNew()#></cfif>
+			</cflock>
+			<cfquery name="Session.getEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select ShortTitle, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, EarlyBird_RegistrationDeadline, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewSpecialPricing, SpecialPriceRequirements, SpecialMemberCost, SpecialNonMemberCost, VideoConferenceCost, WebinarMemberCost, WebinarNonMemberCost
+				From eEvents
+				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+			<cfquery name="Session.getRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				SELECT eRegistrations.TContent_ID, eRegistrations.RegistrationDate, tusers.Fname, tusers.Lname, tusers.Email, eRegistrations.AttendeePrice, eRegistrations.AttendeePriceVerified
+				FROM eRegistrations LEFT JOIN tusers ON tusers.UserID = eRegistrations.User_ID
+				WHERE eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+					and eRegistrations.AttendedEvent = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+			</cfquery>
+			<cfquery name="Session.getMembership" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				SELECT OrganizationName, OrganizationDomainName, Active
+				From eMembership
+				WHere Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+		</cfif>
+
+	</cffunction>
+
+	<cffunction name="updateparticipantcost" returntype="any" output="true">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructNew()#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfif not isDefined("Session.UserSuppliedInfo")><cfset Session.UserSuppliedInfo = #StructNew()#></cfif>
+			</cflock>
+			<cfquery name="Session.getRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				SELECT eRegistrations.TContent_ID, eRegistrations.RegistrationDate, tusers.Fname, tusers.Lname, tusers.Email, eRegistrations.AttendeePrice
+				FROM eRegistrations LEFT JOIN tusers ON tusers.UserID = eRegistrations.User_ID
+				WHERE eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+					eRegistrations.TContent_ID = <cfqueryparam value="#URL.RegistrationID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID") and isDefined("FORM.RegistrationID")>
+			<cfif not isNumeric(FORM.ParticipantCost)>
+				<cfscript>
+					errormsg = {property="ParticipantCost",message="Please Enter Cost to charge Participant for this event."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.updateparticipantcost&EventID=#FORM.EventID#&RegistrationID=#FORM.RegistrationID#&EventStatus=ReEnterForm" addtoken="false">
+			<cfelse>
+				<cftry>
+					<cfquery name="updateParticipantCost" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Update eRegistrations
+						Set AttendeePrice = <cfqueryparam value="#NumberFormat(FORM.ParticipantCost, '99999.99')#" cfsqltype="CF_SQL_DOUBLE">
+						Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
+							TContent_ID = <cfqueryparam value="#FORM.RegistrationID#" cfsqltype="cf_sql_integer">
+					</cfquery>
+					<cfcatch type="Database">
+						<cfdump var="#CFCATCH#"><cfabort>
+					</cfcatch>
+				</cftry>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.generateprofitlossreport&EventID=#FORM.EventID#&UserAction=ParticipantCostVerified" addtoken="false">
+			</cfif>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="updateeventexpenses" returntype="any" output="true">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit") and isDefined("URL.EventID") and not isDefined("FORM.EnterRebateNumbers")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructNew()#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfif not isDefined("Session.UserSuppliedInfo")><cfset Session.UserSuppliedInfo = #StructNew()#></cfif>
+			</cflock>
+			<cfquery name="updateParticipantCostReview" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Update eRegistrations
+				Set AttendeePriceVerified = 1
+				Where EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+					AttendedEvent = 1
+			</cfquery>
+
+			<cfquery name="Session.getEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select ShortTitle, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, EarlyBird_RegistrationDeadline, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewSpecialPricing, SpecialPriceRequirements, SpecialMemberCost, SpecialNonMemberCost, VideoConferenceCost, WebinarMemberCost, WebinarNonMemberCost
+				From eEvents
+				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+
+			<cfquery name="Session.getAvailableEventExpenses" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				SELECT eEvent_ExpenseList.Expense_Name, eEvent_Expenses.Cost_Amount
+				FROM eEvent_Expenses
+					INNER JOIN eEvent_ExpenseList ON eEvent_ExpenseList.TContent_ID = eEvent_Expenses.Expense_ID
+				Where eEvent_Expenses.Event_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+					eEvent_Expenses.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID") and isDefined("FORM.EnterRebateNumbers")>
+			<cfquery name="updateParticipantCostReview" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Update eEventsMatrix
+				Set Event_CostPerParticipant = <cfqueryparam value="#FORM.CostPerParticiant#" cfsqltype="cf_sql_double">,
+					Event_RebatePerParticipant = <cfqueryparam value="#FORM.ParticipantRebateAmount#" cfsqltype="cf_sql_double">
+				Where Event_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+			<cfquery name="Session.getEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select ShortTitle, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, EarlyBird_RegistrationDeadline, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewSpecialPricing, SpecialPriceRequirements, SpecialMemberCost, SpecialNonMemberCost, VideoConferenceCost, WebinarMemberCost, WebinarNonMemberCost
+				From eEvents
+				Where TContent_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+
+			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&EventID=#FORM.EventID#&Successful=True&UserAction=PLStatementGenerated" addtoken="false">
+		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID") and not isDefined("FORM.EnterRebateNumbers")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructCopy(FORM)#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+			</cflock>
+
+			<cfif FORM.EventExpenseID EQ 0>
+				<cfscript>
+					errormsg = {property="EventExpenseID",message="Please Select Event Expense for this event."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.addeventexpenses&EventID=#URL.EventID#&UserAction=PLStatementGenerated" addtoken="false">
+			</cfif>
+
+			<cfif not isNumeric(FORM.ExpenseAmount)>
+				<cfscript>
+					errormsg = {property="ExpenseAmount",message="Please Select Event Expense for this event."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.addeventexpenses&EventID=#URL.EventID#&EventStatus=ReEnterForm" addtoken="false">
+			</cfif>
+
+			<cftry>
+				<cfquery name="insertNewEventExpense" result="insertNewEventExpense" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Insert into eEvent_Expenses(Site_ID, Event_ID, Expense_ID, Cost_Amount, dateCreated, lastUpdated, lastUpdateBy)
+					Values(
+					<cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#FORM.EventExpenseID#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#NumberFormat(FORM.ExpenseAmount, '99999.99')#" cfsqltype="CF_SQL_DOUBLE">,
+					<cfqueryparam value="#Now()#" cfsqltype="CF_SQL_DATE">,
+					<cfqueryparam value="#Now()#" cfsqltype="CF_SQL_DATE">,
+					<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+					)
+				</cfquery>
+				<cfcatch type="Database">
+					<cfdump var="#CFCATCH#"><cfabort>
+				</cfcatch>
+			</cftry>
+			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.updateeventexpenses&EventID=#FORM.EventID#" addtoken="false">
+		</cfif>
+	</cffunction>
+
 	<cffunction name="sendpgpcertificates" returntype="any" output="true">
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 

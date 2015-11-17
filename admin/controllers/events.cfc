@@ -5380,6 +5380,64 @@ http://www.apache.org/licenses/LICENSE-2.0
 		</cfif>
 	</cffunction>
 
+	<cffunction name="addeventincome" returntype="any" output="true">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructNew()#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfif not isDefined("Session.UserSuppliedInfo")><cfset Session.UserSuppliedInfo = #StructNew()#></cfif>
+			</cflock>
+
+			<cfquery name="Session.getEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select ShortTitle
+				From eEvents
+				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+		<cfelseif isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormData = #StructCopy(FORM)#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+			</cflock>
+
+			<cfif not isNumeric(FORM.IncomeAmount)>
+				<cfscript>
+					errormsg = {property="IncomeAmount",message="Please Enter Event Income for this event."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.addeventincome&EventID=#URL.EventID#&EventStatus=ReEnterForm" addtoken="false">
+			</cfif>
+
+			<cftry>
+				<cfquery name="CheckEventExists"Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select Event_ID
+					From eEventsMatrix
+				</cfquery>
+				<cfif CheckEventExists.RecordCount>
+					<cfquery name="updateEventIncome" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Update eEventsMatrix
+						Set Event_TotalIncomeFromOtherParty = <cfqueryparam value="#NumberFormat(FORM.IncomeAmount, '99999.99')#" cfsqltype="CF_SQL_DOUBLE">
+						Where Event_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">
+					</cfquery>
+				<cfelse>
+					<cfquery name="insertNewEventIncome" result="insertNewEventExpense" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Insert into eEventsMatrix(Event_ID, Event_TotalIncomeFromParticipants, Event_TotalIncomeFromOtherParty)
+						Values(
+							<cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="#NumberFormat(0, '99999.99')#" cfsqltype="CF_SQL_DOUBLE">,
+							<cfqueryparam value="#NumberFormat(FORM.IncomeAmount, '99999.99')#" cfsqltype="CF_SQL_DOUBLE">
+						)
+					</cfquery>
+				</cfif>
+				<cfcatch type="Database">
+					<cfdump var="#CFCATCH#"><cfabort>
+				</cfcatch>
+			</cftry>
+			<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events.addeventincome&Successful=True&UserAction=AddedEventIncome&EventID=#FORM.EventID#" addtoken="false">
+		</cfif>
+	</cffunction>
+
 	<cffunction name="generateprofitlossreport" returntype="any" output="true">
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 
@@ -5394,11 +5452,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 				From eEvents
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 			</cfquery>
+			<cfquery name="Session.getEventIncomeFromOtherParty" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select Event_TotalIncomeFromOtherParty
+				From eEventsMatrix
+				Where Event_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+			</cfquery>
 			<cfquery name="Session.getRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				SELECT eRegistrations.TContent_ID, eRegistrations.RegistrationDate, tusers.Fname, tusers.Lname, tusers.Email, eRegistrations.AttendeePrice, eRegistrations.AttendeePriceVerified
+				SELECT eRegistrations.TContent_ID, eRegistrations.RegistrationDate, tusers.Fname, tusers.Lname, tusers.Email, eRegistrations.AttendeePrice, eRegistrations.AttendeePriceVerified, SUBSTR(tusers.Email, INSTR(tusers.Email, '@') + 1, LENGTH(tusers.Email) - (INSTR(tusers.Email, '@') + 1) - LENGTH(SUBSTRING_INDEX(tusers.Email,'.',-1))) as DomainName
 				FROM eRegistrations LEFT JOIN tusers ON tusers.UserID = eRegistrations.User_ID
 				WHERE eRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 					and eRegistrations.AttendedEvent = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+				Order by DomainName ASC
 			</cfquery>
 			<cfquery name="Session.getMembership" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				SELECT OrganizationName, OrganizationDomainName, Active
@@ -5480,8 +5544,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID") and isDefined("FORM.EnterRebateNumbers")>
 			<cfquery name="updateParticipantCostReview" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Update eEventsMatrix
-				Set Event_CostPerParticipant = <cfqueryparam value="#FORM.CostPerParticiant#" cfsqltype="cf_sql_double">,
-					Event_RebatePerParticipant = <cfqueryparam value="#FORM.ParticipantRebateAmount#" cfsqltype="cf_sql_double">
+				Set Event_CostPerParticipant = <cfqueryparam value="#FORM.CostPerParticiant#" cfsqltype="cf_sql_double">
 				Where Event_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfquery name="Session.getEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -5496,6 +5559,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
 			</cflock>
+
+			<cfdump var="#FORM#"><cfabort>
 
 			<cfif FORM.EventExpenseID EQ 0>
 				<cfscript>

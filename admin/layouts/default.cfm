@@ -176,6 +176,11 @@
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:users.default" class="active">Manage Users</a></li>
 									</ul>
 								</li>
+								<li><a href="/plugins/EventRegistration/" class="active">Reporting</a>
+									<ul>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:reports.yearendofevents" class="active">YearEnd Report of Events</a></li>
+									</ul>
+								</li>
 								<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:sysadmin.default" class="active">System Administration</a>
 
 								</li>

@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 --->
 </cfsilent>
-<cfset PriorDate = #DateAdd("m", -2, Now())#>
+<cfset PriorDate = #CreateDate(2015, 07, 01)#>
 <cfquery name="getAvailableEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 	Select TContent_ID, ShortTitle, EventDate, LongDescription, PGPAvailable, MemberCost, NonMemberCost
 	From eEvents

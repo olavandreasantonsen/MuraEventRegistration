@@ -52,7 +52,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 								EarlyBird NonMember Cost: #DollarFormat(Session.getEvent.EarlyBird_NonMemberCost)#<hr>
 							</cfif>
 							<cfif Session.getEvent.ViewSpecialPricing IS 1>
-								Special Pricing Requirements: #Session.getEvent.SpecialPricingRequirements#<br>
+								Special Pricing Requirements: #Session.getEvent.SpecialPriceRequirements#<br>
 								Special Price Member Cost: #DollarFormat(Session.getEvent.SpecialMemberCost)#<br>
 								Special Price NonMember Cost: #DollarFormat(Session.getEvent.SpecialNonMemberCost)#<hr>
 							</cfif>
@@ -81,6 +81,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 								Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 									OrganizationDomainName = <cfqueryparam value="#Variables.UserEmailDomain#" cfsqltype="cf_sql_varchar">
 							</cfquery>
+							<cfif Len(Session.getRegistrations.AttendeePrice) EQ 0>
+								<cfset Session.getRegistrations.AttendeePrice = 0>
+							</cfif>
 							<tr bgcolor="###iif(currentrow MOD 2,DE('ffffff'),DE('efefef'))#">
 								<td width="30%" style="Font-Family: Arial; Font-Size: 12px;">#Session.getRegistrations.Fname# #Session.getRegistrations.Lname#</td>
 								<td width="30%" style="Font-Family: Arial; Font-Size: 12px;">#getUserMembership.OrganizationName#</td>
@@ -95,6 +98,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 							</tr>
 							<cfset IncomeAmount = #Variables.IncomeAmount# + #Session.getRegistrations.AttendeePrice#>
 						</cfloop>
+						<cfif LEN(Session.getEventIncomeFromOtherParty.Event_TotalIncomeFromOtherParty)>
+							<tr>
+								<td colspan="5" style="Font-Family: Arial; Font-Size: 12px;">Income From Other Party</td>
+								<td style="Font-Family: Arial; Font-Size: 12px;">#DollarFormat(Session.getEventIncomeFromOtherParty.Event_TotalIncomeFromOtherParty)#</td>
+							</tr>
+							<cfset IncomeAmount = #Variables.IncomeAmount# + #Session.getEventIncomeFromOtherParty.Event_TotalIncomeFromOtherParty#>
+						</cfif>
 					</tbody>
 					<tfoot>
 						<tr>

@@ -31,7 +31,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<cfif Session.getAvailableEventExpenses.RecordCount>
 						<tfoot>
 							<tr>
-								<td colspan="3" style="Font-Family: Arial; Font-Size: 12px;">Add a new Expense for this event not listed above by clicking <a href="#buildURL('admin:events.updateeventexpenses')#&EventID=#URL.EventID#&UserAction=AddExpenses" class="art-button">here</a></td>
+								<td colspan="3" style="Font-Family: Arial; Font-Size: 12px;">Add a new Expense for this event not listed above by clicking <a href="#buildURL('admin:events.updateeventexpenses')#&EventID=#URL.EventID#&UserAction=AddExpenses" class="art-button">here</a> or to enter non-participant revenue click <a href="#buildURL('admin:events.updateeventexpenses')#&EventID=#URL.EventID#&UserAction=AddIncome" class="art-button">here</a></td>
 							</tr>
 							<tr>
 								<td colspan="3" style="Font-Family: Arial; Font-Size: 12px;">Generate Profit and Loss Report by clicking <a href="#buildURL('admin:events.updateeventexpenses')#&EventID=#URL.EventID#&UserAction=GeneratePLReport" class="art-button">here</a></td>
@@ -88,7 +88,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</cfquery>
 
 				<cfquery name="checkEventMatrix" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-					Select TContent_ID, Event_RebatePerParticipant
+					Select TContent_ID, Event_TotalIncomeFromOtherParty, Event_RebatePerParticipant
 					From eEventsMatrix
 					Where Event_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 				</cfquery>
@@ -105,12 +105,19 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfset EventTotalIncome = 0>
 				<cfloop query="getEventExpenses"><cfset EventTotalExpenses = #Variables.EventTotalExpenses# + #getEventExpenses.Cost_Amount#></cfloop>
 				<cfloop query="getEventIncome"><cfset EventTotalIncome = #Variables.EventTotalIncome# + #getEventIncome.AttendeePrice#></cfloop>
+				<cfif Len(checkEventMatrix.Event_TotalIncomeFromOtherParty) EQ 0>
+					<cfset EventTotalIncomeFromParticipants = #Variables.EventTotalIncome#>
+				<cfelse>
+					<cfset EventTotalIncomeFromParticipants = #Variables.EventTotalIncome#>
+					<cfset EventTotalIncomeFromOtherParty = #checkEventMatrix.Event_TotalIncomeFromOtherParty#>
+					<cfset EventTotalIncome = #Variables.EventTotalIncomeFromParticipants# + #Variables.EventTotalIncomeFromOtherParty#>
+				</cfif>
 
 				<cfif checkEventMatrix.RecordCount>
 					<cfquery name="updateEventmatrixInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 						update eEventsMatrix
 						Set Event_TotalExpensesToHold = <cfqueryparam value="#Variables.EventTotalExpenses#" cfsqltype="cf_sql_double">,
-							Event_TotalIncomeFromParticipants = <cfqueryparam value="#Variables.EventTotalIncome#" cfsqltype="cf_sql_double">
+							Event_TotalIncomeFromParticipants = <cfqueryparam value="#Variables.EventTotalIncomeFromParticipants#" cfsqltype="cf_sql_double">
 						Where TContent_ID = #checkEventMatrix.TContent_ID#
 					</cfquery>
 				<cfelse>
@@ -118,20 +125,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 						insert into eEventsMatrix(Event_ID, Event_TotalExpensesToHold, Event_TotalIncomeFromParticipants)
 						Values(<cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#Variables.EventTotalExpenses#" cfsqltype="cf_sql_double">,
-							<cfqueryparam value="#Variables.EventTotalIncome#" cfsqltype="cf_sql_double">
+							<cfqueryparam value="#Variables.EventTotalIncomeFromParticipants#" cfsqltype="cf_sql_double">
 						)
 					</cfquery>
 				</cfif>
-				<cfset CostPerParticipant = #Variables.EventTotalIncome# / #getEventParticipants.NumParticipants#>
+				<cfset TentativeProfitLossForEvent = #Variables.EventTotalIncome# - #Variables.EventTotalExpenses#>
+				<cfset CostPerParticipant = #Variables.TentativeProfitLossForEvent# / #getEventParticipants.NumParticipants#>
+
 				<div class="art-block clearfix">
 					<div class="art-blockheader">
 						<h3 class="t">Tentative Profit and Loss Report for: #getEvent.ShortTitle#</h3>
 					</div>
 					<div class="art-blockcontent">
-						<cfset Rebate5Percent = #Variables.CostPerParticipant# * .05>
-						<cfset Rebate10Percent = #Variables.CostPerParticipant# * .1>
-						<div class="alert-box notice">Rebate Amount by Percentages:<br>5% = #Variables.Rebate5Percent#<br>10% = #Variables.Rebate10Percent#<br></div>
-						<hr>
 						<uForm:form action="" method="Post" id="AddEventExpenses" errors="#Session.FormErrors#" errorMessagePlacement="both"
 							commonassetsPath="/plugins/EventRegistration/library/uniForm/" showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
 							cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&compactDisplay=false"
@@ -145,17 +150,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<uForm:fieldset legend="Event Information">
 								<uform:field label="Event Total Income" name="EventTotalIncome" id="EventTotalIncome" isRequired="true" value="#NumberFormat(Variables.EventTotalIncome, '99999.99')#" type="text" isDisabled="true" hint="Total Income" />
 								<uform:field label="Event Total Expenses" name="EventTotalExpenses" id="EventTotalExpenses" isRequired="true" value="#NumberFormat(Variables.EventTotalExpenses, '99999.99')#" type="text" isDisabled="true" hint="Total Expenses" />
+								<uform:field label="Event Tentative Profit/Loss" name="EventTentativeProfitLossAmount" id="EventTentativeProfitLossAmount" isRequired="true" value="#NumberFormat(Variables.TentativeProfitLossForEvent, '99999.99')#" type="text" isDisabled="true" hint="Total Expenses" />
 								<uform:field label="Event Total Participants" name="EventTotalParticipants" id="EventTotalParticipants" isRequired="true" value="#NumberFormat(getEventParticipants.NumParticipants, '99999')#" type="text" isDisabled="true" hint="Total Number of Attended Participants" />
 							</uForm:fieldset>
-							<uForm:fieldset legend="Participant Costs">
-								<uform:field label="Participant Breakdown" name="CostPerParticiant" id="CostPerParticipant" isRequired="true" value="#NumberFormat(Variables.CostPerParticipant, '99999.99')#" type="text" isDisabled="True" hint="Cost Per Attended Participant" />
-								<cfif LEN(checkEventMatrix.Event_RebatePerParticipant)>
-									<input type="hidden" name="ParticipantRebateAmount" value="#checkEventMatrix.Event_RebatePerParticipant#">
-									<uform:field label="Participant Rebate Amount" name="ParticipantRebateAmount" id="ParticipantRebateAmount" isRequired="true" isDisabled="true" value="#NumberFormat(checkEventMatrix.Event_RebatePerParticipant,'9999.99')#" type="text" hint="Amount to Rebate. Only Enter Dollars and Cents" />
-								<cfelse>
-									<uform:field label="Participant Rebate Amount" name="ParticipantRebateAmount" id="ParticipantRebateAmount" isRequired="true" type="text" hint="Amount to Rebate. Only Enter Dollars and Cents" />
-								</cfif>
-
+							<uForm:fieldset legend="Participant Profit">
+								<uform:field label="Participant Breakdown" name="CostPerParticiant" id="CostPerParticipant" isRequired="true" value="#NumberFormat(Variables.CostPerParticipant, '99999.99')#" type="text" isDisabled="True" hint="Profit per Attended Participant" />
 							</uForm:fieldset>
 						</uForm:form>
 			</cfcase>
@@ -181,6 +180,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
 							<input type="hidden" name="formSubmit" value="true">
 							<input type="hidden" name="EventID" value="#URL.EventID#">
+							<input type="hidden" name="EventExpenses" value="true">
 							<uForm:fieldset legend="Expense Information">
 								<uform:field label="Expense Name" name="EventExpenseID" id="EventExpenseID" isRequired="true" type="select" hint="Name of Expense that can be associated with an Event">
 									<uform:option display="Select Expense from List" value="0" isSelected="true" />
@@ -189,6 +189,36 @@ http://www.apache.org/licenses/LICENSE-2.0
 									</cfloop>
 								</uform:field>
 								<uform:field label="Expense Amount" name="ExpenseAmount" type="text" value="#NumberFormat('0.00', '9999.99')#" hint="The Amount of the Expense. Just enter Dollars and Cents Only" />
+							</uForm:fieldset>
+						</uForm:form>
+					</div>
+				</div>
+			</cfcase>
+			<cfcase value="AddIncome">
+				<cfimport taglib="/plugins/EventRegistration/library/uniForm/tags/" prefix="uForm">
+				<cflock timeout="60" scope="SESSION" type="Exclusive">
+					<cfset Session.FormData = #StructNew()#>
+					<cfset Session.FormErrors = #ArrayNew()#>
+					<cfif not isDefined("Session.UserSuppliedInfo")><cfset Session.UserSuppliedInfo = #StructNew()#></cfif>
+				</cflock>
+				<div class="art-block clearfix">
+					<div class="art-blockheader">
+						<h3 class="t">Add new Event Income for #Session.getEvent.ShortTitle#</h3>
+					</div>
+					<div class="art-blockcontent">
+						<div class="alert-box notice">Please complete the following information to add a new event income amount.</div>
+						<hr>
+						<uForm:form action="" method="Post" id="AddEventIncome" errors="#Session.FormErrors#" errorMessagePlacement="both"
+							commonassetsPath="/plugins/EventRegistration/library/uniForm/" showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
+							cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=admin:events&compactDisplay=false"
+							submitValue="Add Event Income" loadValidation="true" loadMaskUI="true" loadDateUI="false"
+							loadTimeUI="false">
+							<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+							<input type="hidden" name="formSubmit" value="true">
+							<input type="hidden" name="EventIncome" value="true">
+							<input type="hidden" name="EventID" value="#URL.EventID#">
+							<uForm:fieldset legend="Income Information">
+								<uform:field label="Income Amount" name="IncomeAmount" type="text" value="#NumberFormat('0.00', '9999.99')#" hint="The Amount of the Income. Just enter Dollars and Cents Only" />
 							</uForm:fieldset>
 						</uForm:form>
 					</div>

@@ -801,133 +801,133 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cflocation url="/index.cfm?RegistrationSuccessfull=False&MultipleRegistration=False&Message=NoOne" addtoken="false">
 			<cfelse>
 				<cfif LEN(FORM.AdditionalParticipant_1_FirstName) and LEN(FORM.AdditionalParticipant_1_LastName) and LEN(AdditionalParticipant_1_EMail)>
-						<cfif isDefined("FORM.AdditionalParticipant_1_Stay4Meal")>
-							<cfif Len(FORM.AdditionalParticipant_1_Stay4Meal)>
-								<cfif FORM.AdditionalParticipant_1_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
-							<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_1_Stay4Meal")>
+						<cfif Len(FORM.AdditionalParticipant_1_Stay4Meal)>
+							<cfif FORM.AdditionalParticipant_1_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
 						<cfelse><cfset ParticipantStayForMeal = 0></cfif>
-						<cfif isDefined("FORM.AdditionalParticipant_1_IPVideo")>
-							<cfif Len(FORM.AdditionalParticipant_1_IPVideo)>
-								<cfif FORM.AdditionalParticipant_1_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
-							<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_1_IPVideo")>
+						<cfif Len(FORM.AdditionalParticipant_1_IPVideo)>
+							<cfif FORM.AdditionalParticipant_1_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
 						<cfelse><cfset ParticipantIPVideo = 0></cfif>
-						<cfif isDefined("FORM.RegisterAllDays")>
-							<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
-						</cfif>
-						<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_1_FirstName, FORM.AdditionalParticipant_1_LastName, FORM.AdditionalParticipant_1_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
-						<cfset AddedParticipant1 = true>
+					<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfif isDefined("FORM.RegisterAllDays")>
+						<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
 					</cfif>
-					<cfif LEN(FORM.AdditionalParticipant_2_FirstName) and LEN(FORM.AdditionalParticipant_2_LastName) and LEN(AdditionalParticipant_2_EMail)>
-						<cfif isDefined("FORM.AdditionalParticipant_2_Stay4Meal")>
-							<cfif Len(FORM.AdditionalParticipant_2_Stay4Meal)>
-								<cfif FORM.AdditionalParticipant_2_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
-							<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_1_FirstName, FORM.AdditionalParticipant_1_LastName, FORM.AdditionalParticipant_1_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
+					<cfset AddedParticipant1 = true>
+				</cfif>
+				<cfif LEN(FORM.AdditionalParticipant_2_FirstName) and LEN(FORM.AdditionalParticipant_2_LastName) and LEN(AdditionalParticipant_2_EMail)>
+					<cfif isDefined("FORM.AdditionalParticipant_2_Stay4Meal")>
+						<cfif Len(FORM.AdditionalParticipant_2_Stay4Meal)>
+							<cfif FORM.AdditionalParticipant_2_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
 						<cfelse><cfset ParticipantStayForMeal = 0></cfif>
-						<cfif isDefined("FORM.AdditionalParticipant_2_IPVideo")>
-							<cfif Len(FORM.AdditionalParticipant_2_IPVideo)>
-								<cfif FORM.AdditionalParticipant_2_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
-							<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_2_IPVideo")>
+						<cfif Len(FORM.AdditionalParticipant_2_IPVideo)>
+							<cfif FORM.AdditionalParticipant_2_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
 						<cfelse><cfset ParticipantIPVideo = 0></cfif>
-						<cfif isDefined("FORM.RegisterAllDays")>
-							<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
-						</cfif>
-						<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_2_FirstName, FORM.AdditionalParticipant_2_LastName, FORM.AdditionalParticipant_2_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
-						<cfset AddedParticipant2 = true>
+					<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfif isDefined("FORM.RegisterAllDays")>
+						<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
 					</cfif>
-					<cfif LEN(FORM.AdditionalParticipant_3_FirstName) and LEN(FORM.AdditionalParticipant_3_LastName) and LEN(AdditionalParticipant_3_EMail)>
-						<cfif isDefined("FORM.AdditionalParticipant_3_Stay4Meal")>
-							<cfif Len(FORM.AdditionalParticipant_3_Stay4Meal)>
-								<cfif FORM.AdditionalParticipant_3_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
-							<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_2_FirstName, FORM.AdditionalParticipant_2_LastName, FORM.AdditionalParticipant_2_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
+					<cfset AddedParticipant2 = true>
+				</cfif>
+				<cfif LEN(FORM.AdditionalParticipant_3_FirstName) and LEN(FORM.AdditionalParticipant_3_LastName) and LEN(AdditionalParticipant_3_EMail)>
+					<cfif isDefined("FORM.AdditionalParticipant_3_Stay4Meal")>
+						<cfif Len(FORM.AdditionalParticipant_3_Stay4Meal)>
+							<cfif FORM.AdditionalParticipant_3_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
 						<cfelse><cfset ParticipantStayForMeal = 0></cfif>
-						<cfif isDefined("FORM.AdditionalParticipant_3_IPVideo")>
-							<cfif Len(FORM.AdditionalParticipant_3_IPVideo)>
-								<cfif FORM.AdditionalParticipant_3_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
-							<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_3_IPVideo")>
+						<cfif Len(FORM.AdditionalParticipant_3_IPVideo)>
+							<cfif FORM.AdditionalParticipant_3_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
 						<cfelse><cfset ParticipantIPVideo = 0></cfif>
-						<cfif isDefined("FORM.RegisterAllDays")>
-							<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
-						</cfif>
-						<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_3_FirstName, FORM.AdditionalParticipant_3_LastName, FORM.AdditionalParticipant_3_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
-						<cfset AddedParticipant3 = true>
+					<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfif isDefined("FORM.RegisterAllDays")>
+					<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
 					</cfif>
-					<cfif LEN(FORM.AdditionalParticipant_4_FirstName) and LEN(FORM.AdditionalParticipant_4_LastName) and LEN(AdditionalParticipant_4_EMail)>
-						<cfif isDefined("FORM.AdditionalParticipant_4_Stay4Meal")>
-							<cfif Len(FORM.AdditionalParticipant_4_Stay4Meal)>
-								<cfif FORM.AdditionalParticipant_4_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
-							<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_3_FirstName, FORM.AdditionalParticipant_3_LastName, FORM.AdditionalParticipant_3_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
+					<cfset AddedParticipant3 = true>
+				</cfif>
+				<cfif LEN(FORM.AdditionalParticipant_4_FirstName) and LEN(FORM.AdditionalParticipant_4_LastName) and LEN(AdditionalParticipant_4_EMail)>
+					<cfif isDefined("FORM.AdditionalParticipant_4_Stay4Meal")>
+						<cfif Len(FORM.AdditionalParticipant_4_Stay4Meal)>
+							<cfif FORM.AdditionalParticipant_4_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
 						<cfelse><cfset ParticipantStayForMeal = 0></cfif>
-						<cfif isDefined("FORM.AdditionalParticipant_4_IPVideo")>
-							<cfif Len(FORM.AdditionalParticipant_4_IPVideo)>
-								<cfif FORM.AdditionalParticipant_4_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
-							<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_4_IPVideo")>
+						<cfif Len(FORM.AdditionalParticipant_4_IPVideo)>
+							<cfif FORM.AdditionalParticipant_4_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
 						<cfelse><cfset ParticipantIPVideo = 0></cfif>
-						<cfif isDefined("FORM.RegisterAllDays")>
-							<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
-						</cfif>
-						<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_4_FirstName, FORM.AdditionalParticipant_4_LastName, FORM.AdditionalParticipant_4_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
-						<cfset AddedParticipant4 = true>
+					<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfif isDefined("FORM.RegisterAllDays")>
+						<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
 					</cfif>
-					<cfif LEN(FORM.AdditionalParticipant_5_FirstName) and LEN(FORM.AdditionalParticipant_5_LastName) and LEN(AdditionalParticipant_5_EMail)>
-						<cfif isDefined("FORM.AdditionalParticipant_5_Stay4Meal")>
-							<cfif Len(FORM.AdditionalParticipant_5_Stay4Meal)>
-								<cfif FORM.AdditionalParticipant_5_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
-							<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_4_FirstName, FORM.AdditionalParticipant_4_LastName, FORM.AdditionalParticipant_4_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
+					<cfset AddedParticipant4 = true>
+				</cfif>
+				<cfif LEN(FORM.AdditionalParticipant_5_FirstName) and LEN(FORM.AdditionalParticipant_5_LastName) and LEN(AdditionalParticipant_5_EMail)>
+					<cfif isDefined("FORM.AdditionalParticipant_5_Stay4Meal")>
+						<cfif Len(FORM.AdditionalParticipant_5_Stay4Meal)>
+							<cfif FORM.AdditionalParticipant_5_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
 						<cfelse><cfset ParticipantStayForMeal = 0></cfif>
-						<cfif isDefined("FORM.AdditionalParticipant_5_IPVideo")>
-							<cfif Len(FORM.AdditionalParticipant_5_IPVideo)>
-								<cfif FORM.AdditionalParticipant_5_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
-							<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_5_IPVideo")>
+						<cfif Len(FORM.AdditionalParticipant_5_IPVideo)>
+							<cfif FORM.AdditionalParticipant_5_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
 						<cfelse><cfset ParticipantIPVideo = 0></cfif>
-						<cfif isDefined("FORM.RegisterAllDays")>
-							<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
-						</cfif>
-						<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_5_FirstName, FORM.AdditionalParticipant_5_LastName, FORM.AdditionalParticipant_5_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
-						<cfset AddedParticipant5 = true>
+					<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfif isDefined("FORM.RegisterAllDays")>
+						<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
 					</cfif>
-					<cfif LEN(FORM.AdditionalParticipant_6_FirstName) and LEN(FORM.AdditionalParticipant_6_LastName) and LEN(AdditionalParticipant_6_EMail)>
-						<cfif isDefined("FORM.AdditionalParticipant_6_Stay4Meal")>
-							<cfif Len(FORM.AdditionalParticipant_6_Stay4Meal)>
-								<cfif FORM.AdditionalParticipant_6_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
-							<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_5_FirstName, FORM.AdditionalParticipant_5_LastName, FORM.AdditionalParticipant_5_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
+					<cfset AddedParticipant5 = true>
+				</cfif>
+				<cfif LEN(FORM.AdditionalParticipant_6_FirstName) and LEN(FORM.AdditionalParticipant_6_LastName) and LEN(AdditionalParticipant_6_EMail)>
+					<cfif isDefined("FORM.AdditionalParticipant_6_Stay4Meal")>
+						<cfif Len(FORM.AdditionalParticipant_6_Stay4Meal)>
+							<cfif FORM.AdditionalParticipant_6_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
 						<cfelse><cfset ParticipantStayForMeal = 0></cfif>
-						<cfif isDefined("FORM.AdditionalParticipant_6_IPVideo")>
-							<cfif Len(FORM.AdditionalParticipant_6_IPVideo)>
-								<cfif FORM.AdditionalParticipant_6_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
-							<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_6_IPVideo")>
+						<cfif Len(FORM.AdditionalParticipant_6_IPVideo)>
+							<cfif FORM.AdditionalParticipant_6_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
 						<cfelse><cfset ParticipantIPVideo = 0></cfif>
-						<cfif isDefined("FORM.RegisterAllDays")>
-							<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
-						</cfif>
-						<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_6_FirstName, FORM.AdditionalParticipant_6_LastName, FORM.AdditionalParticipant_6_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
-						<cfset AddedParticipant6 = true>
+					<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfif isDefined("FORM.RegisterAllDays")>
+						<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
 					</cfif>
-					<cfif LEN(FORM.AdditionalParticipant_7_FirstName) and LEN(FORM.AdditionalParticipant_7_LastName) and LEN(AdditionalParticipant_7_EMail)>
-						<cfif isDefined("FORM.AdditionalParticipant_7_Stay4Meal")>
-							<cfif Len(FORM.AdditionalParticipant_7_Stay4Meal)>
-								<cfif FORM.AdditionalParticipant_7_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
-							<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_6_FirstName, FORM.AdditionalParticipant_6_LastName, FORM.AdditionalParticipant_6_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
+					<cfset AddedParticipant6 = true>
+				</cfif>
+				<cfif LEN(FORM.AdditionalParticipant_7_FirstName) and LEN(FORM.AdditionalParticipant_7_LastName) and LEN(AdditionalParticipant_7_EMail)>
+					<cfif isDefined("FORM.AdditionalParticipant_7_Stay4Meal")>
+						<cfif Len(FORM.AdditionalParticipant_7_Stay4Meal)>
+							<cfif FORM.AdditionalParticipant_7_Stay4Meal EQ 1><cfset ParticipantStayForMeal = 1><cfelse><cfset ParticipantStayForMeal = 0></cfif>
 						<cfelse><cfset ParticipantStayForMeal = 0></cfif>
-						<cfif isDefined("FORM.AdditionalParticipant_7_IPVideo")>
-							<cfif Len(FORM.AdditionalParticipant_7_IPVideo)>
-								<cfif FORM.AdditionalParticipant_7_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
-							<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfelse><cfset ParticipantStayForMeal = 0></cfif>
+					<cfif isDefined("FORM.AdditionalParticipant_7_IPVideo")>
+						<cfif Len(FORM.AdditionalParticipant_7_IPVideo)>
+							<cfif FORM.AdditionalParticipant_7_IPVideo EQ 1><cfset ParticipantIPVideo = 1><cfelse><cfset ParticipantIPVideo = 0></cfif>
 						<cfelse><cfset ParticipantIPVideo = 0></cfif>
-						<cfif isDefined("FORM.RegisterAllDays")>
-							<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
-						</cfif>
-						<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_7_FirstName, FORM.AdditionalParticipant_7_LastName, FORM.AdditionalParticipant_7_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
-						<cfset AddedParticipant7 = true>
+					<cfelse><cfset ParticipantIPVideo = 0></cfif>
+					<cfif isDefined("FORM.RegisterAllDays")>
+						<cfif FORM.RegisterAllDays EQ 1><cfset ParticipantRegisterAllDates = 1><cfelse><cfset ParticipantRegisterAllDates = 0></cfif>
 					</cfif>
-					<cflock scope="Session" type="Exclusive" timeout="60">
-						<cfset StructDelete(Session, "UserRegistrationInfo")>
-					</cflock>
-					<cfset temp = #StructDelete(Session, "UserRegistrationInfo")#>
-					<cfif isDefined("Variables.AddedParticipant1") or isDefined("Variables.AddedParticipant2") or isDefined("Variables.AddedParticipant3") or isDefined("Variables.AddedParticipant4") or isDefined("Variables.AddedParticipant5") or isDefined("Variables.AddedParticipant6") or isDefined("Variables.AddedParticipant7")>
-						<cflocation url="/index.cfm?RegistrationSuccessfull=True&MultipleRegistration=True" addtoken="false">
-					<cfelse>
-						<cflocation url="/index.cfm?RegistrationSuccessfull=False&MultipleRegistration=False&Message=NoOne" addtoken="false">
-					</cfif>
+					<cfset temp = #this.AdditionalPartifipantInformationToRegister(FORM.AdditionalParticipant_7_FirstName, FORM.AdditionalParticipant_7_LastName, FORM.AdditionalParticipant_7_Email, FORM.RegisterAllDays, FORM.SiteID, Variables.ParticipantStayForMeal, Variables.ParticipantIPVideo)#>
+					<cfset AddedParticipant7 = true>
+				</cfif>
+				<cflock scope="Session" type="Exclusive" timeout="60">
+					<cfset StructDelete(Session, "UserRegistrationInfo")>
+				</cflock>
+				<cfset temp = #StructDelete(Session, "UserRegistrationInfo")#>
+				<cfif isDefined("Variables.AddedParticipant1") or isDefined("Variables.AddedParticipant2") or isDefined("Variables.AddedParticipant3") or isDefined("Variables.AddedParticipant4") or isDefined("Variables.AddedParticipant5") or isDefined("Variables.AddedParticipant6") or isDefined("Variables.AddedParticipant7")>
+					<cflocation url="/index.cfm?RegistrationSuccessfull=True&MultipleRegistration=True" addtoken="false">
+				<cfelse>
+					<cflocation url="/index.cfm?RegistrationSuccessfull=False&MultipleRegistration=False&Message=NoOne" addtoken="false">
+				</cfif>
 			</cfif>
 		</cfif>
 	</cffunction>

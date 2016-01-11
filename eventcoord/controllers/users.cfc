@@ -393,6 +393,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfquery>
 					<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.default&Successful=true&UserAction=DeActivateAccount" addtoken="false">
 				</cfcase>
+				<cfcase value="Activate">
+					<cfquery name="updateUserRecord" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Update tusers
+						Set inActive = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
+						Where UserID = <cfqueryparam value="#URL.RecNo#" cfsqltype="cf_sql_varchar">
+					</cfquery>
+					<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.default&Successful=true&UserAction=ActivateAccount" addtoken="false">
+				</cfcase>
 			</cfswitch>
 		</cfif>
 

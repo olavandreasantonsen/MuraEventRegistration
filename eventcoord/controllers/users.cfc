@@ -118,7 +118,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 						<!--- Initiates the User Bean --->
 						<cfset NewUser = #Application.userManager.readByUsername(form.Username, rc.$.siteConfig('siteID'))#>
-						<cfset NewUser.setInActive(1)>
+						<cfset NewUser.setInActive(0)>
 						<cfset NewUser.setSiteID(rc.$.siteConfig('siteID'))>
 						<cfset NewUser.setFname(FORM.fName)>
 						<cfset NewUser.setLname(FORM.lName)>

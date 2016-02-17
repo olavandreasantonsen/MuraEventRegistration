@@ -949,118 +949,131 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Lname = <cfqueryparam value="#Arguments.LastName#" cfsqltype="cf_sql_varchar"> and
 				UserName = <cfqueryparam value="#Arguments.Email#" cfsqltype="cf_sql_varchar">
 		</cfquery>
+
+		<cfquery name="CheckUserAlreadyRegistered" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+			Select TContent_ID
+			From eRegistrations
+			Where Site_ID = <cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar"> and
+				User_ID = <cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar"> and
+				EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+		</cfquery>
+
 		<cfif CheckUserAlreadyHasAccount.RecordCount>
 			<cfswitch expression="#Arguments.RegisterAllDates#">
 				<cfcase value="1">
-					<cfquery name="GetEventMultipleDatesID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Select EventID_AdditionalDates
-						From eEventsMatrix
-						Where Event_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
-					</cfquery>
-					<cfset RegistrationID = #CreateUUID()#>
-					<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-						insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
-						Values(
-							<cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#Now()#" cfsqltype="cf_sql_date">,
-							<cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">,
-							<cfqueryparam value="#Session.UserRegistrationInfo.UserEventPrice#" cfsqltype="cf_sql_double">,
-							<cfqueryparam value="#CGI.Remote_ADDR#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
-						)
-					</cfquery>
-					<cfif Arguments.Stay4Meal EQ 1>
-						<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-							Update eRegistrations
-							Set RequestsMeal = <cfqueryparam value="#Arguments.Stay4Meal#" cfsqltype="cf_sql_bit">
-							Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+					<cfif CheckUserAlreadyRegistered.RecordCount EQ 0>
+						<cfquery name="GetEventMultipleDatesID" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Select EventID_AdditionalDates
+							From eEventsMatrix
+							Where Event_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 						</cfquery>
-					</cfif>
-					<cfif Arguments.IPVideoParticipant EQ 1>
-						<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-							Update eRegistrations
-							Set IVCParticipant = <cfqueryparam value="#Arguments.IPVideoParticipant#" cfsqltype="cf_sql_bit">
-							Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+						<cfset RegistrationID = #CreateUUID()#>
+						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							Values(
+								<cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#Now()#" cfsqltype="cf_sql_date">,
+								<cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">,
+								<cfqueryparam value="#Session.UserRegistrationInfo.UserEventPrice#" cfsqltype="cf_sql_double">,
+								<cfqueryparam value="#CGI.Remote_ADDR#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+							)
 						</cfquery>
-					</cfif>
-					<cfloop query="GetEventMultipleDatesID">
-						<cfquery name="CheckUserAlreadyRegisteredAdditionalDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Select TContent_ID
-							From eRegistrations
-							Where Site_ID = <cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar"> and
-								User_ID = <cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar"> and
-								EventID = <cfqueryparam value="#GetEventMultipleDatesID.EventID_AdditionalDates#" cfsqltype="cf_sql_integer">
-						</cfquery>
-						<cfif CheckUserAlreadyRegisteredAdditionalDates.RecordCount EQ 0>
-							<cfset RegistrationID = #CreateUUID()#>
-							<cftry>
-								<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-									insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
-									Values(
-										<cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar">,
-										<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
-										<cfqueryparam value="#Now()#" cfsqltype="cf_sql_date">,
-										<cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar">,
-										<cfqueryparam value="#GetEventMultipleDatesID.EventID_AdditionalDates#" cfsqltype="cf_sql_integer">,
-										<cfqueryparam value="#Session.UserRegistrationInfo.UserEventPrice#" cfsqltype="cf_sql_double">,
-										<cfqueryparam value="#CGI.Remote_ADDR#" cfsqltype="cf_sql_varchar">,
-										<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
-									)
-								</cfquery>
-								<cfif Arguments.Stay4Meal EQ 1>
-									<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-										Update eRegistrations
-										Set RequestsMeal = <cfqueryparam value="#Arguments.Stay4Meal#" cfsqltype="cf_sql_bit">
-										Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-									</cfquery>
-								</cfif>
-								<cfif Arguments.IPVideoParticipant EQ 1>
-									<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-										Update eRegistrations
-										Set IVCParticipant = <cfqueryparam value="#Arguments.IPVideoParticipant#" cfsqltype="cf_sql_bit">
-										Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-									</cfquery>
-								</cfif>
-								<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
-								<cfcatch type="Database">
-									<cfdump var="#CFCATCH#"><cfabort>
-								</cfcatch>
-							</cftry>
+						<cfif Arguments.Stay4Meal EQ 1>
+							<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+								Update eRegistrations
+								Set RequestsMeal = <cfqueryparam value="#Arguments.Stay4Meal#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
 						</cfif>
-					</cfloop>
+						<cfif Arguments.IPVideoParticipant EQ 1>
+							<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+								Update eRegistrations
+								Set IVCParticipant = <cfqueryparam value="#Arguments.IPVideoParticipant#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfif>
+						<cfloop query="GetEventMultipleDatesID">
+							<cfquery name="CheckUserAlreadyRegisteredAdditionalDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Select TContent_ID
+								From eRegistrations
+								Where Site_ID = <cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar"> and
+									User_ID = <cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar"> and
+									EventID = <cfqueryparam value="#GetEventMultipleDatesID.EventID_AdditionalDates#" cfsqltype="cf_sql_integer">
+							</cfquery>
+							<cfif CheckUserAlreadyRegisteredAdditionalDates.RecordCount EQ 0>
+								<cfset RegistrationID = #CreateUUID()#>
+								<cftry>
+									<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+										insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+										Values(
+											<cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar">,
+											<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
+											<cfqueryparam value="#Now()#" cfsqltype="cf_sql_date">,
+											<cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar">,
+											<cfqueryparam value="#GetEventMultipleDatesID.EventID_AdditionalDates#" cfsqltype="cf_sql_integer">,
+											<cfqueryparam value="#Session.UserRegistrationInfo.UserEventPrice#" cfsqltype="cf_sql_double">,
+											<cfqueryparam value="#CGI.Remote_ADDR#" cfsqltype="cf_sql_varchar">,
+											<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+										)
+									</cfquery>
+									<cfif Arguments.Stay4Meal EQ 1>
+										<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+											Update eRegistrations
+											Set RequestsMeal = <cfqueryparam value="#Arguments.Stay4Meal#" cfsqltype="cf_sql_bit">
+											Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+										</cfquery>
+									</cfif>
+									<cfif Arguments.IPVideoParticipant EQ 1>
+										<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+											Update eRegistrations
+											Set IVCParticipant = <cfqueryparam value="#Arguments.IPVideoParticipant#" cfsqltype="cf_sql_bit">
+											Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+										</cfquery>
+									</cfif>
+									<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
+									<cfcatch type="Database">
+										<cfdump var="#CFCATCH#"><cfabort>
+									</cfcatch>
+								</cftry>
+							</cfif>
+						</cfloop>
+					</cfif>
 				</cfcase>
 				<cfdefaultcase>
-					<cfset RegistrationID = #CreateUUID()#>
-					<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-						insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
-						Values(
-							<cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#Now()#" cfsqltype="cf_sql_date">,
-							<cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">,
-							<cfqueryparam value="#Session.UserRegistrationInfo.UserEventPrice#" cfsqltype="cf_sql_double">,
-							<cfqueryparam value="#CGI.Remote_ADDR#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
-						)
-					</cfquery>
-					<cfif Arguments.Stay4Meal EQ 1>
-						<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-							Update eRegistrations
-							Set RequestsMeal = <cfqueryparam value="#Arguments.Stay4Meal#" cfsqltype="cf_sql_bit">
-							Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+					<cfif CheckUserAlreadyRegistered.RecordCount EQ 0>
+						<cfset RegistrationID = #CreateUUID()#>
+						<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+							insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID)
+							Values(
+								<cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#Now()#" cfsqltype="cf_sql_date">,
+								<cfqueryparam value="#CheckUserAlreadyHasAccount.UserID#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">,
+								<cfqueryparam value="#Session.UserRegistrationInfo.UserEventPrice#" cfsqltype="cf_sql_double">,
+								<cfqueryparam value="#CGI.Remote_ADDR#" cfsqltype="cf_sql_varchar">,
+								<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+							)
 						</cfquery>
+						<cfif Arguments.Stay4Meal EQ 1>
+							<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+								Update eRegistrations
+								Set RequestsMeal = <cfqueryparam value="#Arguments.Stay4Meal#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfif>
+						<cfif Arguments.IPVideoParticipant EQ 1>
+							<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+								Update eRegistrations
+								Set IVCParticipant = <cfqueryparam value="#Arguments.IPVideoParticipant#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfif>
+						<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
 					</cfif>
-					<cfif Arguments.IPVideoParticipant EQ 1>
-						<cfquery name="updateNewRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-							Update eRegistrations
-							Set IVCParticipant = <cfqueryparam value="#Arguments.IPVideoParticipant#" cfsqltype="cf_sql_bit">
-							Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-						</cfquery>
-					</cfif>
-					<cfset Temp = #SendEmailCFC.SendEventRegistrationToParticipantFromAnother(insertNewRegistration.GENERATED_KEY)#>
 				</cfdefaultcase>
 			</cfswitch>
 		<cfelse>

@@ -312,6 +312,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfset Session.FormData.PluginInfo.DBPassword = #rc.$.globalConfig('dbpassword')#>
 				<cfset Session.FormData.PluginInfo.PackageName = #HTMLEditFormat(rc.pc.getPackage())#>
 				<cfset Session.FormData.PluginInfo.SiteID = #rc.$.siteConfig('siteID')#>
+				<cfset Session.FormData.FormStep1 = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
 			</cflock>
 			<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
@@ -494,11 +495,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 							</cfdefaultcase>
 						</cfswitch>
 					<cfelse>
+
 						<cfif isDefined("FORM.additionalParticipants")>
 							<cfloop list="#FORM.additionalParticipants#" index="i" delimiters=",">
 								<cfset RegistrationID = #CreateUUID()#>
 								<cftry>
-									<cfparam name="FORM.WantsMeal" default="0">
 									<cfquery name="insertNewRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 										insert into eRegistrations(Site_ID, RegistrationID, RegistrationDate, User_ID, EventID, AttendeePrice, RegistrationIPAddr, RegisterByUserID, WebinarParticipant, RequestsMeal)
 										Values(

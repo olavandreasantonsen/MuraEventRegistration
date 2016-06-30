@@ -45,32 +45,22 @@
 	<cfswitch expression="#URL.PerformAction#">
 		<cfcase value="DisplayReport">
 			<cfimport taglib="/plugins/EventRegistration/library/cfjasperreports/tag/cfjasperreport" prefix="jr">
-			<cfset GetYearlyEventsList = #ValueList(Session.GetYearlyEvents.TContent_ID, ",")#>
-			<cfoutput>#Variables.GetYearlyEventsList#</cfoutput>
-			<cfquery name="GetAllRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select Distinct User_ID
-				From eRegistrations
-				Where EventID IN (#Variables.GetYearlyEventsList#) and AttendedEvent = 1
-			</cfquery>
-			<cfdump var="#GetAllRegistrations#">
-			<cfdump var="#Session.ReportQuery#">
-			<cfabort>
 			<cfset LogoPath = ArrayNew(1)>
 			<cfloop from="1" to="#Session.ReportQuery.RecordCount#" step="1" index="i">
 				<cfset LogoPath[i] = #ExpandPath("/plugins/EventRegistration/library/images/NIESC_Logo.png")#>
 			</cfloop>
-			<cfloop query="#Session.ReportQuery#" from="1" to="1" index="item">
+			<cfloop query="#Session.ReportQuery#" from="1" to="1">
 				<cfset YearRangeFilename = #DateFormat(Session.ReportQuery.ReportFromDate, "yyyy")# & "_-_" & #DateFormat(Session.ReportQuery.ReportToDate, "yyyy")# & "_">
 				<cfset YearRangeReportDate = #DateFormat(Session.ReportQuery.ReportFromDate, "yyyy")# & " - " & #DateFormat(Session.ReportQuery.ReportToDate, "yyyy")#>
 			</cfloop>
-
 			<cfif not #ListContainsNoCase(Session.ReportQuery.columnList, "NIESCLogoPath", ",")#>
 				<cfset temp = QueryAddColumn(Session.ReportQuery, "NIESCLogoPath", "VarChar", Variables.LogoPath)>
 			</cfif>
 			<cfset ReportDirectory = #ExpandPath("/plugins/EventRegistration/library/reports/")# >
 			<cfset ReportExportLoc = #ExpandPath("/plugins/EventRegistration/library/ReportExports/")# & #Variables.YearRangeFilename# & "YearEndEventReport.pdf" >
 			<cfset WebReportExportLoc = "/plugins/EventRegistration/library/ReportExports/" & #Variables.YearRangeFilename# & "YearEndEventReport.pdf">
-			<jr:jasperreport jrxml="#ReportDirectory#/ProfitLossReportofEvents.jrxml" query="#Session.ReportQuery#" params="" exportfile="#ReportExportLoc#" exportType="pdf" />
+
+			<jr:jasperreport jrxml="#ReportDirectory#/ProfitLossReportofEvents.jrxml" query="#Session.ReportQuery#" exportfile="#ReportExportLoc#" exportType="pdf" />
 			<cfoutput><embed src="#Variables.WebReportExportLoc#" width="850" height="650"></cfoutput>
 		</cfcase>
 		<cfdefaultcase>

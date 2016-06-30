@@ -179,6 +179,7 @@
 								<li><a href="/plugins/EventRegistration/" class="active">Reporting</a>
 									<ul>
 										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:reports.yearendofevents" class="active">YearEnd Report of Events</a></li>
+										<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:reports.profitlossreport" class="active">Profit/Loss Report of Events</a></li>
 									</ul>
 								</li>
 								<li><a href="/plugins/EventRegistration/index.cfm?EventRegistrationaction=admin:sysadmin.default" class="active">System Administration</a>

@@ -23,7 +23,7 @@
 										<a href="?display=login"><i class="icon-home"></i> Account Login</a>
 									</li>
 									<li class="<cfif rc.action eq 'public:register.account'>active</cfif>">
-										<a href="#buildURL('public:register.account')#"><i class="icon-home"></i> Register Account</a>
+										<a href="#buildURL('public:registeruser.default')#"><i class="icon-home"></i> Register Account</a>
 									</li>
 									<li class="<cfif rc.action eq 'public:main.forgotpassword'>active</cfif>">
 										<a href="#buildURL('public:main.forgotpassword')#"><i class="icon-leaf"></i> Forgot Password</a>

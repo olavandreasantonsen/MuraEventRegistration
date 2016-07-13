@@ -19,35 +19,65 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 		// triggered by the pluginManager when the plugin is INSTALLED.
 		application.appInitialized = false;
 
-		/* var dbCheckTables = new query();
+		var dbCheckTables = new query();
 		dbCheckTables.setDatasource("#application.configBean.getDatasource()#");
-		dbCheckTables.setSQL("Show Tables LIKE 'p_Auction_Bids'");
+		dbCheckTables.setSQL("Show Tables LIKE 'p_EventRegistration_Membership'");
 		var dbCheckTablesResults = dbCheckTables.execute();
 
 		if (dbCheckTablesResults.getResult().recordcount eq 0) {
 			// Since the Database Table does not exists, Lets Create it
 			var dbCreateTable = new query();
 			dbCreateTable.setDatasource("#application.configBean.getDatasource()#");
-			dbCreateTable.setSQL("CREATE TABLE `p_Auction_Bids` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Auction_ID` int(11) NOT NULL, `User_ID` varchar(30) NOT NULL, `Bid_Amount` double(15,2) NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
+			dbCreateTable.setSQL("CREATE TABLE `p_EventRegistration_Membership` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `OrganizationName` varchar(50) NOT NULL, `OrganizationDomainName` varchar(50) NOT NULL, `StateDOE_IDNumber` varchar(10) DEFAULT NULL, `StateDOE_State` tinytext, `Active` bit(1) NOT NULL DEFAULT b'0', `dateCreated` date NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, `Mailing_Address` tinytext, `Mailing_City` tinytext, `Mailing_State` tinytext, `Mailing_ZipCode` tinytext, `Primary_PhoneNumber` tinytext, `Primary_FaxNumber` tinytext, `Physical_Address` tinytext, `Physical_City` tinytext, `Physical_State` tinytext, `Physical_ZipCode` tinytext, `AccountsPayable_EmailAddress` tinytext, `AccountsPayable_ContactName` tinytext, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
 			var dbCreateTableResults = dbCreateTable.execute();
 		} else {
 			// Database Table Exists, We must Drop it to create it again
 			var dbDropTable = new query();
 			dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-			dbDropTable.setSQL("DROP TABLE p_Auction_Bids");
+			dbDropTable.setSQL("DROP TABLE p_EventRegistration_Membership");
 			var dbDropTableResults = dbDropTable.execute();
 
 			if (len(dbDropTableResults.getResult()) eq 0) {
 				var dbCreateTable = new query();
 				dbCreateTable.setDatasource("#application.configBean.getDatasource()#");
-				dbCreateTable.setSQL("CREATE TABLE `p_Auction_Bids` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Auction_ID` int(11) NOT NULL, `User_ID` varchar(30) NOT NULL, `Bid_Amount` double(15,2) NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
+				dbCreateTable.setSQL("CREATE TABLE `p_EventRegistration_Membership` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `OrganizationName` varchar(50) NOT NULL, `OrganizationDomainName` varchar(50) NOT NULL, `StateDOE_IDNumber` varchar(10) DEFAULT NULL, `StateDOE_State` tinytext, `Active` bit(1) NOT NULL DEFAULT b'0', `dateCreated` date NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, `Mailing_Address` tinytext, `Mailing_City` tinytext, `Mailing_State` tinytext, `Mailing_ZipCode` tinytext, `Primary_PhoneNumber` tinytext, `Primary_FaxNumber` tinytext, `Physical_Address` tinytext, `Physical_City` tinytext, `Physical_State` tinytext, `Physical_ZipCode` tinytext, `AccountsPayable_EmailAddress` tinytext, `AccountsPayable_ContactName` tinytext, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
 				var dbCreateTableResults = dbCreateTable.execute();
 			} else {
+
 				 writedump(dbDropTableResults.getResult());
 				 abort;
 			}
 		}
-		* */
+
+		var dbCheckTables = new query();
+		dbCheckTables.setDatasource("#application.configBean.getDatasource()#");
+		dbCheckTables.setSQL("Show Tables LIKE 'p_EventRegistration_UserMatrix'");
+		var dbCheckTablesResults = dbCheckTables.execute();
+
+		if (dbCheckTablesResults.getResult().recordcount eq 0) {
+			// Since the Database Table does not exists, Lets Create it
+			var dbCreateTable = new query();
+			dbCreateTable.setDatasource("#application.configBean.getDatasource()#");
+			dbCreateTable.setSQL("CREATE TABLE `p_EventRegistration_UserMatrix` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `User_ID` char(35) NOT NULL, `School_District` int(11) DEFAULT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
+			var dbCreateTableResults = dbCreateTable.execute();
+		} else {
+			// Database Table Exists, We must Drop it to create it again
+			var dbDropTable = new query();
+			dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+			dbDropTable.setSQL("DROP TABLE p_EventRegistration_UserMatrix");
+			var dbDropTableResults = dbDropTable.execute();
+
+			if (len(dbDropTableResults.getResult()) eq 0) {
+				var dbCreateTable = new query();
+				dbCreateTable.setDatasource("#application.configBean.getDatasource()#");
+				dbCreateTable.setSQL("CREATE TABLE `p_EventRegistration_UserMatrix` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `User_ID` char(35) NOT NULL, `School_District` int(11) DEFAULT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
+				var dbCreateTableResults = dbCreateTable.execute();
+			} else {
+
+				 writedump(dbDropTableResults.getResult());
+				 abort;
+			}
+		}
 
 		var NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
@@ -72,6 +102,26 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 	public void function delete() {
 		// triggered by the pluginManager when the plugin is DELETED.
 		application.appInitialized = false;
+
+		var dbDropTable = new query();
+		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+		dbDropTable.setSQL("DROP TABLE p_EventRegistration_Membership");
+		var dbDropTableResults = dbDropTable.execute();
+
+		if (len(dbDropTableResults.getResult()) neq 0) {
+			writedump(dbDropTableResults.getResult());
+			abort;
+		}
+
+		var dbDropTable = new query();
+		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+		dbDropTable.setSQL("DROP TABLE p_EventRegistration_UserMatrix");
+		var dbDropTableResults = dbDropTable.execute();
+
+		if (len(dbDropTableResults.getResult()) neq 0) {
+			writedump(dbDropTableResults.getResult());
+			abort;
+		}
 	}
 
 }

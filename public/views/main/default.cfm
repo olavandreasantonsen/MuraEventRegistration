@@ -54,6 +54,8 @@
 					</cfcase>
 				</cfswitch>
 			</cfif>
+			<cfdump var="#Session.getFeaturedEvents#">
+			<cfdump var="#Session.getNonFeaturedEvents#">
 		</div>
 	</div>
 </cfoutput>

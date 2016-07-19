@@ -11,7 +11,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 </cfsilent>
 <cfoutput>
 	<div class="panel panel-default">
-		<div class="panel-heading"><h1>Current Active Auctions for Account</h1></div>
-		<div class="panel-body"></div>
+		<div class="panel-heading"><h1>Welcome Event Facilitator</h1></div>
+		<div class="panel-body">
+
+		</div>
 	</div>
 </cfoutput>

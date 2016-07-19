@@ -33,6 +33,34 @@
 							</ul>
 						</li>
 					</ul>
+					<ul class="nav navbar-nav">
+						<li class="<cfif rc.action contains 'eventcoord:events'>active</cfif>">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#buildURL('eventcoord:events.default')#">Event Menu <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li class="<cfif rc.action eq 'eventcoord:events.default'>active</cfif>">
+									<a href="#buildURL('eventcoord:events.default')#">List Events</a>
+								</li>
+								<li class="<cfif rc.action eq 'eventcoord:events.addevent'>active</cfif>">
+									<a href="#buildURL('eventcoord:events.addevent')#">Add New Event</a>
+								</li>
+							</ul>
+						</li>
+						<li class="<cfif rc.action contains 'eventcoord:catering'>active</cfif>">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#buildURL('eventcoord:catering.default')#">Catering Menu <span class="caret"></span></a>
+						</li>
+						<li class="<cfif rc.action contains 'eventcoord:facilities'>active</cfif>">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#buildURL('eventcoord:facilities.default')#">Facility Menu <span class="caret"></span></a>
+						</li>
+						<li class="<cfif rc.action contains 'eventcoord:membership'>active</cfif>">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#buildURL('eventcoord:membership.default')#">Membership Menu <span class="caret"></span></a>
+						</li>
+						<li class="<cfif rc.action contains 'eventcoord:presenters'>active</cfif>">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#buildURL('eventcoord:presenters.default')#">Presenters Menu <span class="caret"></span></a>
+						</li>
+						<li class="<cfif rc.action contains 'eventcoord:users'>active</cfif>">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#buildURL('eventcoord:users.default')#">Users Menu <span class="caret"></span></a>
+						</li>
+					</ul>
 					<!---
 					<ul class="nav navbar-nav navbar-right">
 						<li class="<cfif rc.action eq 'selleradmin:main'>active</cfif> dropdown">

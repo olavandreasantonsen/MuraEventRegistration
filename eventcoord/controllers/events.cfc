@@ -11,6 +11,11 @@
 				EventCancelled = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
 			Order by EventDate DESC
 		</cfquery>
+		<cfif isDefined("Session.getFacilityInformation")><cfset temp = StructDelete(Session, "getFacilityInformation")></cfif>
+		<cfif isDefined("Session.getFacilityRoomInfo")><cfset temp = StructDelete(Session, "getFacilityRoomInfo")></cfif>
+		<cfif isDefined("Session.getFeaturedEvents")><cfset temp = StructDelete(Session, "getFeaturedEvents")></cfif>
+		<cfif isDefined("Session.getNonFeaturedEvents")><cfset temp = StructDelete(Session, "getNonFeaturedEvents")></cfif>
+		<cfif isDefined("Session.getSpecificFacilityRoomInfo")><cfset temp = StructDelete(Session, "getSpecificFacilityRoomInfo")></cfif>
 
 	</cffunction>
 
@@ -1247,6 +1252,61 @@
 				<cflocation url="http://#cgi.server_name#/#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.publishtofb&SiteID=#rc.$.siteConfig('siteID')#&EventID=#GetSelectedEvent.TContent_ID#&AutomaticPost=True" addtoken="false">
 			<cfelse>
 				<cflocation url="http://#cgi.server_name#/#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default&UserAction=PostToFacebook&Successful=False&FacebookPost=MissingInformation" addtoken="false">
+			</cfif>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="cancelevent" returntype="any" output="false">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit")>
+			<cfquery name="Session.getSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, Featured_StartDate, Featured_EndDate, Featured_SortOrder, MemberCost, NonMemberCost, EarlyBird_RegistrationDeadline, EarlyBird_RegistrationAvailable, EarlyBird_MemberCost, EarlyBird_NonMemberCost,
+					ViewSpecialPricing, SpecialMemberCost, SpecialNonMemberCost, SpecialPriceRequirements, PGPAvailable, PGPPoints, MealProvided, MealProvidedBy, MealCost_Estimated, AllowVideoConference, VideoConferenceInfo, VideoConferenceCost, AcceptRegistrations, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, MaxParticipants, LocationID, LocationRoomID, Presenters, Facilitator, dateCreated, lastUpdated, lastUpdateBy,
+					Active, EventCancelled, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost, PostedTo_Facebook, PostedTo_Twitter
+				From p_EventRegistration_Events
+				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="CF_SQL_INTEGER"> and
+					Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+		<cfelseif isDefined("FORM.formSubmit")>
+			<cflock timeout="60" scope="Session" type="Exclusive">
+				<cfset Session.FormErrors = #ArrayNew()#>
+			</cflock>
+			<cfif FORM.UserAction EQ "Back to Main Menu">
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:main.default" addtoken="false">
+			</cfif>
+
+			<cfif FORM.CancelEvent EQ "----">
+				<cfscript>
+					eventdate = {property="EventDate",message="Please select an option as to whether you want to cancel this event or not."};
+					arrayAppend(Session.FormErrors, eventdate);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.cancelevent&EventID=#URL.EventID#&FormRetry=True" addtoken="false">
+			<cfelseif FORM.CancelEvent EQ 0>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default&UserAction=EventCancelled&Successful=False" addtoken="false">
+			<cfelseif FORM.CancelEvent EQ 1>
+				<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
+				<cfquery name="checkNumberRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select RegistrationID, User_ID
+					From eRegistrations
+					Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+						EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+				</cfquery>
+				<cfquery name="updateEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Update eEvents
+					Set Active = <cfqueryparam value="0" cfsqltype="cf_sql_bit">,
+						EventCancelled = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+					Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+						TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+				</cfquery>
+				<cfif checkNumberRegistrations.RecordCount GT 0>
+					<cfloop query="checkNumberRegistrations">
+						<cfset Variables.Info = StructNew()>
+						<cfset Variables.Info.RegistrationID = #checkNumberRegistrations.RegistrationID#>
+						<cfset Variables.Info.UserID = #checkNumberRegistrations.User_ID#>
+						<cfset Temp = SendEmailCFC.SendEventCancellationToSingleParticipant(rc, Variables.Info)>
+					</cfloop>
+				</cfif>
 			</cfif>
 		</cfif>
 	</cffunction>

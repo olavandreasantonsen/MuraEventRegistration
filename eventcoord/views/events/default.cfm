@@ -28,6 +28,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 								</cfif>
 							</cfif>
 						</cfcase>
+						<cfcase value="EventCancelled">
+							<cfif isDefined("URL.Successful")>
+								<cfif URL.Successful EQ "False">
+									<div class="alert alert-info"><p>Event was not cancelled due to selecting the 'No' option when asked if you really want to cancel this event.</p></div>
+								</cfif>
+							</cfif>
+						</cfcase>
 						<cfcase value="AddedEvent">
 							<cfif isDefined("URL.Successful")>
 								<cfif URL.Successful EQ "true">

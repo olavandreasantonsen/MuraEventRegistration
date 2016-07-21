@@ -259,6 +259,39 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 			}
 		}
 
+		var dbCheckTables = new query();
+		dbCheckTables.setDatasource("#application.configBean.getDatasource()#");
+		dbCheckTables.setSQL("Show Tables LIKE 'p_EventRegistration_SiteConfig'");
+		var dbCheckTablesResults = dbCheckTables.execute();
+
+		if (dbCheckTablesResults.getResult().recordcount eq 0) {
+			// Since the Database Table does not exists, Lets Create it
+			var dbCreateTable = new query();
+			dbCreateTable.setDatasource("#application.configBean.getDatasource()#");
+			dbCreateTable.setSQL("CREATE TABLE `p_EventRegistration_SiteConfig` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `DateCreated` datetime NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, `ProcessPayments_Stripe` bit(1) NOT NULL DEFAULT b'0', `Stripe_TestMode` bit(1) NOT NULL DEFAULT b'1', `Stripe_TestAPIKey` tinytext, `Stripe_LiveAPIKey` tinytext, `Facbook_AppID` tinytext, `Facebook_AppSecretKey` tinytext, `Facebook_PageID` tinytext, `Facebook_AppScope` tinytext, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
+			var dbCreateTableResults = dbCreateTable.execute();
+		} else {
+			// Database Table Exists, We must Drop it to create it again
+			var dbDropTable = new query();
+			dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+			dbDropTable.setSQL("DROP TABLE p_EventRegistration_SiteConfig");
+			var dbDropTableResults = dbDropTable.execute();
+
+			if (len(dbDropTableResults.getResult()) eq 0) {
+				var dbCreateTable = new query();
+				dbCreateTable.setDatasource("#application.configBean.getDatasource()#");
+				dbCreateTable.setSQL("CREATE TABLE `p_EventRegistration_SiteConfig` ( `TContent_ID` int(11) NOT NULL AUTO_INCREMENT, `Site_ID` tinytext NOT NULL, `DateCreated` datetime NOT NULL, `lastUpdateBy` varchar(35) NOT NULL, `lastUpdated` datetime NOT NULL, `ProcessPayments_Stripe` bit(1) NOT NULL DEFAULT b'0', `Stripe_TestMode` bit(1) NOT NULL DEFAULT b'1', `Stripe_TestAPIKey` tinytext, `Stripe_LiveAPIKey` tinytext, `Facbook_AppID` tinytext, `Facebook_AppSecretKey` tinytext, `Facebook_PageID` tinytext, `Facebook_AppScope` tinytext, PRIMARY KEY (`TContent_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
+				var dbCreateTableResults = dbCreateTable.execute();
+			} else {
+
+				 writedump(dbDropTableResults.getResult());
+				 abort;
+			}
+		}
+
+		<!---
+			Find out how to check to see if a Group Name Exists from a previous installation of plugin. If group name exists, then skip this otherwise create these groups
+		--->
 
 
 		var NewGroupEventFacilitator = #application.userManager.read("")#;
@@ -274,6 +307,19 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 		NewGroupEventPresentator.setType(1);
 		NewGroupEventPresentator.setIsPublic(1);
 		NewGroupEventPresentatorStatus = #Application.userManager.create(NewGroupAuctionAdmin)#;
+
+		insertSiteConfig = arrayNew(1);
+		insertSiteConfig[1] = "'#Session.SiteID#', #Now()#, 'System', #Now()#, 0, 1";
+
+		var dbInsertSiteConfigQuery = new query();
+		dbInsertSiteConfigQuery.setDatasource("#application.configBean.getDatasource()#");
+
+		for (i=1; i LTE ArrayLen(insertSiteConfig);i=i+1) {
+			dbInsertSiteConfigQuery.setSQL("Insert into p_EventRegistration_SiteConfig(Site_ID, DateCreated, lastUpdateBy, lastUpdated, ProcessPayments_Stripe, Stripe_TestMode) Values(:RecordRow)");
+			dbInsertSiteConfigQuery.addParam(name="RecordRow", value=i);
+			dbInsertSiteConfigQuery.execute();
+			dbInsertSiteConfigQuery.clearParams();
+		}
 	}
 
 	public void function update() {
@@ -358,6 +404,16 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
 		dbDropTable.setSQL("DROP TABLE p_EventRegistration_Caterers");
+		var dbDropTableResults = dbDropTable.execute();
+
+		if (len(dbDropTableResults.getResult()) neq 0) {
+			writedump(dbDropTableResults.getResult());
+			abort;
+		}
+
+		var dbDropTable = new query();
+		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+		dbDropTable.setSQL("DROP TABLE p_EventRegistration_SiteConfig");
 		var dbDropTableResults = dbDropTable.execute();
 
 		if (len(dbDropTableResults.getResult()) neq 0) {

@@ -7,7 +7,242 @@ Licensed under the Apache License, Version v2.0
 http://www.apache.org/licenses/LICENSE-2.0
 --->
 </cfsilent>
+<cfset YesNoQuery = QueryNew("ID,OptionName", "Integer,VarChar")>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 0)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "No")#>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 1)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "Yes")#>
+<cfoutput>
+	<cfif not isDefined("URL.FormRetry") and not isDefined("URL.EventStatus")>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h1>Register Participant for: #Session.getSelectedEvent.ShortTitle#</h1></div>
+			<cfform action="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=ShowCorporations" method="post" id="AddEvent" class="form-horizontal">
+				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+				<cfinput type="hidden" name="formSubmit" value="true">
+				<cfif Session.getSelectedEvent.WebinarAvailable EQ 0><cfinput type="hidden" name="WebinarParticipant" value="0"></cfif>
+				<div class="panel-body">
+					<div class="alert alert-info"><p>Complete this form to register users for the selected event</p></div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Primary Event Date:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#dateFormat(Session.getSelectedEvent.EventDate, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Description:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.LongDescription#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Registration Deadline:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#dateFormat(Session.getSelectedEvent.Registration_Deadline, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Registration Begin Time:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#TimeFormat(Session.getSelectedEvent.Registration_BeginTime, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Start Time:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#TimeFormat(Session.getSelectedEvent.Event_StartTime, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event End Time:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#TimeFormat(Session.getSelectedEvent.Event_EndTime, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Agenda:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventAgenda#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Target Audience:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventTargetAudience#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Strategies:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventStrategies#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Special Instructions:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventSpecialInstructions#</p></div>
+					</div>
+					<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
+						<div class="form-group">
+							<label for="EventDate" class="control-label col-sm-3">Participant via Webinar:&nbsp;</label>
+							<div class="col-sm-8"><cfselect name="WebinarParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant use Webinar Option for Event</option></cfselect>
+						</div>
+					</cfif>
+					<cfif Session.getSelectedEvent.LocationID GT 0 and Session.getSelectedEvent.WebinarAvailable EQ 1>
+						<div class="form-group">
+							<label for="EventDate" class="control-label col-sm-3">Participant via Facility:&nbsp;</label>
+							<div class="col-sm-8"><cfselect name="FacilityParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant be at Facility for Event</option></cfselect>
+						</div>
+					</cfif>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Send Email Confirmations:&nbsp;</label>
+						<div class="col-sm-8"><cfselect name="EmailConfirmations" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Send Email Confirmations to Participants</option></cfselect>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">School District:&nbsp;</label>
+						<div class="col-sm-8"><cfselect name="DistrictName" class="form-control" Required="Yes" Multiple="No" query="Session.GetMembershipOrganizations" value="TContent_ID" Display="OrganizationName"  queryposition="below"><option value="----">Select School District Participant Is From</option><option value="0">Participant is from a Business</option></cfselect>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Register Participants"><br /><br />
+				</div>
+			</cfform>
+		</div>
+	<cfelseif isDefined("URL.FormRetry")>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h1>Register Participant for: #Session.getSelectedEvent.ShortTitle#</h1></div>
+			<cfform action="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=ShowCorporations" method="post" id="AddEvent" class="form-horizontal">
+				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+				<cfinput type="hidden" name="formSubmit" value="true">
+				<cfif Session.getSelectedEvent.WebinarAvailable EQ 0><cfinput type="hidden" name="WebinarParticipant" value="0"></cfif>
+				<cfif isDefined("Session.FormErrors")>
+					<div class="panel-body">
+						<cfif ArrayLen(Session.FormErrors) GTE 1>
+							<div class="alert alert-danger"><p>#Session.FormErrors[1].Message#</p></div>
+						</cfif>
+					</div>
+				</cfif>
+				<div class="panel-body">
+					<div class="alert alert-info"><p>Complete this form to register users for the selected event</p></div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Primary Event Date:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#dateFormat(Session.getSelectedEvent.EventDate, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Description:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.LongDescription#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Registration Deadline:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#dateFormat(Session.getSelectedEvent.Registration_Deadline, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Registration Begin Time:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#TimeFormat(Session.getSelectedEvent.Registration_BeginTime, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Start Time:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#TimeFormat(Session.getSelectedEvent.Event_StartTime, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event End Time:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#TimeFormat(Session.getSelectedEvent.Event_EndTime, "full")#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Agenda:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventAgenda#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Target Audience:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventTargetAudience#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Strategies:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventStrategies#</p></div>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Event Special Instructions:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.EventSpecialInstructions#</p></div>
+					</div>
+					<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
+						<div class="form-group">
+							<label for="EventDate" class="control-label col-sm-3">Participant via Webinar:&nbsp;</label>
+							<div class="col-sm-8"><cfselect name="WebinarParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant use Webinar Option for Event</option></cfselect>
+						</div>
+					</cfif>
+					<cfif Session.getSelectedEvent.LocationID GT 0 and Session.getSelectedEvent.WebinarAvailable EQ 1>
+						<div class="form-group">
+							<label for="EventDate" class="control-label col-sm-3">Participant via Facility:&nbsp;</label>
+							<div class="col-sm-8"><cfselect name="FacilityParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant be at Facility for Event</option></cfselect>
+						</div>
+					</cfif>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">Send Email Confirmations:&nbsp;</label>
+						<div class="col-sm-8"><cfselect name="EmailConfirmations" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Send Email Confirmations to Participants</option></cfselect>
+					</div>
+					<div class="form-group">
+						<label for="EventDate" class="control-label col-sm-3">School District:&nbsp;</label>
+						<div class="col-sm-8"><cfselect name="DistrictName" class="form-control" Required="Yes" Multiple="No" query="Session.GetMembershipOrganizations" value="TContent_ID" Display="OrganizationName"  queryposition="below"><option value="----">Select School District Participant Is From</option><option value="0">Participant is from a Business</option></cfselect>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Register Participants"><br /><br />
+				</div>
+			</cfform>
+		</div>
+	<cfelseif isDefined("URL.EventID") and isDefined("URL.EventStatus")>
+		<cfswitch expression="#URL.EventStatus#">
+			<cfcase value="ShowCorporations">
+				<div class="panel panel-default">
+					<div class="panel-heading"><h1>Register Participant for: #Session.getSelectedEvent.ShortTitle#</h1></div>
+					<cfform action="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=PickedParticipants" method="post" id="AddEvent" class="form-horizontal">
+						<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+						<cfinput type="hidden" name="formSubmit" value="true">
+						<div class="panel-body">
+							<cfif Session.getSelectedEvent.MealProvided EQ 1>
+								<div class="form-group">
+									<label for="EventDate" class="control-label col-sm-3">Each Participant Staying for Meal?:&nbsp;</label>
+									<div class="col-sm-8"><cfselect name="RegisterParticipantStayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Everyone Staying for Meal Being Registered</option></cfselect>
+								</div>
+							<cfelse>
+								<cfinput type="hidden" name="RegisterParticipantStayForMeal" value="0">
+							</cfif>
+							<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
+								<div class="form-group">
+									<label for="EventDate" class="control-label col-sm-3">Each Participant Utilizing Webinar Option?:&nbsp;</label>
+									<div class="col-sm-8"><cfselect name="RegisterParticipantWebinarOption" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Everyone Participanting via Webinar</option></cfselect>
+								</div>
+							<cfelse>
+								<cfinput type="hidden" name="RegisterParticipantWebinarOption" value="0">
+							</cfif>
+							<table class="table table-striped" width="100%" cellspacing="0" cellpadding="0">
+							<cfloop query="Session.GetSelectedAccountsWithinOrganization">
+								<cfquery name="CheckUserAlreadyRegistered" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+									Select User_ID, EventID
+									From p_EventRegistration_UserRegistrations
+									Where User_ID = <cfqueryparam value="#Session.GetSelectedAccountsWithinOrganization.UserID#" cfsqltype="cf_sql_varchar">
+										and EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
+								</cfquery>
+								<cfset CurrentModRow = #Session.GetSelectedAccountsWithinOrganization.CurrentRow# MOD 4>
+								<cfswitch expression="#Variables.CurrentModRow#">
+									<cfcase value="1">
+										<tr><td width="25%" <cfif CheckUserAlreadyRegistered.RecordCount>Style="Color: ##009900;"</cfif>><cfif CheckUserAlreadyRegistered.RecordCount><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" disabled>&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#<cfelseif Session.GetSelectedAccountsWithinOrganization.UserID EQ Session.Mura.UserID><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" checked>&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#<cfelse><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" >&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#</cfif></td>
+									</cfcase>
+									<cfcase value="0">
+										<td width="25%" <cfif CheckUserAlreadyRegistered.RecordCount>Style="Color: ##009900;"</cfif>><cfif CheckUserAlreadyRegistered.RecordCount><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" disabled>&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#<cfelseif Session.GetSelectedAccountsWithinOrganization.UserID EQ Session.Mura.UserID><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" checked>&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#<cfelse><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" >&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#</cfif></td></tr>
+									</cfcase>
+									<cfdefaultcase>
+										<td width="25%" <cfif CheckUserAlreadyRegistered.RecordCount>Style="Color: ##009900;"</cfif>><cfif CheckUserAlreadyRegistered.RecordCount><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" disabled>&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#<cfelseif Session.GetSelectedAccountsWithinOrganization.UserID EQ Session.Mura.UserID><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" checked>&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#<cfelse><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.GetSelectedAccountsWithinOrganization.UserID#" >&nbsp;&nbsp;#Session.GetSelectedAccountsWithinOrganization.LName#, #Session.GetSelectedAccountsWithinOrganization.FName#</cfif></td>
+									</cfdefaultcase>
+								</cfswitch>
+							</cfloop>
+							<cfswitch expression="#Variables.CurrentModRow#">
+								<cfcase value="0"></cfcase>
+								<cfcase value="1"><td colspan="3">&nbsp;</td></tr></cfcase>
+								<cfdefaultcase><td>&nbsp;</td></tr></cfdefaultcase>
+							</cfswitch>
+							</table>
+						</div>
+						<div class="panel-footer">
+							<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
+							<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Register Participants"><br /><br />
+						</div>
+					</cfform>
+				</div>
+			</cfcase>
+			<cfcase value="PickedParticipants">
+				<cfdump var="#Session.UserRegister#">
+			</cfcase>
+		</cfswitch>
 
+	</cfif>
+</cfoutput>
+
+<!---
 <cfimport taglib="/plugins/EventRegistration/library/uniForm/tags/" prefix="uForm">
 
 <cfoutput>
@@ -283,3 +518,4 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</cfswitch>
 			</cfif>
 </cfoutput>
+--->

@@ -1579,6 +1579,20 @@
 				Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 				Order by OrganizationName
 			</cfquery>
+			<cfif isDefined("URL.EventStatus")>
+				<cfswitch expression="#URl.EventStatus#">
+					<cfcase value="ShowCorporations">
+						<cfquery name="Session.GetSelectedAccountsWithinOrganization" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+							Select UserID, Fname, Lname, Email
+							From tusers
+							WHERE 1 = 1 AND
+								SiteID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+								Email LIKE "%#Session.UserRegister.DistrictDomain#%"
+							Order by Lname, Fname
+						</cfquery>
+					</cfcase>
+				</cfswitch>
+			</cfif>
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -1588,10 +1602,20 @@
 			</cfif>
 			<cfswitch expression="#URL.EventStatus#">
 				<cfcase value="ShowCorporations">
+					<cfquery name="GetMembershipOrganizations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Active
+						From p_EventRegistration_Membership
+						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and TContent_ID = <cfqueryparam value="#FORM.DistrictName#" cfsqltype="cf_sql_integer">
+						Order by OrganizationName
+					</cfquery>
+					<cfset Session.UserRegister = #StructNew()#>
+					<cfset Session.UserRegister.DistrictDomain = #GetMembershipOrganizations.OrganizationDomainName#>
+					<cfset Session.UserRegister.DistrictMembership = #GetMembershipOrganizations.Active#>
+					<cfset Session.UserRegister.FirstStep = #StructCopy(FORM)#>
 					<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
 						<cfif FORM.WebinarParticipant EQ "----">
 							<cfscript>
-								eventdate = {property="EventDate",message="Please select whether the participants you will be registering will participat in this event through the Webinar Option."};
+								eventdate = {property="EventDate",message="Please select whether the participants you will be registering will participate in this event through the Webinar Option."};
 								arrayAppend(Session.FormErrors, eventdate);
 							</cfscript>
 							<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&FormRetry=True" addtoken="false">
@@ -1618,16 +1642,6 @@
 						</cfscript>
 						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&FormRetry=True" addtoken="false">
 					</cfif>
-					<cfquery name="GetMembershipOrganizations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Active
-						From p_EventRegistration_Membership
-						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and TContent_ID = <cfqueryparam value="#FORM.DistrictName#" cfsqltype="cf_sql_integer">
-						Order by OrganizationName
-					</cfquery>
-					<cfset Session.UserRegister = #StructNew()#>
-					<cfset Session.UserRegister.DistrictDomain = #GetMembershipOrganizations.OrganizationDomainName#>
-					<cfset Session.UserRegister.DistrictMembership = #GetMembershipOrganizations.Active#>
-					<cfset Session.UserRegister.FirstStep = #StructCopy(FORM)#>
 					<cfquery name="Session.GetSelectedAccountsWithinOrganization" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 						Select UserID, Fname, Lname, Email
 						From tusers
@@ -1636,9 +1650,18 @@
 							Email LIKE "%#GetMembershipOrganizations.OrganizationDomainName#%"
 						Order by Lname, Fname
 					</cfquery>
+
+					<cfif Session.GetSelectedAccountsWithinOrganization.RecordCount EQ 0><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventStatus=AddNewParticipants&EventID=#URL.EventID#" addtoken="false"></cfif>
 				</cfcase>
-				<cfcase value="PickedParticipants">
+				<cfcase value="RegisterParticipants">
 					<cfset Session.UserRegister.SecondStep = #StructCopy(FORM)#>
+					<cfif not isDefined("FORM.ParticipantEmployee")>
+						<cfscript>
+							eventdate = {property="EventDate",message="Please select atleast 1 participant that you would like to register from the list provided. Or if the individual is not listed in the list, please add them in the space provided and click the Add Button."};
+							arrayAppend(Session.FormErrors, eventdate);
+						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=ShowCorporations" addtoken="false">
+					</cfif>
 					<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
 					<cfloop list="#Session.UserRegister.SecondStep.ParticipantEmployee#" delimiters="," index="i">
 						<cfquery name="CheckRegisteredAlready" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -1648,6 +1671,7 @@
 								User_ID = <cfqueryparam value="#i#" cfsqltype="cf_sql_varchar"> and
 								EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 						</cfquery>
+
 						<cfif CheckRegisteredAlready.RecordCount EQ 0>
 							<cfset RegistrationUUID = #CreateUUID()#>
 							<cfquery name="InsertRegistration" result="insertNewRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -1729,6 +1753,10 @@
 							</cfif>
 						</cfif>
 					</cfloop>
+					<cfset temp = StructDelete(Session, "UserRegister")>
+					<cfset temp = StructDelete(Session, "FormErrors")>
+					<cfset temp = StructDelete(Session, "GetSelectedAccountsWithinOrganization")>
+					<cfset temp = StructDelete(Session, "GetSelectedEvent")>
 					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default&UserAction=ParticipantsRegistered&Successful=True" addtoken="false">
 				</cfcase>
 			</cfswitch>

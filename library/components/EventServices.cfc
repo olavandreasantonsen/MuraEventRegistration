@@ -189,4 +189,33 @@
 		</cfif>
 	</cffunction>
 
+	<cffunction name="AddParticipantToDatabase" Access="Remote" returntype="Any" output="true" hint="Add Participant To Database">
+		<cfargument name="jsStruct" required="true" type="String">
+
+		<cfset cfStruct = #DeserializeJSON(arguments.jsStruct)#>
+
+		<cfquery name="CheckAccount" Datasource="#cfStruct.DBINfo.Datasource#" username="#cfStruct.DBINfo.DBUsername#" password="#cfStruct.DBInfo.DBPassword#">
+			Select UserID, Fname, Lname, Email
+			From tusers
+			Where SiteID = <cfqueryparam value="#cfStruct.DBINfo.SiteID#" cfsqltype="cf_sql_varchar"> and
+				UserName = <cfqueryparam value="#cfStruct.Email#" cfsqltype="cf_sql_varchar">
+			Order by Lname, Fname
+		</cfquery>
+
+		<cfif CheckAccount.RecordCount EQ 0>
+			<cfset NewUser = #Application.userManager.readByUsername(cfStruct.Email, cfStruct.DBINfo.SiteID)#>
+			<cfset NewUser.setInActive(1)>
+			<cfset NewUser.setSiteID(cfStruct.DBINfo.SiteID)>
+			<cfset NewUser.setFname(cfStruct.Fname)>
+			<cfset NewUser.setLname(cfStruct.Lname)>
+			<cfset NewUser.setUsername(cfStruct.Email)>
+			<cfset NewUser.setEmail(cfStruct.Email)>
+			<cfset AddNewAccount = #Application.userManager.save(NewUser)#>
+			<cfset NewUserAccountID = #Variables.AddNewAccount.GetUserID()#>
+			<cfreturn True>
+		<cfelse>
+			<cfreturn False>
+		</cfif>
+	</cffunction>
+
 </cfcomponent>

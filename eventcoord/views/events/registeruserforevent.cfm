@@ -1,12 +1,13 @@
 <cfsilent>
-<!---
-This file is part of MuraFW1
+	<!---
+		This file is part of MuraFW1
 
-Copyright 2010-2013 Stephen J. Withington, Jr.
-Licensed under the Apache License, Version v2.0
-http://www.apache.org/licenses/LICENSE-2.0
---->
+		copyright 2010-2013 Stephen J. Withington, Jr.
+		Licensed under the Apache License, Version v2.0
+		http://www.apache.org/licenses/LICENSE-2.0
+	--->
 </cfsilent>
+
 <cfset YesNoQuery = QueryNew("ID,OptionName", "Integer,VarChar")>
 <cfset temp = QueryAddRow(YesNoQuery, 1)>
 <cfset temp = #QuerySetCell(YesNoQuery, "ID", 0)#>
@@ -263,10 +264,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Register Participants"><br /><br />
 						</div>
 						<script>
-							var table = document.getElementById('NewParticipantRows'),
-								tbody = table.getElementsByTagName('tbody')[0],
-								clone = tbody.rows[0].cloneNode(true);
-
 							function AddRow() {
 								structvar = {
 									Datasource: "#rc.$.globalConfig('datasource')#",
@@ -299,156 +296,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</div>
 			</cfcase>
 			<cfcase value="PickedParticipants">
-
-			</cfcase>
-			<cfcase value="AddNewParticipants">
-				<cfif not isDefined("URL.FormRetry")>
-					<div class="panel panel-default">
-						<div class="panel-heading"><h1>Register Participant for: #Session.getSelectedEvent.ShortTitle#</h1></div>
-						<cfform action="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=AddNewParticipants" method="post" id="AddEvent" class="form-horizontal">
-							<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-							<cfinput type="hidden" name="formSubmit" value="true">
-							<div class="panel-body">
-								<div class="alert alert-info"><p>Enter Participants Information for any individual that was not on the previous screen who you would like to have attend this event.</p></div>
-								<div class="panel-heading"><h1>First New Participant</h1></div>
-								<div class="form-group">
-									<label for="Participant1FirstName" class="control-label col-sm-3">Participant's First Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant1FirstName" name="Participant1FirstName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant1LastName" class="control-label col-sm-3">Participant's Last Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant1LastName" name="Participant1LastName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant1EmailAddress" class="control-label col-sm-3">Participant's Email Address:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant1EmailAddress" name="Participant1EmailAddress" required="no"></div>
-								</div>
-								<cfif Session.getSelectedEvent.MealProvided EQ 1>
-									<div class="form-group">
-										<label for="Participant1WantsMeal" class="control-label col-sm-3">Participant Staying for Meal:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant1WantsMeal" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant Stay for Meal</option></cfselect>
-									</div>
-								</cfif>
-								<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
-									<div class="form-group">
-										<label for="Participant1WantsWebinar" class="control-label col-sm-3">Participant Attending via Webinar:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant1WantsWebinar" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant attend via Webinar</option></cfselect>
-									</div>
-								</cfif>
-								<div class="panel-heading"><h1>Second New Participant</h1></div>
-								<div class="form-group">
-									<label for="Participant2FirstName" class="control-label col-sm-3">Participant's First Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant2FirstName" name="Participant2FirstName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant2LastName" class="control-label col-sm-3">Participant's Last Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant2LastName" name="Participant2LastName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant2EmailAddress" class="control-label col-sm-3">Participant's Email Address:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant2EmailAddress" name="Participant2EmailAddress" required="no"></div>
-								</div>
-								<cfif Session.getSelectedEvent.MealProvided EQ 1>
-									<div class="form-group">
-										<label for="Participant2WantsMeal" class="control-label col-sm-3">Participant Staying for Meal:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant2WantsMeal" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant Stay for Meal</option></cfselect>
-									</div>
-								</cfif>
-								<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
-									<div class="form-group">
-										<label for="Participant2WantsWebinar" class="control-label col-sm-3">Participant Attending via Webinar:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant2WantsWebinar" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant attend via Webinar</option></cfselect>
-									</div>
-								</cfif>
-								<div class="panel-heading"><h1>Third New Participant</h1></div>
-								<div class="form-group">
-									<label for="Participant3FirstName" class="control-label col-sm-3">Participant's First Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant3FirstName" name="Participant3FirstName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant3LastName" class="control-label col-sm-3">Participant's Last Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant3LastName" name="Participant3LastName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant3EmailAddress" class="control-label col-sm-3">Participant's Email Address:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant3EmailAddress" name="Participant3EmailAddress" required="no"></div>
-								</div>
-								<cfif Session.getSelectedEvent.MealProvided EQ 1>
-									<div class="form-group">
-										<label for="Participant3WantsMeal" class="control-label col-sm-3">Participant Staying for Meal:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant3WantsMeal" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant Stay for Meal</option></cfselect>
-									</div>
-								</cfif>
-								<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
-									<div class="form-group">
-										<label for="Participant3WantsWebinar" class="control-label col-sm-3">Participant Attending via Webinar:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant3WantsWebinar" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant attend via Webinar</option></cfselect>
-									</div>
-								</cfif>
-								<div class="panel-heading"><h1>Fourth New Participant</h1></div>
-								<div class="form-group">
-									<label for="Participant4FirstName" class="control-label col-sm-3">Participant's First Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant4FirstName" name="Participant4FirstName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant4LastName" class="control-label col-sm-3">Participant's Last Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant4LastName" name="Participant4LastName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant4EmailAddress" class="control-label col-sm-3">Participant's Email Address:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant4EmailAddress" name="Participant4EmailAddress" required="no"></div>
-								</div>
-								<cfif Session.getSelectedEvent.MealProvided EQ 1>
-									<div class="form-group">
-										<label for="Participant4WantsMeal" class="control-label col-sm-3">Participant Staying for Meal:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant4WantsMeal" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant Stay for Meal</option></cfselect>
-									</div>
-								</cfif>
-								<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
-									<div class="form-group">
-										<label for="Participant4WantsWebinar" class="control-label col-sm-3">Participant Attending via Webinar:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant4WantsWebinar" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant attend via Webinar</option></cfselect>
-									</div>
-								</cfif>
-								<div class="panel-heading"><h1>Fifth New Participant</h1></div>
-								<div class="form-group">
-									<label for="Participant5FirstName" class="control-label col-sm-3">Participant's First Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant5FirstName" name="Participant5FirstName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant5LastName" class="control-label col-sm-3">Participant's Last Name:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant5LastName" name="Participant5LastName" required="no"></div>
-								</div>
-								<div class="form-group">
-									<label for="Participant5EmailAddress" class="control-label col-sm-3">Participant's Email Address:&nbsp;</label>
-									<div class="col-sm-8"><cfinput type="text" class="form-control" id="Participant5EmailAddress" name="Participant5EmailAddress" required="no"></div>
-								</div>
-								<cfif Session.getSelectedEvent.MealProvided EQ 1>
-									<div class="form-group">
-										<label for="Participant5WantsMeal" class="control-label col-sm-3">Participant Staying for Meal:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant5WantsMeal" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant Stay for Meal</option></cfselect>
-									</div>
-								</cfif>
-								<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
-									<div class="form-group">
-										<label for="Participant5WantsWebinar" class="control-label col-sm-3">Participant Attending via Webinar:&nbsp;</label>
-										<div class="col-sm-8"><cfselect name="Participant5WantsWebinar" class="form-control" Required="no" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant attend via Webinar</option></cfselect>
-									</div>
-								</cfif>
-							</div>
-							<div class="panel-footer">
-								<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
-								<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Register Participants"><br /><br />
-							</div>
-						</cfform>
-					</div>
-					<cfdump var="#Session.GetSelectedAccountsWithinOrganization#">
-				<cfelseif isDefined("FORM.FormRetry")>
-					<cfdump var="#Session.UserRegister#">
-				</cfif>
 			</cfcase>
 		</cfswitch>
-
 	</cfif>
 </cfoutput>
 

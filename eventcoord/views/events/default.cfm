@@ -21,6 +21,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<cfif isDefined("URL.UserAction")>
 				<div class="panel-body">
 					<cfswitch expression="#URL.UserAction#">
+						<cfcase value="EmailParticipants">
+							<cfif isDefined("URL.Successful")>
+								<cfif URL.Successful EQ "true">
+									<div class="alert alert-success"><p>You have successfully send registered participants an email message regarding the event. The system in in process of delivering these messages and depending on how many registered participants will depend on how much time will pass</p></div>
+								</cfif>
+							</cfif>
+						</cfcase>
 						<cfcase value="ParticipantsRegistered">
 							<cfif isDefined("URL.Successful")>
 								<cfif URL.Successful EQ "true">
@@ -95,6 +102,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 									EventID = <cfqueryparam value="#Session.getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer"> and
 									AttendedEvent = <cfqueryparam value="1" cfsqltype="cf_sql_boolean">
 							</cfquery>
+							<cfquery name="getRegisteredParticipantsForEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Select TContent_ID, User_ID
+								From p_EventRegistration_UserRegistrations
+								Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+									EventID = <cfqueryparam value="#Session.getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer"> and
+									AttendedEvent = <cfqueryparam value="0" cfsqltype="cf_sql_boolean">
+							</cfquery>
 							<cfquery name="getEventExpenses" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 								Select TContent_ID
 								From p_EventRegistration_EventExpenses
@@ -110,9 +124,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<a href="#buildURL('eventcoord:events.copyevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Copy</small></a>
 									<a href="#buildURL('eventcoord:events.registeruserforevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Register</small></a>
 									<a href="#buildURL('eventcoord:events.geteventinfo')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Info</small></a><br />
+									<cfif getRegisteredParticipantsForEvent.RecordCount>
+										<a href="#buildURL('eventcoord:events.emailregistered')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Registered</small></a><br />
+									</cfif>
+									<cfif getAttendedParticipantsForEvent.RecordCount>
+										<a href="#buildURL('eventcoord:events.emailattended')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Attended</small></a>&nbsp;
+									</cfif>
 
-									<a href="#buildURL('eventcoord:events.emailregistered')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Registered</small></a>&nbsp;
-									<a href="#buildURL('eventcoord:events.emailattended')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Attended</small></a>&nbsp;
 									&nbsp;
 
 									<a href="#buildURL('eventcoord:events.publishtofb')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small small"><small>Post to Facebook</small></a><br>

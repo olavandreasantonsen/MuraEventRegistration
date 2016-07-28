@@ -389,6 +389,12 @@
 		<cfinclude template="EmailTemplates/EventRegistrationConfirmationToIndividualOnWaitingList.cfm">
 	</cffunction>
 
+	<cffunction name="SendEventMessageToAllParticipants" returntype="Any" Output="false">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+		<cfargument name="ParticipantInfo" type="struct" Required="True">
+		<cfinclude template="EmailTemplates/SendEventMessageToParticipantsFromFacilitator.cfm">
+	</cffunction>
+
 
 
 
@@ -719,10 +725,7 @@
 
 	</cffunction>
 
-	<cffunction name="SendEventMessageToAllParticipants" returntype="Any" Output="false">
-		<cfargument name="ParticipantInfo" type="struct" Required="True">
-		<cfinclude template="EmailTemplates/SendEventMessageToParticipantsFromFacilitator.cfm">
-	</cffunction>
+
 
 	<cffunction name="SendEventMessageToAllAttendedParticipants" returntype="Any" Output="false">
 		<cfargument name="ParticipantInfo" type="struct" Required="True">

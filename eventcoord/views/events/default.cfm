@@ -21,6 +21,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<cfif isDefined("URL.UserAction")>
 				<div class="panel-body">
 					<cfswitch expression="#URL.UserAction#">
+						<cfcase value="RemovedParticipants">
+							<cfif isDefined("URL.Successful")>
+								<cfif URL.Successful EQ "true">
+									<div class="alert alert-success"><p>You have successfully removed participants from the event. If you selected the option to send confirmation email messages the participant will be receiving this communication within the next few minutes.</p></div>
+								</cfif>
+							</cfif>
+						</cfcase>
 						<cfcase value="EmailParticipants">
 							<cfif isDefined("URL.Successful")>
 								<cfif URL.Successful EQ "true">
@@ -125,6 +132,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<a href="#buildURL('eventcoord:events.registeruserforevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Register</small></a>
 									<a href="#buildURL('eventcoord:events.geteventinfo')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Info</small></a><br />
 									<cfif getRegisteredParticipantsForEvent.RecordCount>
+										<a href="#buildURL('eventcoord:events.deregisteruserforevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>De-Register</small></a>
 										<a href="#buildURL('eventcoord:events.emailregistered')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Registered</small></a>
 										<a href="#buildURL('eventcoord:events.eventsigninsheet')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Sign-In Sheet</small></a>
 										<br />
@@ -137,7 +145,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 									<a href="#buildURL('eventcoord:events.publishtofb')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small small"><small>Post to Facebook</small></a><br>
 									<cfif getRegistrationsForEvent.RecordCount>
-										&nbsp;<a href="#buildURL('eventcoord:events.deregisteruserforevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>De-Register</small></a>
+										&nbsp;
 										&nbsp;
 										&nbsp;<a href="#buildURL('eventcoord:events.eventsigninparticipant')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Sign-In Participant</small></a>
 										&nbsp;<a href="#buildURL('eventcoord:events.eventnamebadges')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Participant Name Badges</small></a>

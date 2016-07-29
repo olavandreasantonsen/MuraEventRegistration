@@ -125,7 +125,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<a href="#buildURL('eventcoord:events.registeruserforevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Register</small></a>
 									<a href="#buildURL('eventcoord:events.geteventinfo')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Info</small></a><br />
 									<cfif getRegisteredParticipantsForEvent.RecordCount>
-										<a href="#buildURL('eventcoord:events.emailregistered')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Registered</small></a><br />
+										<a href="#buildURL('eventcoord:events.emailregistered')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Registered</small></a>
+										<a href="#buildURL('eventcoord:events.eventsigninsheet')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Sign-In Sheet</small></a>
+										<br />
 									</cfif>
 									<cfif getAttendedParticipantsForEvent.RecordCount>
 										<a href="#buildURL('eventcoord:events.emailattended')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Attended</small></a>&nbsp;
@@ -136,7 +138,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<a href="#buildURL('eventcoord:events.publishtofb')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small small"><small>Post to Facebook</small></a><br>
 									<cfif getRegistrationsForEvent.RecordCount>
 										&nbsp;<a href="#buildURL('eventcoord:events.deregisteruserforevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>De-Register</small></a>
-										&nbsp;<a href="#buildURL('eventcoord:events.eventsigninsheet')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Sign-In Sheet</small></a>
+										&nbsp;
 										&nbsp;<a href="#buildURL('eventcoord:events.eventsigninparticipant')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Sign-In Participant</small></a>
 										&nbsp;<a href="#buildURL('eventcoord:events.eventnamebadges')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Participant Name Badges</small></a>
 									</cfif>

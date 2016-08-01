@@ -35,6 +35,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 								</cfif>
 							</cfif>
 						</cfcase>
+						<cfcase value="EmailAttended">
+							<cfif isDefined("URL.Successful")>
+								<cfif URL.Successful EQ "true">
+									<div class="alert alert-success"><p>You have successfully send attended participants an email message regarding the event. The system in in process of delivering these messages and depending on how many attended participants will depend on how much time will pass</p></div>
+								</cfif>
+							</cfif>
+						</cfcase>
 						<cfcase value="ParticipantsRegistered">
 							<cfif isDefined("URL.Successful")>
 								<cfif URL.Successful EQ "true">

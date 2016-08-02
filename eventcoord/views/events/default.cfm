@@ -193,14 +193,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<cfif getAttendedParticipantsForEvent.RecordCount>
 										<a href="#buildURL('eventcoord:events.emailattended')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Email Attended</small></a>
 										<cfif Session.getAvailableEvents.PGPAvailable EQ 1><a href="#buildURL('eventcoord:events.sendpgpcertificates')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Send PGP Certificates</small></a></cfif>
+										<a href="#buildURL('eventcoord:events.enterexpenses')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Enter Expenses</small></a>
 									</cfif>
 									<a href="#buildURL('eventcoord:events.publishtofb')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small small"><small>Post to Facebook</small></a><br>
-									<cfif getAttendedParticipantsForEvent.RecordCount and Session.getAvailableEvents.PGPAvailable EQ 1>
-
-										&nbsp;<a href="#buildURL('eventcoord:events.enterexpenses')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Enter Event Expenses</small></a>
-									<cfelseif getAttendedParticipantsForEvent.RecordCount and Session.getAvailableEvents.PGPAvailable EQ 0>
-										&nbsp;<a href="#buildURL('eventcoord:events.enterexpenses')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Enter Event Expenses</small></a>
-									</cfif>
 									<cfif getEventExpenses.RecordCount>
 										&nbsp;<a href="#buildURL('eventcoord:events.generateprofitlossreport')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Generate Profit/Loss Report</small></a><br />
 									</cfif>

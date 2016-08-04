@@ -15,7 +15,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		$.jgrid.defaults.styleUI = 'Bootstrap';
 	</script>
 	<div class="panel panel-default">
-		<div class="panel-heading"><h1>Available Caterers</h1></div>
+		<div class="panel-heading"><h1>Available Facilities</h1></div>
 		<div class="panel-body">
 			<cfif isDefined("URL.UserAction")>
 				<cfswitch expression="#URL.UserAction#">
@@ -44,7 +44,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		$(document).ready(function () {
 			var selectedRow = 0;
 			$("##jqGrid").jqGrid({
-				url: "/plugins/#rc.pc.getPackage()#/eventcoord/controllers/caterers.cfc?method=getAllCaterers",
+				url: "/plugins/#rc.pc.getPackage()#/eventcoord/controllers/facility.cfc?method=getAllFacilities",
 				// we set the changes to be made at client side using predefined word clientArray
 				datatype: "json",
 				colNames: ["Rec No","Facility Name","State","Phone Number","Active"],

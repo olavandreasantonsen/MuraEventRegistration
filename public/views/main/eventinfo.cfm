@@ -249,7 +249,7 @@
 			<cfif Session.EventInfo.SelectedEvent.AcceptRegistrations EQ 1>
 				<cfif DateDiff("d", Now(), Session.EventInfo.SelectedEvent.Registration_Deadline) GTE 0>
 					<cfif Variables.SeatsLeft GT 0>
-						<a href="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=action=public:registerevent.default&EventID=#URL.EventID#" class="btn btn-primary pull-right">Register</a><br /><br />
+						<a href="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&EventID=#URL.EventID#" class="btn btn-primary pull-right">Register</a><br /><br />
 					<cfelse>
 						<br /><br />
 					</cfif>

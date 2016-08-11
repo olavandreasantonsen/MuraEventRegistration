@@ -18,6 +18,15 @@
 		<cfif Session.Mura.Username EQ "admin"><cfset Session.Mura.SuperAdminRole = true></cfif>
 		<cfif Session.Mura.EventCoordinatorRole EQ "True"><cfoutput>#Variables.this.redirect("eventcoord:main.default")#</cfoutput></cfif>
 		<cfif Session.Mura.SuperAdminRole EQ "true"><cfoutput>#Variables.this.redirect("siteadmin:main.default")#</cfoutput></cfif>
+
+		<cfif isDefined("Session.UserRegistrationInfo")>
+			<cfif DateDiff("n", Session.UserRegistrationInfo.DateRegistered, Now()) LTE 15>
+				<cfdump var="#Session.UserRegistrationInfo#">
+				<cfabort>
+			<cfelse>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:main.eventinfo&EventID=#Session.UserRegistrationInfo.EventID#" addtoken="false">
+			</cfif>
+		</cfif>
 	<cfelse>
 		<cfparam name="Session.Mura.EventCoordinatorRole" default="0" type="boolean">
 		<cfparam name="Session.Mura.EventPresenterRole" default="0" type="boolean">
@@ -90,10 +99,7 @@
 						</tr>
 					</tfoot>
 				</table>
-				<cfdump var="#Session.getNonFeaturedEvents#">
 			</cfif>
-
-
 		</div>
 	</div>
 </cfoutput>

@@ -21,8 +21,7 @@
 
 		<cfif isDefined("Session.UserRegistrationInfo")>
 			<cfif DateDiff("n", Session.UserRegistrationInfo.DateRegistered, Now()) LTE 15>
-				<cfdump var="#Session.UserRegistrationInfo#">
-				<cfabort>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&EventID=#Session.UserRegistrationInfo.EventID#" addtoken="false">
 			<cfelse>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:main.eventinfo&EventID=#Session.UserRegistrationInfo.EventID#" addtoken="false">
 			</cfif>
@@ -39,6 +38,13 @@
 		<div class="panel-body">
 			<cfif isDefined("URL.UserAction")>
 				<cfswitch expression="#URL.UserAction#">
+					<cfcase value="UserRegistered">
+						<cfif URL.Successfull EQ "true">
+							<div class="alert alert-success">You have successfully registered an individual for the event. Within the next few minutes, the registered participant will be receiving an electronic copy of the confirmation information for the event.</div>
+						<cfelse>
+							<div class="alert alert-danger">Something happened during the registration process. Please contact us so that we can resolve the system error</div>
+						</cfif>
+					</cfcase>
 					<cfcase value="UserActivated">
 						<cfif URL.Successfull EQ "true">
 							<div class="alert alert-success">You have successfully activated your account on the event registration system. You are now able to login and register for any upcoming events or workshops that are offered through this system.</div>

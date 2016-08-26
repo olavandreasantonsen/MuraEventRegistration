@@ -29,8 +29,8 @@
 
 <cfquery name="Create-p_EventRegistration_Facility" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_Facility](
-	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [FacilityName] [nvarchar](50) NULL, [PhysicalAddress] [nvarchar](max) NULL, [PhysicalCity] [nvarchar](50) NULL,
-	[PhysicalState] [nvarchar](50) NULL, [PhysicalZipCode] [nvarchar](50) NULL, [PhysicalZip4] [nvarchar](10) NULL, [PrimaryVoiceNumber] [nvarchar](50) NULL, [BusinessWebsite] [nvarchar](max) NULL,
+	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [FacilityName] [nvarchar](50) NOT NULL, [PhysicalAddress] [nvarchar](max) NOT NULL, [PhysicalCity] [nvarchar](50) NOT NULL,
+	[PhysicalState] [nvarchar](50) NOT NULL, [PhysicalZipCode] [nvarchar](50) NOT NULL, [PhysicalZip4] [nvarchar](10) NULL, [PrimaryVoiceNumber] [nvarchar](50) NULL, [BusinessWebsite] [nvarchar](max) NULL,
 	[ContactName] [nvarchar](50) NULL, [ContactPhoneNumber] [nvarchar](50) NULL, [ContactEmail] [nvarchar](50) NULL, [dateCreated] [datetime] NOT NULL, [lastUpdated] [datetime] NULL,
 	[lastUpdateBy] [nvarchar](50) NULL, [isAddressVerified] [bit] NOT NULL, [GeoCode_Latitude] [nvarchar](50) NULL, [GeoCode_Longitude] [nvarchar](50) NULL, [GeoCode_Township] [nvarchar](50) NULL,
 	[GeoCode_StateLongName] [nvarchar](50) NULL, [GeoCode_CountryShortName] [nvarchar](50) NULL, [GeoCode_Neighborhood] [nvarchar](50) NULL, [USPS_CarrierRoute] [nvarchar](50) NULL,

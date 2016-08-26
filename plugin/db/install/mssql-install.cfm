@@ -97,7 +97,7 @@
 	[SpecialMemberCost] [money] NULL, [SpecialNonMemberCost] [money] NULL, [PGPAvailable] [bit] NULL, [PGPPoints] [nvarchar](10) NULL, [MealProvided] [bit] NULL, [MealProvidedBy] [int] NULL,
 	[MealCost_Estimated] [money] NULL, [AllowVideoConference] [bit] NULL, [VideoConferenceInfo] [nvarchar](max) NULL, [VideoConferenceCost] [money] NULL, [AcceptRegistrations] [bit] NULL,
 	[EventAgenda] [nvarchar](max) NULL, [EventTargetAudience] [nvarchar](max) NULL, [EventStrategies] [nvarchar](max) NULL, [EventSpecialInstructions] [nvarchar](max) NULL,
-	[MaxParticipants] [int] NULL, [LocataionID] [int] NULL, [LocationRoomID] [int] NULL, [Presenters] [nvarchar](max) NULL, [Facilitator] [nvarchar](max) NULL, [dateCreated] [date] NULL,
+	[MaxParticipants] [int] NULL, [LocationID] [int] NULL, [LocationRoomID] [int] NULL, [Presenters] [nvarchar](max) NULL, [Facilitator] [nvarchar](max) NULL, [dateCreated] [date] NULL,
 	[lastUpdated] [date] NULL, [lastUpdateBy] [nvarchar](35) NULL, [Active] [bit] NULL, [EventCancelled] [bit] NULL, [WebinarAvailable] [bit] NULL, [WebinarConnectInfo] [nvarchar](max) NULL,
 	[WebinarMemberCost] [money] NULL, [WebinarNonMemberCost] [money] NULL, [PostedTo_Facebook] [bit] NULL, [PostedTo_Twitter] [bit] NULL ) ON [PRIMARY]
 </cfquery>

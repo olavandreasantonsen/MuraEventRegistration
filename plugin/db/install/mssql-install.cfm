@@ -1,7 +1,7 @@
 <cfquery name="Create-p_EventRegistration_Caterers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_Caterers](
-		[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [FacilityName] [nvarchar](50) NULL, [PhysicalAddress] [nvarchar](max) NULL,
-		[PhysicalCity] [nvarchar](50) NULL, [PhysicalState] [nvarchar](50) NULL, [PhysicalZipCode] [nvarchar](10) NULL, [PhysicalZip4] [nvarchar](10) NULL,
+		[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [FacilityName] [nvarchar](50) NOT NULL, [PhysicalAddress] [nvarchar](max) NOT NULL,
+		[PhysicalCity] [nvarchar](50) NOT NULL, [PhysicalState] [nvarchar](50) NOT NULL, [PhysicalZipCode] [nvarchar](10) NOT NULL, [PhysicalZip4] [nvarchar](10) NULL,
 		[PrimaryVoiceNumber] [nvarchar](50) NULL, [BusinessWebsite] [nvarchar](max) NULL, [ContactName] [nvarchar](50) NULL, [ContactEmail] [nvarchar](50) NULL,
 		[ContactPhoneNumber] [nvarchar](50) NULL, [PaymentTerms] [nvarchar] (max) NULL, [DeliveryInfo] [nvarchar] (max) NULL, [GuaranteeInformation] [nvarchar] (max) NULL,
 		[AdditionalNotes] [nvarchar] (max) NULL, [dateCreated] [datetime] NULL, [lastUpdated] [datetime] NULL, [lastUpdateBy] [nvarchar](max) NULL,

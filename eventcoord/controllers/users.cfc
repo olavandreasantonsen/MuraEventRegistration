@@ -243,6 +243,13 @@
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 
 		<cfif not isDefined("FORM.formSubmit")>
+			<cfquery name="Session.getEventGroups" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select UserID, GroupName
+				From tusers
+				Where SiteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#"> and InActive = <cfqueryparam cfsqltype="cf_sql_bit" value="0"> and
+					GroupName Like <cfqueryparam cfsqltype="cf_sql_varchar" value="%Event%">
+				Order by GroupName ASC
+			</cfquery>
 
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">

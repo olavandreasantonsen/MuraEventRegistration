@@ -101,8 +101,8 @@
 								<li class="<cfif rc.action eq 'eventcoord:users.default'>active</cfif>">
 									<a href="#buildURL('eventcoord:users.default')#">List Users</a>
 								</li>
-								<li class="<cfif rc.action eq 'eventcoord:users.addevent'>active</cfif>">
-									<a href="#buildURL('eventcoord:users.addmembership')#">Add New User</a>
+								<li class="<cfif rc.action eq 'eventcoord:users.adduser'>active</cfif>">
+									<a href="#buildURL('eventcoord:users.adduser')#">Add New User</a>
 								</li>
 							</ul>
 						</li>

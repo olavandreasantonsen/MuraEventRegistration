@@ -4119,12 +4119,24 @@
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 
 		<cfif not isDefined("FORM.FormSubmit")>
-			<cfquery name="GetUpComingEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select TContent_ID, ShortTitle, EventDate, LongDescription
-				From p_EventRegistration_Events
-				Where DateDiff(Registration_Deadline, Now()) >= 1
-				Order by EventDate ASC
-			</cfquery>
+			<cfswitch expression="#application.configbean.getDBType()#">
+				<cfcase value="mysql">
+					<cfquery name="GetUpComingEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Select TContent_ID, ShortTitle, EventDate, LongDescription
+						From p_EventRegistration_Events
+						Where DateDiff("d", Registration_Deadline, Now()) >= 1
+						Order by EventDate ASC
+					</cfquery>
+				</cfcase>
+				<cfcase value="mssql">
+					<cfquery name="GetUpComingEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+						Select TContent_ID, ShortTitle, EventDate, LongDescription
+						From p_EventRegistration_Events
+						Where DateDiff("d", Registration_Deadline, GETUTCDATE()) >= 1
+						Order by EventDate ASC
+					</cfquery>
+				</cfcase>
+			</cfswitch>
 
 			<cfset Session.EmailMarketing = #StructNew()#>
 			<cfset Session.EmailMarketing.MasterTemplate = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/reports/EventUpcomingList.jrxml")#>

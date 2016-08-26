@@ -22,7 +22,7 @@
 <cfquery name="Create-p_EventRegistration_ExpenseList" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_ExpenseList](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [Expense_Name] [nvarchar](50) NOT NULL, [Active] [bit] NOT NULL,
-	[dataeCreated] [datetime] NOT NULL, [lastUpdatead] [datetime] NOT NULL, [lastUpdateBy] [nvarchar](50) NOT NULL,
+	[dateCreated] [datetime] NOT NULL, [lastUpdated] [datetime] NOT NULL, [lastUpdateBy] [nvarchar](50) NOT NULL,
 	CONSTRAINT [PK_p_EventRegistration_ExpenseList] PRIMARY KEY CLUSTERED ( [TContent_ID] ASC ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 </cfquery>

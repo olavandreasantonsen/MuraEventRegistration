@@ -46,7 +46,7 @@
 								<li class="<cfif rc.action eq 'eventcoord:events.listeventexpenses'>active</cfif>">
 									<a href="#buildURL('eventcoord:events.listeventexpenses')#">Event Expenses</a>
 								</li>
-								<li class="<cfif rc.action eq 'eventcoord:events.listeventexpenses'>active</cfif>">
+								<li class="<cfif rc.action eq 'eventcoord:events.emaileventlisting'>active</cfif>">
 									<a href="#buildURL('eventcoord:events.emaileventlisting')#">Email Event Listing</a>
 								</li>
 							</ul>

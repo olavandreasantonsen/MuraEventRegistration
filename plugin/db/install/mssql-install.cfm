@@ -53,7 +53,7 @@
 	[lastUpdated] [datetime] NOT NULL, [Mailing_Address] [nvarchar](50) NULL, [Mailing_City] [nvarchar](50) NULL, [Mailing_State] [nvarchar](50) NULL, [Mailing_ZipCode] [nvarchar](50) NULL,
 	[Primary_PhoneNumber] [nvarchar](50) NULL, [Primary_FaxNumber] [nvarchar](50) NULL, [Physical_Address] [nvarchar](50) NULL, [Physical_City] [nvarchar](50) NULL,
 	[Physical_State] [nvarchar](50) NULL, [Physical_ZipCode] [nvarchar](50) NULL, [AccountsPayable_EmailAddress] [nvarchar](50) NULL, [AccountsPayable_ContactName] [nvarchar](50) NULL,
-	[ReceiveInvoicesByEmnail] [bit] NOT NULL, CONSTRAINT [PK_p_EventRegistration_Membership] PRIMARY KEY CLUSTERED
+	[ReceiveInvoicesByEmail] [bit] NOT NULL, CONSTRAINT [PK_p_EventRegistration_Membership] PRIMARY KEY CLUSTERED
 	( [TContent_ID] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 </cfquery>

@@ -116,6 +116,14 @@
 			<cfif FORM.AddNewEventStep EQ "Back to Step 1">
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent&FormRetry=True" addtoken="false">
 			</cfif>
+			<cfif FORM.LocationID EQ "----">
+				<cfscript>
+					errormsg = {property="MealProvidedBy",message="Please Select a Facility to hold this event. If a facility does not display in the Location dropdown, you first must add a facility to the system."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step2&FormRetry=True" addtoken="false">
+			</cfif>
+
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<!--- Clear out the Array from Previous Submissions --->
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -627,7 +635,7 @@
 
 			<cftry>
 				<cfquery name="insertNewEvent" result="insertNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-					Insert into p_EventRegistration_Events(Site_ID, ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, EarlyBird_RegistrationAvailable, ViewSpecialPricing, PGPAvailable, MealProvided, AllowVideoConference, AcceptRegistrations, Facilitator, dateCreated, MaxParticipants, Active, lastUpdated, lastUpdateBy)
+					Insert into p_EventRegistration_Events(Site_ID, ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, EarlyBird_RegistrationAvailable, ViewSpecialPricing, PGPAvailable, MealProvided, AllowVideoConference, AcceptRegistrations, Facilitator, dateCreated, MaxParticipants, Active, lastUpdated, lastUpdateBy, EventCancelled)
 					Values (
 						<cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">,
 						<cfqueryparam value="#FORM.ShortTitle#" cfsqltype="cf_sql_varchar">,
@@ -650,7 +658,8 @@
 						<cfqueryparam value="#FORM.RoomMaxParticipants#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="1" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
-						<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+						<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">,
+						<cfqueryparam value="0" cfsqltype="cf_sql_integer">
 					)
 				</cfquery>
 
@@ -3597,6 +3606,15 @@
 			</cfquery>
 		<cfelseif isDefined("FORM.FormSubmit")>
 			<cfif FORM.UserAction EQ "Back to Main Menu">
+				<cfset temp = StructDelete(Session, "FormData")>
+				<cfset temp = StructDelete(Session, "FormErrors")>
+				<cfset temp = StructDelete(Session, "getSelectedEvent")>
+				<cfset temp = StructDelete(Session, "getSelectedMealProvider")>
+				<cfset temp = StructDelete(Session, "getSelectedLocation")>
+				<cfset temp = StructDelete(Session, "getSelectedRoomInfo")>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default" addtoken="false">
+			</cfif>
+			<cfif FORM.UserAction EQ "Submit Changes">
 				<cfset temp = StructDelete(Session, "FormData")>
 				<cfset temp = StructDelete(Session, "FormErrors")>
 				<cfset temp = StructDelete(Session, "getSelectedEvent")>

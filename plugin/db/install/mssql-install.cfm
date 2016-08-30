@@ -90,8 +90,8 @@
 <cfquery name="Create-p_EventRegistrations_Events" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_Events](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [ShortTitle] [nvarchar](50) NULL, [EventDate] [date] NULL, [EventDate1] [date] NULL, [EventDate2] [date] NULL,
-	[EventDate3] [date] NULL, [EventDate4] [date] NULL, [EventDate5] [date] NULL, [LongDescription] [nvarchar](max) NULL, [Event_StartTime] [nchar](10) NULL, [Event_EndTime] [nchar](10) NULL,
-	[Registration_Deadline] [date] NULL, [Registration_BeginTime] [nchar](10) NULL, [Registration_EndTime] [nchar](10) NULL, [EventFeatured] [bit] NULL, [Featured_StartDate] [nchar](10) NULL,
+	[EventDate3] [date] NULL, [EventDate4] [date] NULL, [EventDate5] [date] NULL, [LongDescription] [nvarchar](max) NULL, [Event_StartTime] [datetime] NOT NULL, [Event_EndTime] [datetime] NOT NULL,
+	[Registration_Deadline] [date] NULL, [Registration_BeginTime] [datetime] NULL, [Registration_EndTime] [datetime] NULL, [EventFeatured] [bit] NULL, [Featured_StartDate] [nchar](10) NULL,
 	[Featured_EndDate] [nchar](10) NULL, [Featured_SortOrder] [int] NULL, [MemberCost] [money] NULL, [NonMemberCost] [money] NULL, [EarlyBird_RegistrationDeadline] [date] NULL,
 	[EarlyBird_RegistrationAvailable] [bit] NULL, [EarlyBird_MemberCost] [money] NULL, [EarlyBird_NonMemberCost] [money] NULL, [ViewSpecialPricing] [bit] NULL, [SpecialPriceRequirements] [nvarchar](max) NULL,
 	[SpecialMemberCost] [money] NULL, [SpecialNonMemberCost] [money] NULL, [PGPAvailable] [bit] NULL, [PGPPoints] [nvarchar](10) NULL, [MealProvided] [bit] NULL, [MealProvidedBy] [int] NULL,
@@ -127,7 +127,7 @@
 </cfquery>
 
 <cfquery name="AlterTable-p_EventRegistration_Membership" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-	ALTER TABLE [dbo].[p_EventRegistration_Membership] ADD  CONSTRAINT [DF_p_EventRegistration_Membership_ReceiveInvoicesByEmnail]  DEFAULT ((0)) FOR [ReceiveInvoicesByEmnail]
+	ALTER TABLE [dbo].[p_EventRegistration_Membership] ADD  CONSTRAINT [DF_p_EventRegistration_Membership_ReceiveInvoicesByEmail]  DEFAULT ((0)) FOR [ReceiveInvoicesByEmail]
 </cfquery>
 
 <cfquery name="AlterTable-p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
@@ -247,7 +247,7 @@
 <cfelse>
 	<cfset GroupPresenterExists = 0>
 	<cfset GroupFacilitatorExists = 0>
-	<cfloop query="CheckGroup-EventFacilitator">
+	<cfloop query="CheckGroups">
 		<cfif CheckGroups.GroupName EQ "Event Facilitator">
 			<cfset GroupFacilitatorExists = 1>
 		</cfif>

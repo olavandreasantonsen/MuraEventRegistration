@@ -4328,7 +4328,7 @@
 					<cfquery name="GetUpComingEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 						Select TContent_ID, ShortTitle, EventDate, LongDescription
 						From p_EventRegistration_Events
-						Where DateDiff("d", Registration_Deadline, Now()) >= 1
+						Where DateDiff("d", Now(), Registration_Deadline) >= 1
 						Order by EventDate ASC
 					</cfquery>
 				</cfcase>
@@ -4336,7 +4336,7 @@
 					<cfquery name="GetUpComingEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 						Select TContent_ID, ShortTitle, EventDate, LongDescription
 						From p_EventRegistration_Events
-						Where DateDiff("d", Registration_Deadline, GETUTCDATE()) >= 1
+						Where DateDiff("d", GETUTCDATE(), Registration_Deadline) >= 1
 						Order by EventDate ASC
 					</cfquery>
 				</cfcase>

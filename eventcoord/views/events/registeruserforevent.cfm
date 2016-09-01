@@ -530,42 +530,48 @@
 							<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
 							<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Register Participants"><br /><br />
 						</div>
-						<script>
-							var msg;
-							function AddRow() {
-								structvar = {
-									Datasource: "#rc.$.globalConfig('datasource')#",
-									DBUsername: "#rc.$.globalConfig('dbusername')#",
-									DBPassword: "#rc.$.globalConfig('dbpassword')#",
-									PackageName: "#rc.pc.getPackage()#",
-									CGIScriptName: "#CGI.Script_name#",
-									CGIPathInfo: "#CGI.path_info#",
-									SiteID: "#rc.$.siteConfig('siteID')#",
-									EventID: "#URL.EventID#"
-								};
-								newuser = {
-									Email: document.getElementById("ParticipantEmail").value,
-									Fname: document.getElementById("ParticipantFirstName").value,
-									Lname: document.getElementById("ParticipantLastName").value
-								};
-
-								$.ajax({
-									url: '/plugins/#rc.pc.getPackage()#/library/components/EventServices.cfc?method=AddParticipantToDatabase',
-									type: "POST",
-									dataType: "json",
-									data: {
-										returnFormat: "json",
-										jrStruct: JSON.stringify({"DBInfo": structvar, "UserInfo": newuser})
-									},
-									success: handleDataFromServer(msg)
-								})
-								function handleDataFromServer(msg) {
-									location.reload(true);
-								}
-							};
-						</script>
 					</cfform>
 				</div>
+				<script type="text/javascript">
+					function AddRow() {
+						var msg;
+
+						structvar = {
+							Datasource: "#rc.$.globalConfig('datasource')#",
+							DBUsername: "#rc.$.globalConfig('dbusername')#",
+							DBPassword: "#rc.$.globalConfig('dbpassword')#",
+							PackageName: "#rc.pc.getPackage()#",
+							CGIScriptName: "#CGI.Script_name#",
+							CGIPathInfo: "#CGI.path_info#",
+							SiteID: "#rc.$.siteConfig('siteID')#",
+							EventID: "#Session.FormInput.EventID#"
+						};
+
+						newuser = {
+							Email: document.getElementById("ParticipantEmail").value,
+							Fname: document.getElementById("ParticipantFirstName").value,
+							Lname: document.getElementById("ParticipantLastName").value
+						};
+
+						$.ajax({
+							url: "/plugins/#rc.pc.getPackage()#/library/components/EventServices.cfc?method=AddParticipantToDatabase",
+							type: "POST",
+							dataType: "json",
+							data: {
+							returnFormat: "json",
+								jrStruct: JSON.stringify({"DBInfo": structvar, "UserInfo": newuser})
+							},
+							success: function(data){
+								setTimeout(function(){
+									window.location.reload();
+								},100);
+							},
+
+							error: function(){
+							}
+						});
+					};
+				</script>
 			</cfcase>
 		</cfswitch>
 	</cfif>

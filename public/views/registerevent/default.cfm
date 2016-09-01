@@ -111,10 +111,6 @@
 						<label for="AttendViaWebinar" class="control-label col-sm-3">Attend via Webinar?:&nbsp;</label>
 						<div class="col-sm-8"><cfselect name="AttendViaWebinar" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you attend via Webinar Option</option></cfselect></div>
 						</div>
-						<div class="form-group">
-						<label for="RegistrationEmail" class="control-label col-sm-3">Webinar Price:&nbsp;</label>
-						<div class="col-sm-8"><p class="form-control-static">#Session.UserRegistrationInfo.WebinarPricingEventCost#</p></div>
-						</div>
 					<cfelseif Session.getSelectedEvent.WebinarAvailable EQ 0>
 						<cfif Session.UserRegistrationInfo.UserGetsEarlyBirdRegistration EQ "True">
 							<div class="form-group">
@@ -146,10 +142,6 @@
 						<div class="form-group">
 						<label for="EventDate" class="control-label col-sm-3">Video Conferencing Info:&nbsp;</label>
 						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.VideoConferenceInfo#</p></div>
-						</div>
-						<div class="form-group">
-						<label for="EventDate" class="control-label col-sm-3">Video Conferencing Cost:&nbsp;</label>
-						<div class="col-sm-8"><p class="form-control-static">#DollarFormat(Session.UserRegistrationInfo.VideoConferenceCost)#</p></div>
 						</div>
 					</cfif>
 				</div>
@@ -230,19 +222,13 @@
 					<cfif Session.getSelectedEvent.MealProvided EQ 1>
 						<div class="form-group">
 						<label for="StayForMeal" class="control-label col-sm-3">Staying for Meal?:&nbsp;</label>
-						<div class="col-sm-8">
-							<cfif isDefined("FORM.StayForMeal")>
-								<cfselect name="StayForMeal" selected="#Session.FormInput.StayForMeal#" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect>
-							<cfelse>
-								<cfselect name="StayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect>
-							</cfif>
-							</div>
+						<div class="col-sm-8"><cfselect name="StayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect></div>
 						</div>
 					</cfif>
 					<cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)>
 						<div class="form-group">
 						<label for="RegisterAllDates" class="control-label col-sm-3">Register for All Dates?:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="RegisterAllDates" selected="#Session.FormInput.RegisterAllDates#" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you attend all Event Dates</option></cfselect></div>
+						<div class="col-sm-8"><cfselect name="RegisterAllDates" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you attend all Event Dates</option></cfselect></div>
 						</div>
 						<cfif isDate(Session.getSelectedEvent.EventDate1)>
 							<div class="form-group">
@@ -280,10 +266,6 @@
 						<label for="AttendViaWebinar" class="control-label col-sm-3">Attend via Webinar?:&nbsp;</label>
 						<div class="col-sm-8"><cfselect name="AttendViaWebinar" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you attend via Webinar Option</option></cfselect></div>
 						</div>
-						<div class="form-group">
-						<label for="RegistrationEmail" class="control-label col-sm-3">Webinar Price:&nbsp;</label>
-						<div class="col-sm-8"><p class="form-control-static">#Session.UserRegistrationInfo.WebinarPricingEventCost#</p></div>
-						</div>
 					<cfelseif Session.getSelectedEvent.WebinarAvailable EQ 0>
 						<cfif Session.UserRegistrationInfo.UserGetsEarlyBirdRegistration EQ "True">
 							<div class="form-group">
@@ -315,10 +297,6 @@
 						<div class="form-group">
 						<label for="EventDate" class="control-label col-sm-3">Video Conferencing Info:&nbsp;</label>
 						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.VideoConferenceInfo#</p></div>
-						</div>
-						<div class="form-group">
-						<label for="EventDate" class="control-label col-sm-3">Video Conferencing Cost:&nbsp;</label>
-						<div class="col-sm-8"><p class="form-control-static">#DollarFormat(Session.UserRegistrationInfo.VideoConferenceCost)#</p></div>
 						</div>
 					</cfif>
 				</div>

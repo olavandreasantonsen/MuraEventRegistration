@@ -73,6 +73,7 @@
 		`AttendedEventDate6` bit(1) NOT NULL DEFAULT b'0', `AttendedEventSessionAM` bit(1) NOT NULL DEFAULT b'0', `AttendedEventSessionPM` bit(1) NOT NULL DEFAULT b'0', `Comments` varchar(255) DEFAULT NULL,
 		`WebinarParticipant` bit(1) NOT NULL DEFAULT b'0', `AttendeePriceVerified` bit(1) NOT NULL DEFAULT b'0', `RegisterForEventDate1` bit(1) NOT NULL DEFAULT b'0', `RegisterForEventDate2` bit(1) NOT NULL DEFAULT b'0',
 		`RegisterForEventDate3` bit(1) NOT NULL DEFAULT b'0', `RegisterForEventDate4` bit(1) NOT NULL DEFAULT b'0', `RegisterForEventDate5` bit(1) NOT NULL DEFAULT b'0', `RegisterForEventDate6` bit(1) NOT NULL DEFAULT b'0',
+		`RegisterForEventSessionAM` bit(1) NOT NULL DEFAULT b'0', `RegisterForEventSessionPM` bit(1) NOT NULL DEFAULT b'0',
 		PRIMARY KEY (`TContent_ID`,`Site_ID`,`User_ID`) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 </cfquery>
 

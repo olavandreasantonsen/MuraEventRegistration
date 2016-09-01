@@ -4084,8 +4084,7 @@
 			<cfquery name="Session.getMealProviders" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select TContent_ID, FacilityName
 				From p_EventRegistration_Caterers
-				Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-					TContent_ID = <cfqueryparam value="#Session.getSelectedEvent.MealProvidedBy#" cfsqltype="cf_sql_integer">
+				Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 			</cfquery>
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
 			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
@@ -4139,7 +4138,7 @@
 					Set ViewSpecialPricing = <cfqueryparam value="#FORM.ViewSpecialPricing#" cfsqltype="cf_sql_bit">,
 						SpecialMemberCost = <cfqueryparam value="#FORM.SpecialMemberCost#" cfsqltype="cf_sql_decimal">,
 						SpecialNonMemberCost = <cfqueryparam value="#FORM.SpecialNonMemberCost#" cfsqltype="cf_sql_decimal">,
-						SpecialPriceRequrements = <cfqueryparam value="#FORM.SpecialPriceRequirements#" cfsqltype="cf_sql_varchar">,
+						SpecialPriceRequirements = <cfqueryparam value="#FORM.SpecialPriceRequirements#" cfsqltype="cf_sql_varchar">,
 						lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 						lastUpdateBy = <cfqueryparam value="#Session.Mura.FName# #Session.Mura.LName#" cfsqltype="cf_sql_varchar">
 					Where TContent_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">
@@ -4279,10 +4278,10 @@
 				<cfset Session.FormErrors = #ArrayNew()#>
 				<cfquery name="updateEventSection" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Update p_EventRegistration_Events
-					Set Registration_Deadline = <cfqueryparam value="#FORM.ShortTitle#" cfsqltype="cf_sql_timestamp">,
-						Registration_BeginTime = <cfqueryparam value="#FORM.LongDescription#" cfsqltype="cf_sql_timestamp">,
-						Event_StartTime = <cfqueryparam value="#FORM.EventAgenda#" cfsqltype="cf_sql_timestamp">,
-						Event_EndTime = <cfqueryparam value="#FORM.EventTargetAudience#" cfsqltype="cf_sql_timestamp">,
+					Set Registration_Deadline = <cfqueryparam value="#FORM.Registration_Deadline#" cfsqltype="cf_sql_timestamp">,
+						Registration_BeginTime = <cfqueryparam value="#FORM.Registration_BeginTime#" cfsqltype="cf_sql_timestamp">,
+						Event_StartTime = <cfqueryparam value="#FORM.Event_StartTime#" cfsqltype="cf_sql_timestamp">,
+						Event_EndTime = <cfqueryparam value="#FORM.Event_EndTime#" cfsqltype="cf_sql_timestamp">,
 						lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 						lastUpdateBy = <cfqueryparam value="#Session.Mura.FName# #Session.Mura.LName#" cfsqltype="cf_sql_varchar">
 					Where TContent_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">

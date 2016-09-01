@@ -10,6 +10,8 @@ Minimum Requirements
 Mura CMS 6.0+
 Railo 4+
 
+Note: Upon Installation create an account through the Register Account Section to add your account to the database. A manual entry of the tusersmemb table is needed which maps your account to the Event Facilitator UUID to access the Event Coordinator Subsystem of the Plugin.
+
 
 Description
 ====================

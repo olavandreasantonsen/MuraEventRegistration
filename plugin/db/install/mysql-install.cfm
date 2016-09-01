@@ -95,12 +95,12 @@
 	) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 </cfquery>
 
-<cfquery name="CheckGroup-EventFacilitator" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="CheckGroups" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	Select UserID, GroupName
 	From tusers
-	Where GroupName LIKE '%Event Facilitator%'
+	Where GroupName LIKE '%Event%'
 </cfquery>
-<cfif CheckGroup-EventFacilitator.RecordCount EQ 0>
+<cfif CheckGroups.RecordCount EQ 0>
 	<cfscript>
 		var NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
@@ -109,14 +109,6 @@
 		NewGroupEventFacilitator.setIsPublic(1);
 		NewGroupEventFacilitatorStatus = #Application.userManager.create(NewGroupEventFacilitator)#;
 	</cfscript>
-</cfif>
-
-<cfquery name="CheckGroup-EventPresenter" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-	Select UserID, GroupName
-	From tusers
-	Where GroupName LIKE '%Event Presenter%'
-</cfquery>
-<cfif CheckGroup-EventFacilitator.RecordCount EQ 0>
 	<cfscript>
 		var NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
@@ -125,4 +117,35 @@
 		NewGroupEventFacilitator.setIsPublic(1);
 		NewGroupEventFacilitatorStatus = #Application.userManager.create(NewGroupEventFacilitator)#;
 	</cfscript>
+<cfelse>
+	<cfset GroupPresenterExists = 0>
+	<cfset GroupFacilitatorExists = 0>
+	<cfloop query="CheckGroups">
+		<cfif CheckGroups.GroupName EQ "Event Facilitator">
+			<cfset GroupFacilitatorExists = 1>
+		</cfif>
+		<cfif CheckGroups.GroupName EQ "Event Presenter">
+			<cfset GroupPresenterExists = 1>
+		</cfif>
+	</cfloop>
+	<cfif GroupFacilitatorExists EQ 0>
+		<cfscript>
+		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator.setSiteID(Session.SiteID);
+		NewGroupEventFacilitator.setGroupName("Event Facilitator");
+		NewGroupEventFacilitator.setType(1);
+		NewGroupEventFacilitator.setIsPublic(1);
+		NewGroupEventFacilitatorStatus = #Application.userManager.create(NewGroupEventFacilitator)#;
+		</cfscript>
+	</cfif>
+	<cfif GroupPresenterExists EQ 0>
+		<cfscript>
+		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator.setSiteID(Session.SiteID);
+		NewGroupEventFacilitator.setGroupName("Event Presenter");
+		NewGroupEventFacilitator.setType(1);
+		NewGroupEventFacilitator.setIsPublic(1);
+		NewGroupEventFacilitatorStatus = #Application.userManager.create(NewGroupEventFacilitator)#;
+		</cfscript>
+	</cfif>
 </cfif>

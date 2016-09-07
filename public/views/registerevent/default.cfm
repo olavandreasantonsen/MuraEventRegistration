@@ -139,10 +139,6 @@
 						<label for="AttendViaIVC" class="control-label col-sm-3">Attend via Video Conference?:&nbsp;</label>
 						<div class="col-sm-8"><cfselect name="AttendViaIVC" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName" queryposition="below"><option value="----">Will you attend via Video Conferencing Equipment</option></cfselect></div>
 						</div>
-						<div class="form-group">
-						<label for="EventDate" class="control-label col-sm-3">Video Conferencing Info:&nbsp;</label>
-						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.VideoConferenceInfo#</p></div>
-						</div>
 					</cfif>
 				</div>
 				<div class="panel-footer">
@@ -217,12 +213,23 @@
 					</div>
 					<div class="form-group">
 						<label for="RegisterAdditionalIndividuals" class="control-label col-sm-3">Register Additional Individuals?:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect></div>
+						<div class="col-sm-8">
+							<cfif isDefined("Session.FormInput.RegisterAdditionalIndividuals")>
+								<cfselect name="RegisterAdditionalIndividuals" class="form-control" selected="#Session.FormInput.RegisterAdditionalIndividuals#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+							<cfelse>
+								<cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+							</cfif>
+							</div>
 					</div>
 					<cfif Session.getSelectedEvent.MealProvided EQ 1>
 						<div class="form-group">
 						<label for="StayForMeal" class="control-label col-sm-3">Staying for Meal?:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="StayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect></div>
+						<div class="col-sm-8">
+							<cfif isDefined("Session.FormInput.StayForMeal")>
+								<cfselect name="StayForMeal" class="form-control" selected="#Session.FormInput.StayForMeal#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect>
+							<cfelse>
+								<cfselect name="StayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect>
+							</cfif></div>
 						</div>
 					</cfif>
 					<cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)>
@@ -264,7 +271,13 @@
 					<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
 						<div class="form-group">
 						<label for="AttendViaWebinar" class="control-label col-sm-3">Attend via Webinar?:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="AttendViaWebinar" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you attend via Webinar Option</option></cfselect></div>
+						<div class="col-sm-8">
+							<cfif isDefined("Session.FormInput.AttendViaWebinar")>
+								<cfselect name="AttendViaWebinar" class="form-control" Selected="#Session.FormInput.AttendViaWebinar#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you attend via Webinar Option</option></cfselect>
+							<cfelse>
+								<cfselect name="AttendViaWebinar" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you attend via Webinar Option</option></cfselect>
+							</cfif>
+						</div>
 						</div>
 					<cfelseif Session.getSelectedEvent.WebinarAvailable EQ 0>
 						<cfif Session.UserRegistrationInfo.UserGetsEarlyBirdRegistration EQ "True">
@@ -292,11 +305,13 @@
 					<cfif Session.UserRegistrationInfo.VideoConferenceOption EQ "True">
 						<div class="form-group">
 						<label for="AttendViaIVC" class="control-label col-sm-3">Attend via Video Conference?:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="AttendViaIVC" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName" queryposition="below"><option value="----">Will you attend via Video Conferencing Equipment</option></cfselect></div>
+						<div class="col-sm-8">
+							<cfif isDefined("Session.FormInput.AttendViaWebinar")>
+								<cfselect name="AttendViaIVC" class="form-control" Selected="#Session.FormInput.AttendViaIVC#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName" queryposition="below"><option value="----">Will you attend via Video Conferencing Equipment</option></cfselect>
+							<cfelse>
+								<cfselect name="AttendViaIVC" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName" queryposition="below"><option value="----">Will you attend via Video Conferencing Equipment</option></cfselect>
+							</cfif>
 						</div>
-						<div class="form-group">
-						<label for="EventDate" class="control-label col-sm-3">Video Conferencing Info:&nbsp;</label>
-						<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.VideoConferenceInfo#</p></div>
 						</div>
 					</cfif>
 				</div>

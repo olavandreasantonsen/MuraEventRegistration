@@ -337,8 +337,7 @@
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
-
-			<cfif Session.UserSuppliedInfo.EventFeatured EQ 1 AND LEN(FORM.Featured_StartDate) EQ 0 OR Session.UserSuppliedInfo.EventFeatured EQ 1 AND LEN(FORM.Featured_EndDate) EQ 0>
+			<cfif FORM.EventFeatured EQ 1 AND LEN(FORM.Featured_StartDate) EQ 0 OR FORM.EventFeatured EQ 1 AND LEN(FORM.Featured_EndDate) EQ 0>
 				<cfscript>
 					eventdate = {property="Registration_Deadline",message="Please complete the missing information of either Featured Start Date or Featured Ending Date. To not use this you can change the value of Event Featured to 'No'"};
 					arrayAppend(Session.FormErrors, eventdate);
@@ -354,20 +353,21 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable EQ 1 and LEN(FORM.EarlyBird_RegistrationDeadline) EQ 0>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="To utilize the Early Bird Registration Feature a date is needed."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
-			</cfif>
-
-			<cfif Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable EQ 1 and LEN(FORM.EarlyBird_Member) EQ 0 OR Session.UserSuppliedInfo.EarlyBird_RegistrationAvailable EQ 1 and LEN(FORM.EarlyBird_NonMemberCost) EQ 0>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="To utilize the Early Bird Registration Feature you will need to enter the cost for members and non members if they register for the early bird deadline date."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+			<cfif FORM.EarlyBird_RegistrationAvailable EQ 1>
+				<cfif FORM.EarlyBird_RegistrationAvailable EQ 1 and LEN(FORM.EarlyBird_RegistrationDeadline) EQ 0>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="To utilize the Early Bird Registration Feature a date is needed."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
+				<cfif FORM.EarlyBird_RegistrationAvailable EQ 1 and LEN(FORM.EarlyBird_Member) EQ 0 OR FORM.EarlyBird_RegistrationAvailable EQ 1 and LEN(FORM.EarlyBird_NonMemberCost) EQ 0>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="To utilize the Early Bird Registration Feature you will need to enter the cost for members and non members if they register for the early bird deadline date."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
 			</cfif>
 
 			<cfif FORM.ViewSpecialPricing EQ "----">
@@ -378,20 +378,21 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif FORM.ViewSpecialPricing EQ 1 and LEN(FORM.SpecialPriceRequirements) LT 50>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="Please enter the requirements needed for participants to meet in order to receive this special pricing for this event."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
-			</cfif>
-
-			<cfif FORM.ViewSpecialPricing EQ 1 and LEN(FORM.SpecialMemberCost) EQ 0 or FORM.ViewSpecialPricing EQ 1 and LEN(FORM.SpecialNonMemberCost) EQ 0>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="Please enter the special pricing amounts for Member and NonMember. To not use this feature you can simply change the value of View Special Pricing to 'No'"};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+			<cfif FORM.ViewSpecialPricing EQ 1>
+				<cfif FORM.ViewSpecialPricing EQ 1 and LEN(FORM.SpecialPriceRequirements) LT 50>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please enter the requirements needed for participants to meet in order to receive this special pricing for this event."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
+				<cfif FORM.ViewSpecialPricing EQ 1 and LEN(FORM.SpecialMemberCost) EQ 0 or FORM.ViewSpecialPricing EQ 1 and LEN(FORM.SpecialNonMemberCost) EQ 0>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please enter the special pricing amounts for Member and NonMember. To not use this feature you can simply change the value of View Special Pricing to 'No'"};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
 			</cfif>
 
 			<cfif FORM.PGPAvailable EQ "----">
@@ -402,12 +403,14 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif FORM.PGPAvailable EQ 1 and LEN(FORM.PGPPoints) EQ 0>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="Please enter how many PGP Points you want to award the participants that successfully attended this event or workshop."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+			<cfif FORM.PGPAvailable EQ 1>
+				<cfif FORM.PGPAvailable EQ 1 and LEN(FORM.PGPPoints) EQ 0>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please enter how many PGP Points you want to award the participants that successfully attended this event or workshop."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
 			</cfif>
 
 			<cfif FORM.MealProvided EQ "----">
@@ -418,20 +421,22 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif FORM.MealProvided EQ 1 and LEN(FORM.MealCost_Estimated) EQ 0>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="Please enter an amount for the cost of each participant's meal. To not use this feature simply select No Meal is Provided."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
-			</cfif>
+			<cfif FORM.MealProvided EQ 1>
+				<cfif FORM.MealProvided EQ 1 and LEN(FORM.MealCost_Estimated) EQ 0>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please enter an amount for the cost of each participant's meal. To not use this feature simply select No Meal is Provided."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
 
-			<cfif FORM.MealProvided EQ 1 and FORM.MealProvidedBy EQ "----">
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="Please enter who will be providing the meal for this event or workshop. To not use this feature simply change the option of Meal Provided to 'No'"};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				<cfif FORM.MealProvided EQ 1 and FORM.MealProvidedBy EQ "----">
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please enter who will be providing the meal for this event or workshop. To not use this feature simply change the option of Meal Provided to 'No'"};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
 			</cfif>
 
 			<cfif FORM.AllowVideoConference EQ "----">
@@ -442,12 +447,14 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif FORM.AllowVideoConference EQ 1 and LEN(FORM.VideoConferenceInfo) LT 50 or FORM.AllowVideoConference EQ 1 and LEN(FORM.VideoConferenceCost) EQ 0>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="Please enter information as to how the participant will connect to this event through the distance education equipment or enter the cost for the particpant to use this method to attend this event."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+			<cfif FORM.AllowVideoConference EQ 1>
+				<cfif FORM.AllowVideoConference EQ 1 and LEN(FORM.VideoConferenceInfo) LT 50 or FORM.AllowVideoConference EQ 1 and LEN(FORM.VideoConferenceCost) EQ 0>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please enter information as to how the participant will connect to this event through the distance education equipment or enter the cost for the particpant to use this method to attend this event."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
 			</cfif>
 
 			<cfif FORM.WebinarEvent EQ "----">
@@ -458,12 +465,14 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif FORM.WebinarEvent EQ 1 and LEN(FORM.WebinarConnectWebInfo) LT 50 or FORM.WebinarEvent EQ 1 and LEN(FORM.WebinarMemberCost) EQ 0 or FORM.WebinarEvent EQ 1 and LEN(FORM.WebinarNonMemberCost) EQ 0>
-				<cfscript>
-					eventdate = {property="Registration_Deadline",message="Please enter the necessary information to give particiants information on how to connect to this event as a webinar and/or the costs for a participant to utilize this option."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+			<cfif FORM.WebinarEvent EQ 1>
+				<cfif FORM.WebinarEvent EQ 1 and LEN(FORM.WebinarConnectWebInfo) LT 50 or FORM.WebinarEvent EQ 1 and LEN(FORM.WebinarMemberCost) EQ 0 or FORM.WebinarEvent EQ 1 and LEN(FORM.WebinarNonMemberCost) EQ 0>
+					<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please enter the necessary information to give particiants information on how to connect to this event as a webinar and/or the costs for a participant to utilize this option."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				</cfif>
 			</cfif>
 
 			<cfif FORM.WebinarEvent EQ 0>
@@ -509,9 +518,9 @@
 			</cfif>
 
 			<!--- Create Date Object from User Inputted Time from Event Start Time --->
-			<cfset EventStartTimeHours = #ListFirst(Session.UserSuppliedInfo.Event_StartTime, ":")#>
-			<cfset EventStartTimeMinutes = #Left(ListLast(Session.UserSuppliedInfo.Event_StartTime, ":"), 2)#>
-			<cfset EventStartTimeAMPM = #Right(ListLast(Session.UserSuppliedInfo.Event_StartTime, ":"), 2)#>
+			<cfset EventStartTimeHours = #ListFirst(FORM.Event_StartTime, ":")#>
+			<cfset EventStartTimeMinutes = #Left(ListLast(FORM.Event_StartTime, ":"), 2)#>
+			<cfset EventStartTimeAMPM = #Right(ListLast(FORM.Event_StartTime, ":"), 2)#>
 			<cfif EventStartTimeAMPM EQ "PM">
 				<cfswitch expression="#Variables.EventStartTimeHours#">
 					<cfcase value="12">
@@ -525,9 +534,9 @@
 			<cfset EventStartTimeObject = #CreateTime(Variables.EventStartTimeHours, Variables.EventStartTimeMinutes, 0)#>
 
 			<!--- Create Date Object from User Inputted Time from Event End Time --->
-			<cfset EventEndTimeHours = #ListFirst(Session.UserSuppliedInfo.Event_EndTime, ":")#>
-			<cfset EventEndTimeMinutes = #Left(ListLast(Session.UserSuppliedInfo.Event_EndTime, ":"), 2)#>
-			<cfset EventEndTimeAMPM = #Right(ListLast(Session.UserSuppliedInfo.Event_EndTime, ":"), 2)#>
+			<cfset EventEndTimeHours = #ListFirst(FORM.Event_EndTime, ":")#>
+			<cfset EventEndTimeMinutes = #Left(ListLast(FORM.Event_EndTime, ":"), 2)#>
+			<cfset EventEndTimeAMPM = #Right(ListLast(FORM.Event_EndTime, ":"), 2)#>
 			<cfif EventEndTimeAMPM EQ "PM">
 				<cfswitch expression="#Variables.EventEndTimeHours#">
 					<cfcase value="12">
@@ -541,9 +550,9 @@
 			<cfset EventEndTimeObject = #CreateTime(Variables.EventEndTimeHours, Variables.EventEndTimeMinutes, 0)#>
 
 			<!--- Create Date Object from User Inputted Time from Event End Time --->
-			<cfset RegistrationBeginTimeHours = #ListFirst(Session.UserSuppliedInfo.Registration_BeginTime, ":")#>
-			<cfset RegistrationBeginTimeMinutes = #Left(ListLast(Session.UserSuppliedInfo.Registration_BeginTime, ":"), 2)#>
-			<cfset RegistrationBeginTimeAMPM = #Right(ListLast(Session.UserSuppliedInfo.Registration_BeginTime, ":"), 2)#>
+			<cfset RegistrationBeginTimeHours = #ListFirst(FORM.Registration_BeginTime, ":")#>
+			<cfset RegistrationBeginTimeMinutes = #Left(ListLast(FORM.Registration_BeginTime, ":"), 2)#>
+			<cfset RegistrationBeginTimeAMPM = #Right(ListLast(FORM.Registration_BeginTime, ":"), 2)#>
 			<cfif RegistrationBeginTimeAMPM EQ "PM">
 				<cfswitch expression="#Variables.RegistrationBeginTimeHours#">
 					<cfcase value="12">

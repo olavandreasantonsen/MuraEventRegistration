@@ -32,9 +32,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 					EventCancelled = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
 			</cfquery>
 
-			<cflocation addtoken="true" url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=action=public:registerevent.default&EventID=#URL.EventID#&display=login">
+			<cflocation addtoken="false" url="#CGI.Script_name##CGI.path_info#?display=login">
 		<cfelseif isDefined("URL.EventID") and isNumeric(URL.EventID) and Session.Mura.IsLoggedIn EQ "true" and not isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="SESSION" type="Exclusive">
+				<cfquery name="Session.getSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, Featured_StartDate, Featured_EndDate, Featured_SortOrder, MemberCost, NonMemberCost, EarlyBird_RegistrationDeadline, EarlyBird_RegistrationAvailable, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewSpecialPricing, SpecialMemberCost, SpecialNonMemberCost, SpecialPriceRequirements, PGPAvailable, PGPPoints, MealProvided, MealProvidedBy, MealCost_Estimated, AllowVideoConference, VideoConferenceInfo, VideoConferenceCost, AcceptRegistrations, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, MaxParticipants, LocationID, LocationRoomID, Facilitator, Active, EventCancelled, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost, Presenters
+					From p_EventRegistration_Events
+					Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
+						TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+						Active = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and
+						EventCancelled = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
+				</cfquery>
 				<cfif isDefined("Session.UserRegistrationInfo")>
 					<cfset Session.UserRegistrationInfo.EventID = #URL.EventID#>
 					<cfset Session.UserRegistrationInfo.DateRegistered = #Now()#>

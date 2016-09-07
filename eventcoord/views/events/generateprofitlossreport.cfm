@@ -66,7 +66,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<br /><br />
 			<div class="panel-footer">
 				<a href="#buildURL('eventcoord:events.default')#" class="btn btn-primary pull-left">Back to Main Menu</a>
-				<a href="#buildURL('eventcoord:events.generateinvoices')#&EventID=#URL.EventID#" class="btn btn-primary  pull-right">Generate Invoices</a>
+				<cfif Session.GetSelectedEventRegistrations.RecordCount><a href="#buildURL('eventcoord:events.generateinvoices')#&EventID=#URL.EventID#" class="btn btn-primary  pull-right">Generate Invoices</a></cfif>
 				<a href="#buildURL('eventcoord:events.default')#" class="btn btn-primary pull-right">Generate Report for another Event</a><br /><br />
 			</div>
 		</cfif>

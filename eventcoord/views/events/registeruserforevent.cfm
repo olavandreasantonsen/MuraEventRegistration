@@ -97,22 +97,22 @@
 					<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
 						<div class="form-group">
 							<label for="EventDate" class="control-label col-sm-3">Participant via Webinar:&nbsp;</label>
-							<div class="col-sm-8"><cfselect name="WebinarParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant use Webinar Option for Event</option></cfselect>
+							<div class="col-sm-8"><cfselect name="WebinarParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant use Webinar Option for Event</option></cfselect></div>
 						</div>
 					</cfif>
 					<cfif Session.getSelectedEvent.LocationID GT 0 and Session.getSelectedEvent.WebinarAvailable EQ 1>
 						<div class="form-group">
 							<label for="EventDate" class="control-label col-sm-3">Participant via Facility:&nbsp;</label>
-							<div class="col-sm-8"><cfselect name="FacilityParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant be at Facility for Event</option></cfselect>
+							<div class="col-sm-8"><cfselect name="FacilityParticipant" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant be at Facility for Event</option></cfselect></div>
 						</div>
 					</cfif>
 					<div class="form-group">
 						<label for="EventDate" class="control-label col-sm-3">Send Email Confirmations:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="EmailConfirmations" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Send Email Confirmations to Participants</option></cfselect>
+						<div class="col-sm-8"><cfselect name="EmailConfirmations" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Send Email Confirmations to Participants</option></cfselect></div>
 					</div>
 					<div class="form-group">
 						<label for="EventDate" class="control-label col-sm-3">School District:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="DistrictName" class="form-control" Required="Yes" Multiple="No" query="Session.GetMembershipOrganizations" value="TContent_ID" Display="OrganizationName"  queryposition="below"><option value="----">Select School District Participant Is From</option><option value="0">Participant is from a Business</option></cfselect>
+						<div class="col-sm-8"><cfselect name="DistrictName" class="form-control" Required="Yes" Multiple="No" query="Session.GetMembershipOrganizations" value="TContent_ID" Display="OrganizationName"  queryposition="below"><option value="----">Select School District Participant Is From</option><option value="0">Participant is from a Business</option></cfselect></div>
 					</div>
 				</div>
 				<div class="panel-footer">
@@ -121,7 +121,7 @@
 				</div>
 			</cfform>
 		</div>
-	<cfelseif isDefined("URL.FormRetry")>
+	<cfelseif isDefined("URL.FormRetry") and not isDefined("URL.EventStatus")>
 		<div class="panel panel-default">
 			<div class="panel-heading"><h1>Register Participant for: #Session.getSelectedEvent.ShortTitle#</h1></div>
 			<cfform action="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=ShowCorporations" method="post" id="AddEvent" class="form-horizontal">
@@ -210,22 +210,22 @@
 					<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
 						<div class="form-group">
 							<label for="EventDate" class="control-label col-sm-3">Participant via Webinar:&nbsp;</label>
-							<div class="col-sm-8"><cfselect name="WebinarParticipant" class="form-control" selected="#Session.UserRegister.FirstStep.WebinarParticipant#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant use Webinar Option for Event</option></cfselect>
+							<div class="col-sm-8"><cfselect name="WebinarParticipant" class="form-control" selected="#Session.UserRegister.FirstStep.WebinarParticipant#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant use Webinar Option for Event</option></cfselect></div>
 						</div>
 					</cfif>
 					<cfif Session.getSelectedEvent.LocationID GT 0 and Session.getSelectedEvent.WebinarAvailable EQ 1>
 						<div class="form-group">
 							<label for="EventDate" class="control-label col-sm-3">Participant via Facility:&nbsp;</label>
-							<div class="col-sm-8"><cfselect name="FacilityParticipant" class="form-control" Required="Yes" selected="#Session.UserRegister.FirstStep.FacilityParticipant#" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant be at Facility for Event</option></cfselect>
+							<div class="col-sm-8"><cfselect name="FacilityParticipant" class="form-control" Required="Yes" selected="#Session.UserRegister.FirstStep.FacilityParticipant#" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will Participant be at Facility for Event</option></cfselect></div>
 						</div>
 					</cfif>
 					<div class="form-group">
 						<label for="EventDate" class="control-label col-sm-3">Send Email Confirmations:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="EmailConfirmations" class="form-control" Required="Yes" Multiple="No" selected="#Session.UserRegister.FirstStep.EmailConfirmations#" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Send Email Confirmations to Participants</option></cfselect>
+						<div class="col-sm-8"><cfselect name="EmailConfirmations" class="form-control" Required="Yes" Multiple="No" selected="#Session.UserRegister.FirstStep.EmailConfirmations#" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Send Email Confirmations to Participants</option></cfselect></div>
 					</div>
 					<div class="form-group">
 						<label for="EventDate" class="control-label col-sm-3">School District:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="DistrictName" class="form-control" Required="Yes" selected="#Session.UserRegister.FirstStep.DistrictName#" Multiple="No" query="Session.GetMembershipOrganizations" value="TContent_ID" Display="OrganizationName"  queryposition="below"><option value="----">Select School District Participant Is From</option><option value="0">Participant is from a Business</option></cfselect>
+						<div class="col-sm-8"><cfselect name="DistrictName" class="form-control" Required="Yes" selected="#Session.UserRegister.FirstStep.DistrictName#" Multiple="No" query="Session.GetMembershipOrganizations" value="TContent_ID" Display="OrganizationName"  queryposition="below"><option value="----">Select School District Participant Is From</option><option value="0">Participant is from a Business</option></cfselect></div>
 					</div>
 				</div>
 				<div class="panel-footer">
@@ -278,7 +278,7 @@
 							<cfif Session.getSelectedEvent.MealProvided EQ 1>
 								<div class="form-group">
 									<label for="EventDate" class="control-label col-sm-3">Each Participant Staying for Meal?:&nbsp;</label>
-									<div class="col-sm-8"><cfselect name="RegisterParticipantStayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Everyone Staying for Meal Being Registered</option></cfselect>
+									<div class="col-sm-8"><cfselect name="RegisterParticipantStayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Everyone Staying for Meal Being Registered</option></cfselect></div>
 								</div>
 							<cfelse>
 								<cfinput type="hidden" name="RegisterParticipantStayForMeal" value="0">
@@ -286,7 +286,7 @@
 							<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
 								<div class="form-group">
 									<label for="EventDate" class="control-label col-sm-3">Each Participant Utilizing Webinar Option?:&nbsp;</label>
-									<div class="col-sm-8"><cfselect name="RegisterParticipantWebinarOption" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Everyone Participanting via Webinar</option></cfselect>
+									<div class="col-sm-8"><cfselect name="RegisterParticipantWebinarOption" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Everyone Participanting via Webinar</option></cfselect></div>
 								</div>
 							<cfelse>
 								<cfinput type="hidden" name="RegisterParticipantWebinarOption" value="0">
@@ -544,7 +544,7 @@
 							CGIScriptName: "#CGI.Script_name#",
 							CGIPathInfo: "#CGI.path_info#",
 							SiteID: "#rc.$.siteConfig('siteID')#",
-							EventID: "#Session.FormInput.EventID#"
+							EventID: "#URL.EventID#"
 						};
 
 						newuser = {

@@ -426,6 +426,15 @@
 
 	</cffunction>
 
+	<cffunction name="SendInvoiceToCompanyAccountsPayable" returntype="Any" Output="False">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+		<cfargument name="ReportLocFilename" required="true" type="String">
+		<cfargument name="ShortTitle" required="true" type="String">
+		<cfargument name="ActPayableContactName" required="true" type="String">
+		<cfargument name="ActPayableContactEmail" required="true" type="String">
+		<cfinclude template="EmailTemplates/SendEmailInvoiceToAccountsPayable.cfm">
+	</cffunction>
+
 
 
 

@@ -12,6 +12,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<cffunction name="default" returntype="any" output="false">
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 
+		<cfif isDefined("URL.Info")>
+			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:main.eventinfo&EventID=#URL.Info#" addtoken="false">
+		</cfif>
 		<!--- Checking to make sure that today's date is within the Featured Events Date Window, Otherwise Update Event to not be featured. --->
 		<cfswitch expression="#application.configbean.getDBType()#">
 			<cfcase value="mysql">

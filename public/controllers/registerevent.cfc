@@ -139,13 +139,58 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif isDefined("FORM.RegisterAllDates")>
-				<cfif FORM.RegisterAllDates EQ "----">
+			<cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)>
+				<cfif FORM.RegisterDate EQ "----">
 					<cfscript>
-						errormsg = {property="EmailMsg",message="Please Select whether you will be attending all of the dates that this event is scheduled for."};
+						errormsg = {property="EmailMsg",message="Please Select whether you will be attending the first date of this event."};
 						arrayAppend(Session.FormErrors, errormsg);
 					</cfscript>
 					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">
+				</cfif>
+				<cfif isDefined("FORM.RegisterDate2")>
+					<cfif FORM.RegisterDate2 EQ "----">
+						<cfscript>
+							errormsg = {property="EmailMsg",message="Please Select whether you will be attending the second date of this event."};
+							arrayAppend(Session.FormErrors, errormsg);
+						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">
+					</cfif>
+				</cfif>
+				<cfif isDefined("FORM.RegisterDate3")>
+					<cfif FORM.RegisterDate3 EQ "----">
+						<cfscript>
+							errormsg = {property="EmailMsg",message="Please Select whether you will be attending the third date of this event."};
+							arrayAppend(Session.FormErrors, errormsg);
+						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">
+					</cfif>
+				</cfif>
+				<cfif isDefined("FORM.RegisterDate4")>
+					<cfif FORM.RegisterDate4 EQ "----">
+						<cfscript>
+							errormsg = {property="EmailMsg",message="Please Select whether you will be attending the fourth date of this event."};
+							arrayAppend(Session.FormErrors, errormsg);
+						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">
+					</cfif>
+				</cfif>
+				<cfif isDefined("FORM.RegisterDate5")>
+					<cfif FORM.RegisterDate5 EQ "----">
+						<cfscript>
+							errormsg = {property="EmailMsg",message="Please Select whether you will be attending the fifth date of this event."};
+							arrayAppend(Session.FormErrors, errormsg);
+						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">
+					</cfif>
+				</cfif>
+				<cfif isDefined("FORM.RegisterDate6")>
+					<cfif FORM.RegisterDate6 EQ "----">
+						<cfscript>
+							errormsg = {property="EmailMsg",message="Please Select whether you will be attending the sixth date of this event."};
+							arrayAppend(Session.FormErrors, errormsg);
+						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">
+					</cfif>
 				</cfif>
 			</cfif>
 
@@ -199,7 +244,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 								<cfqueryparam value="#FORM.SiteID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Variables.RegistrationID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
-								<cfqueryparam value="1" cfsqltype="cf_sql_bit">,
+								<cfqueryparam value="#FORM.RegisterDate#" cfsqltype="cf_sql_bit">,
 								<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">,
 								<cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">,
 								<cfqueryparam value="#Session.UserRegistrationInfo.UserEventPrice#" cfsqltype="cf_sql_money">,
@@ -208,47 +253,43 @@ http://www.apache.org/licenses/LICENSE-2.0
 								<cfqueryparam value="#FORM.StayForMeal#" cfsqltype="cf_sql_bit">
 							)
 						</cfquery>
-						<cfif isDefined("FORM.RegisterAllDates")>
-							<cfif FORM.RegisterAllDates EQ 1>
-								<cfif isDate(Session.getSelectedEvent.EventDate1)>
-									<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-										Update p_EventRegistration_UserRegistrations
-										Set RegisterForEventDate2 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-										Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-									</cfquery>
-								</cfif>
-								<cfif isDate(Session.getSelectedEvent.EventDate2)>
-									<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-										Update p_EventRegistration_UserRegistrations
-										Set RegisterForEventDate3 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-										Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-									</cfquery>
-								</cfif>
-								<cfif isDate(Session.getSelectedEvent.EventDate3)>
-									<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-										Update p_EventRegistration_UserRegistrations
-										Set RegisterForEventDate4 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-										Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-									</cfquery>
-								</cfif>
-								<cfif isDate(Session.getSelectedEvent.EventDate4)>
-									<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-										Update p_EventRegistration_UserRegistrations
-										Set RegisterForEventDate5 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-										Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-									</cfquery>
-								</cfif>
-								<cfif isDate(Session.getSelectedEvent.EventDate5)>
-									<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-										Update p_EventRegistration_UserRegistrations
-										Set RegisterForEventDate6 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-										Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
-									</cfquery>
-								</cfif>
-							<cfelse>
 
-							</cfif>
+						<cfif isDefined("FORM.RegisterDate1")>
+							<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set RegisterForEventDate2 = <cfqueryparam value="#FORM.RegisterDate1#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
 						</cfif>
+						<cfif isDefined("FORM.RegisterDate2")>
+							<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set RegisterForEventDate3 = <cfqueryparam value="#FORM.RegisterDate2#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfif>
+						<cfif isDefined("FORM.RegisterDate3")>
+							<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set RegisterForEventDate4 = <cfqueryparam value="#FORM.RegisterDate3#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfif>
+						<cfif isDefined("FORM.RegisterDate4")>
+							<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set RegisterForEventDate5 = <cfqueryparam value="#FORM.RegisterDate4#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfif>
+						<cfif isDefined("FORM.RegisterDate5")>
+						<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set RegisterForEventDate6 = <cfqueryparam value="#FORM.RegisterDate5#" cfsqltype="cf_sql_bit">
+								Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfif>
+
 						<cfif isDefined("FORM.AttendViaWebinar")>
 							<cfquery name="updateRegistrationRegisterDates" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 								Update p_EventRegistration_UserRegistrations

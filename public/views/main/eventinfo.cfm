@@ -194,19 +194,19 @@
 								<td style="width: 292px;">#DollarFormat(Session.EventInfo.SelectedEvent.NonMemberCost)# <cfif isDate(Session.EventInfo.SelectedEvent.EventDate1) or isDate(Session.EventInfo.SelectedEvent.EventDate2) or isDate(Session.EventInfo.SelectedEvent.EventDate3) or isDate(Session.EventInfo.SelectedEvent.EventDate4) or isDate(Session.EventInfo.SelectedEvent.EventDate5)> Per Event Date</cfif></td>
 							</tr>
 						</cfif>
-						<cfif Session.EventInfo.SelectedEvent.ViewSpecialPricing EQ 1>
+						<cfif Session.EventInfo.SelectedEvent.ViewGroupPricing EQ 1>
 							<tr>
-								<td colspan="4"><big><big><span style="font-weight: bold;">Special Price (<small><small>if Requirements are Met</small></small>)</span></big></big></td>
+								<td colspan="4"><big><big><span style="font-weight: bold;">Group Price (<small><small>if Requirements are Met</small></small>)</span></big></big></td>
 							</tr>
 							<tr>
 								<td style="width: 155px;">Requirements:</td>
-								<td colspan="3">#Session.EventInfo.SelectedEvent.SpecialPriceRequirements#</td>
+								<td colspan="3">#Session.EventInfo.SelectedEvent.GroupPriceRequirements#</td>
 							</tr>
 							<tr>
 								<td style="width: 155px;">ESC Member Price:</td>
-								<td style="width: 292px;">#DollarFormat(Session.EventInfo.SelectedEvent.SpecialMemberCost)# <cfif isDate(Session.EventInfo.SelectedEvent.EventDate1) or isDate(Session.EventInfo.SelectedEvent.EventDate2) or isDate(Session.EventInfo.SelectedEvent.EventDate3) or isDate(Session.EventInfo.SelectedEvent.EventDate4) or isDate(Session.EventInfo.SelectedEvent.EventDate5)> Per Event Date</cfif></td>
+								<td style="width: 292px;">#DollarFormat(Session.EventInfo.SelectedEvent.GroupMemberCost)# <cfif isDate(Session.EventInfo.SelectedEvent.EventDate1) or isDate(Session.EventInfo.SelectedEvent.EventDate2) or isDate(Session.EventInfo.SelectedEvent.EventDate3) or isDate(Session.EventInfo.SelectedEvent.EventDate4) or isDate(Session.EventInfo.SelectedEvent.EventDate5)> Per Event Date</cfif></td>
 								<td style="width: 155px;">ESC NonMember Price:</td>
-								<td style="width: 292px;">#DollarFormat(Session.EventInfo.SelectedEvent.SpecialNonMemberCost)# <cfif isDate(Session.EventInfo.SelectedEvent.EventDate1) or isDate(Session.EventInfo.SelectedEvent.EventDate2) or isDate(Session.EventInfo.SelectedEvent.EventDate3) or isDate(Session.EventInfo.SelectedEvent.EventDate4) or isDate(Session.EventInfo.SelectedEvent.EventDate5)> Per Event Date</cfif></td>
+								<td style="width: 292px;">#DollarFormat(Session.EventInfo.SelectedEvent.GroupNonMemberCost)# <cfif isDate(Session.EventInfo.SelectedEvent.EventDate1) or isDate(Session.EventInfo.SelectedEvent.EventDate2) or isDate(Session.EventInfo.SelectedEvent.EventDate3) or isDate(Session.EventInfo.SelectedEvent.EventDate4) or isDate(Session.EventInfo.SelectedEvent.EventDate5)> Per Event Date</cfif></td>
 							</tr>
 						</cfif>
 						<cfif Session.EventInfo.SelectedEvent.AllowVideoConference EQ 1>

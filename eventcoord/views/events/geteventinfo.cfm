@@ -242,5 +242,8 @@
 				</tbody>
 			</table>
 		</div>
+		<div class="panel-footer">
+			<a href="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default" class="btn btn-primary pull-left">Return to Event Listing</a><br /><br />
+		</div>
 	</div>
 </cfoutput>

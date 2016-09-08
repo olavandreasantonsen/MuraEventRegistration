@@ -255,6 +255,19 @@
 			ALTER TABLE p_EventRegistration_Events DROP COLUMN EventDoc_FileNameTen
 		</cfquery>
 	</cfif>
+	<cfquery name="ChangeTableSpecialPriceAvailableToGroupPriceAvailable" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_Events CHANGE ViewSpecialPricing 'ViewGroupPricing' Bit(1) NOT NULL DEFAULT B'0'
+	</cfquery>
+	<cfquery name="ChangeTableSpecialPriceMemberCostToGroupPriceMemberCost" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_Events CHANGE SpecialMemberCost 'GroupMemberCost' decimal(6,2) DEFAULT NULL
+	</cfquery>
+	<cfquery name="ChangeTableSpecialPriceNonMemberCostToGroupPriceNonMemberCost" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_Events CHANGE SpecialNonMemberCost 'GroupNonMemberCost' decimal(6,2) DEFAULT NULL
+	</cfquery>
+	<cfquery name="ChangeTableSpecialPriceRequirementsToGroupPriceRequirements" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_Events CHANGE SpecialPriceRequirements 'GroupPriceRequirements' longtext DEFAULT NULL
+	</cfquery>
+
 </cfif>
 
 <cfquery name="ShowOldTableeRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">

@@ -16,7 +16,7 @@
 										<a href="#CGI.Script_name##CGI.path_info#?doaction=logout"><i class="icon-home"></i> Account Logout</a>
 									</li>
 									<li class="<cfif rc.action eq 'public:main.login'>active</cfif>">
-										<a href="#CGI.Script_name##CGI.path_info#?display=login"><i class="icon-home"></i> Manage Profile</a>
+										<a href="#CGI.Script_name##CGI.path_info#?display=editProfile"><i class="icon-home"></i> Manage Profile</a>
 									</li>
 								<cfelse>
 									<li class="<cfif rc.action eq 'public:main.login'>active</cfif>">
@@ -55,6 +55,11 @@
 					</ul>
 				</div>
 			</nav>
+			<div class="text-right">
+				Logged In: #Session.Mura.FName# #Session.Mura.LName# (<a href="#CGI.Script_name##CGI.path_info#?doaction=logout" class="btn btn-sm btn-primary">Logout</a>)<br>
+				Organization: #Session.Mura.Company#
+				<hr>
+			</div>
 		</div>
 		<div class="container-fluid">
 			<div class="row">

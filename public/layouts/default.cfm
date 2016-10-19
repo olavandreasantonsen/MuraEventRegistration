@@ -55,11 +55,17 @@
 					</ul>
 				</div>
 			</nav>
-			<div class="text-right">
-				Logged In: #Session.Mura.FName# #Session.Mura.LName# (<a href="#CGI.Script_name##CGI.path_info#?doaction=logout" class="btn btn-sm btn-primary">Logout</a>)<br>
-				Organization: #Session.Mura.Company#
-				<hr>
-			</div>
+			<cfif Session.Mura.IsLoggedIn EQ "True">
+				<div class="text-right">
+					Current User: #Session.Mura.FName# #Session.Mura.LName# (#Session.Mura.Company#) <a href="#CGI.Script_name##CGI.path_info#?doaction=logout" class="btn btn-sm btn-primary">Logout</a><br>
+					<hr>
+				</div>
+			<cfelse>
+				<div class="text-right">
+					Current User: Guest User <a href="#CGI.Script_name##CGI.path_info#?display=login" class="btn btn-sm btn-primary">Login</a> | <a href="#buildURL('public:registeruser.default')#" class="btn btn-sm btn-primary">Create Account</a>
+					<hr>
+				</div>
+			</cfif>
 		</div>
 		<div class="container-fluid">
 			<div class="row">

@@ -133,7 +133,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 			<cfif FORM.RegisterAdditionalIndividuals EQ "----">
 				<cfscript>
-					errormsg = {property="EmailMsg",message="Please Select whether you are wanting to register additional individuals to this same event/workshop."};
+					errormsg = {property="EmailMsg",message="Do you want to register additional individuals for this event? Select Yes or No below."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:registerevent.default&FormRetry=True" addtoken="false">

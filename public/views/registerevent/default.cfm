@@ -67,7 +67,7 @@
 					<cfif Session.getSelectedEvent.MealProvided EQ 1>
 						<div class="form-group">
 						<label for="StayForMeal" class="control-label col-sm-3">Staying for Meal?:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="StayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect></div>
+						<div class="col-sm-8"><cfselect name="StayForMeal" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" selected="1" value="ID" Display="OptionName"  queryposition="below"><option value="----">Will you be staying for Meal</option></cfselect></div>
 						</div>
 					</cfif>
 					<cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)>
@@ -119,13 +119,17 @@
 							</div>
 						<cfelseif Session.UserRegistrationInfo.GroupPricingAvailable EQ "True">
 							<div class="form-group">
-								<p class="alert alert-info">This Pricing will be updated by the Facilitator once the Special Pricing Requirements have been met. If Special Requirements have not been met, then Event Pricing will be #DollarFormat(Session.UserRegistrationInfo.UserEventPrice)# to attend  <cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)> each date of this event<cfelse> this event</cfif></p></div></p>
-								<label for="RegistrationEmail" class="control-label col-sm-3">Special Requirements:&nbsp;</label>
+								<p class="alert alert-info">This Pricing will be updated by the Facilitator once the Special Pricing Requirements have been met. If Group Price Requirements have not been met, then Event Pricing will be #DollarFormat(Session.UserRegistrationInfo.UserEventPrice)# to attend  <cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)> each date of this event<cfelse> this event</cfif></p></div></p>
+								<label for="RegistrationEmail" class="control-label col-sm-3">Group Requirements:&nbsp;</label>
 								<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.GroupPriceRequirements#</p></div>
 							</div>
 							<div class="form-group">
-							<label for="RegistrationEmail" class="control-label col-sm-3">Special Pricing:&nbsp;</label>
+							<label for="RegistrationEmail" class="control-label col-sm-3">Group Price:&nbsp;</label>
 							<div class="col-sm-8"><p class="form-control-static">#DollarFormat(Session.UserRegistrationInfo.GroupEventPrice)#</p></div>
+							</div>
+							<div class="form-group">
+							<label for="RegistrationEmail" class="control-label col-sm-3">Cost to Participate<br>(Without Discount):&nbsp;</label>
+							<div class="col-sm-8"><p class="form-control-static">#DollarFormat(Session.UserRegistrationInfo.UserEventPrice)#<cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)> Per Event Date</cfif></p></div>
 							</div>
 						<cfelse>
 							<div class="form-group">
@@ -161,7 +165,7 @@
 							<div class="modal-content">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
-									<h3>Account Registration Error</h3>
+									<h3>Missing Information to Register for Event</h3>
 								</div>
 								<div class="modal-body">
 									<div class="alert alert-danger"><p>#Session.FormErrors[1].Message#</p></div>
@@ -407,13 +411,17 @@
 							</div>
 						<cfelseif Session.UserRegistrationInfo.GroupPricingAvailable EQ "True">
 							<div class="form-group">
-								<p class="alert alert-info">This Pricing will be updated by the Facilitator once the Special Pricing Requirements have been met. If Special Requirements have not been met, then Event Pricing will be #DollarFormat(Session.UserRegistrationInfo.UserEventPrice)# to attend  <cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)> each date of this event<cfelse> this event</cfif></p></div></p>
-								<label for="RegistrationEmail" class="control-label col-sm-3">Special Requirements:&nbsp;</label>
+								<p class="alert alert-info">This Pricing will be updated by the Facilitator once the Special Pricing Requirements have been met. If Group Price Requirements have not been met, then Event Pricing will be #DollarFormat(Session.UserRegistrationInfo.UserEventPrice)# to attend  <cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)> each date of this event<cfelse> this event</cfif></p></div></p>
+								<label for="RegistrationEmail" class="control-label col-sm-3">Group Requirements:&nbsp;</label>
 								<div class="col-sm-8"><p class="form-control-static">#Session.getSelectedEvent.GroupPriceRequirements#</p></div>
 							</div>
 							<div class="form-group">
-							<label for="RegistrationEmail" class="control-label col-sm-3">Special Pricing:&nbsp;</label>
+							<label for="RegistrationEmail" class="control-label col-sm-3">Group Price:&nbsp;</label>
 							<div class="col-sm-8"><p class="form-control-static">#DollarFormat(Session.UserRegistrationInfo.GroupEventPrice)#</p></div>
+							</div>
+							<div class="form-group">
+							<label for="RegistrationEmail" class="control-label col-sm-3">Cost to Participate<br>(Without Discount):&nbsp;</label>
+							<div class="col-sm-8"><p class="form-control-static">#DollarFormat(Session.UserRegistrationInfo.UserEventPrice)#<cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)> Per Event Date</cfif></p></div>
 							</div>
 						<cfelse>
 							<div class="form-group">

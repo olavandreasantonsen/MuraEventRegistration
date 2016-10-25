@@ -12,6 +12,7 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#buildURL('public:main')#">Home <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<cfif Session.Mura.IsLoggedIn EQ True>
+									<li class="<cfif rc.action eq 'public:main.login'>active</cfif>"><a href="#buildURL('public:main.default')#"><i class="icon-home"></i> Event Listing</a></li>
 									<li class="<cfif rc.action eq 'public:main.login'>active</cfif>">
 										<a href="#CGI.Script_name##CGI.path_info#?doaction=logout"><i class="icon-home"></i> Account Logout</a>
 									</li>

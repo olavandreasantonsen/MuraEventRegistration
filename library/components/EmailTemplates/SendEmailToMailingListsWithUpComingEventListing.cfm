@@ -5,7 +5,7 @@
 
 Mailing List Email
 
-Note: This is an automated email address and not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# #rc.$.siteConfig('ContactEmail')# #rc.$.siteConfig('ContactPhone')#
+Note: Replies to this automated email address are not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# at #rc.$.siteConfig('ContactEmail')# or call #rc.$.siteConfig('ContactPhone')#
 </cfmailpart>
 <cfmailpart type="text/html">
 	<html><body>
@@ -14,7 +14,7 @@ Note: This is an automated email address and not monitored by staff. If you have
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">&nbsp;</td></tr>
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">Mailing List Email</td></tr>
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">&nbsp;</td></tr>
-			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">Note: This is an automated email address and not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# #rc.$.siteConfig('ContactEmail')# #rc.$.siteConfig('ContactPhone')#</td></tr>
+			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">Note: Replies to this automated email address are not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# at #rc.$.siteConfig('ContactEmail')# or call #rc.$.siteConfig('ContactPhone')#</td></tr>
 		</table>
 	</body></html>
 </cfmailpart>

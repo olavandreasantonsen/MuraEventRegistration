@@ -2,20 +2,20 @@
 <cfmailpart type="text/plain">
 #getUserAccount.fName# #getUserAccount.lName#,
 
-You have successfully registered an account on the #rc.$.siteConfig('site')# event registration system. You may now login with your email address and password you entered while creating your account.
+You have successfully activated your account on the #rc.$.siteConfig('site')# event registration system. You may now login with your email address and password you entered while creating your account.
 
 
-Note: This is an automated email address and not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# #rc.$.siteConfig('ContactEmail')# #rc.$.siteConfig('ContactPhone')#
+Note: Replies to this automated email address are not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# at #rc.$.siteConfig('ContactEmail')# or call #rc.$.siteConfig('ContactPhone')#
 </cfmailpart>
 <cfmailpart type="text/html">
 	<html><body>
 		<table border="0" align="center" width="100%" cellspacing="0" cellpadding="0">
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">#getUserAccount.fName# #getUserAccount.lName#,</td></tr>
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">&nbsp;</td></tr>
-			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">You have successfully registered an account on the #rc.$.siteConfig('site')# event registration system. You may now login with your email address and password you entered while creating your account.</td></tr>
+			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">You have successfully activated your account on the #rc.$.siteConfig('site')# event registration system. You may now login with your email address and password you entered while creating your account.</td></tr>
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">&nbsp;</td></tr>
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">&nbsp;</td></tr>
-			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">Note: This is an automated email address and not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# #rc.$.siteConfig('ContactEmail')# #rc.$.siteConfig('ContactPhone')#</td></tr>
+			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">Note: Replies to this automated email address are not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# at #rc.$.siteConfig('ContactEmail')# or call #rc.$.siteConfig('ContactPhone')#</td></tr>
 		</table>
 	</body></html>
 </cfmailpart>

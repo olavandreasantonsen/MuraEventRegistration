@@ -35,6 +35,256 @@
 <cfoutput>
 	<cfif isDefined("URL.UserAction")>
 		<cfswitch expression="#URL.UserAction#">
+			<cfcase value="PasswordChanged">
+				<div id="modelWindowDialog" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
+								<h3>Password Changed Successfully</h3>
+							</div>
+							<div class="modal-body">
+								<p class="alert alert-success">The password on the selected account has been changed sucessfully. You can now login with the username and new password to register for upcoming events/workshops.</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<script type='text/javascript'>
+					(function() {
+						'use strict';
+						function remoteModal(idModal){
+							var vm = this;
+							vm.modal = $(idModal);
+
+							if( vm.modal.length == 0 ) { return false; } else { openModal(); }
+
+							if( window.location.hash == idModal ){ openModal(); }
+
+							var services = { open: openModal, close: closeModal };
+							return services;
+							///////////////
+
+							// method to open modal
+							function openModal(){
+								vm.modal.modal('show');
+							}
+
+							// method to close modal
+							function closeModal(){
+								vm.modal.modal('hide');
+							}
+						}
+						Window.prototype.remoteModal = remoteModal;
+					})();
+
+					$(function(){
+						window.remoteModal('##modelWindowDialog');
+					});
+				</script>
+			</cfcase>
+			<cfcase value="PasswordNotChanged">
+				<div id="modelWindowDialog" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
+								<h3>Password Not Changed</h3>
+							</div>
+							<div class="modal-body">
+								<p class="alert alert-success">The password on the selected account has not been changed due to an error.</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<script type='text/javascript'>
+					(function() {
+						'use strict';
+						function remoteModal(idModal){
+							var vm = this;
+							vm.modal = $(idModal);
+
+							if( vm.modal.length == 0 ) { return false; } else { openModal(); }
+
+							if( window.location.hash == idModal ){ openModal(); }
+
+							var services = { open: openModal, close: closeModal };
+							return services;
+							///////////////
+
+							// method to open modal
+							function openModal(){
+								vm.modal.modal('show');
+							}
+
+							// method to close modal
+							function closeModal(){
+								vm.modal.modal('hide');
+							}
+						}
+						Window.prototype.remoteModal = remoteModal;
+					})();
+
+					$(function(){
+						window.remoteModal('##modelWindowDialog');
+					});
+				</script>
+			</cfcase>
+			<cfcase value="PasswordTimeExpired">
+				<div id="modelWindowDialog" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
+								<h3>Password Reset Request Expired</h3>
+							</div>
+							<div class="modal-body">
+								<p class="alert alert-success">Time has expired on the password reset request and no changes to the account has been done.</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<script type='text/javascript'>
+					(function() {
+						'use strict';
+						function remoteModal(idModal){
+							var vm = this;
+							vm.modal = $(idModal);
+
+							if( vm.modal.length == 0 ) { return false; } else { openModal(); }
+
+							if( window.location.hash == idModal ){ openModal(); }
+
+							var services = { open: openModal, close: closeModal };
+							return services;
+							///////////////
+
+							// method to open modal
+							function openModal(){
+								vm.modal.modal('show');
+							}
+
+							// method to close modal
+							function closeModal(){
+								vm.modal.modal('hide');
+							}
+						}
+						Window.prototype.remoteModal = remoteModal;
+					})();
+
+					$(function(){
+						window.remoteModal('##modelWindowDialog');
+					});
+				</script>
+			</cfcase>
+			<cfcase value="WrongInformationRequest">
+				<div id="modelWindowDialog" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
+								<h3>Invalid Information Passed</h3>
+							</div>
+							<div class="modal-body">
+								<p class="alert alert-success">Something went wrong with the Link which was clicked on. Please visit the link again</p>
+							</div>
+							<div class="modal-footer">
+								<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<script type='text/javascript'>
+					(function() {
+						'use strict';
+						function remoteModal(idModal){
+							var vm = this;
+							vm.modal = $(idModal);
+
+							if( vm.modal.length == 0 ) { return false; } else { openModal(); }
+
+							if( window.location.hash == idModal ){ openModal(); }
+
+							var services = { open: openModal, close: closeModal };
+							return services;
+							///////////////
+
+							// method to open modal
+							function openModal(){
+								vm.modal.modal('show');
+							}
+
+							// method to close modal
+							function closeModal(){
+								vm.modal.modal('hide');
+							}
+						}
+						Window.prototype.remoteModal = remoteModal;
+					})();
+
+					$(function(){
+						window.remoteModal('##modelWindowDialog');
+					});
+				</script>
+			</cfcase>
+			<cfcase value="PasswordRequestSent">
+				<div id="modelWindowDialog" class="modal fade">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
+									<h3>Password Request Sent</h3>
+								</div>
+								<div class="modal-body">
+									<p class="alert alert-success">The special link to request password request has been sent to the email address we have on file for the account you entered.</p>
+								</div>
+								<div class="modal-footer">
+									<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script type='text/javascript'>
+						(function() {
+							'use strict';
+							function remoteModal(idModal){
+								var vm = this;
+								vm.modal = $(idModal);
+
+								if( vm.modal.length == 0 ) { return false; } else { openModal(); }
+
+								if( window.location.hash == idModal ){ openModal(); }
+
+								var services = { open: openModal, close: closeModal };
+								return services;
+								///////////////
+
+								// method to open modal
+								function openModal(){
+									vm.modal.modal('show');
+								}
+
+								// method to close modal
+								function closeModal(){
+									vm.modal.modal('hide');
+								}
+							}
+							Window.prototype.remoteModal = remoteModal;
+						})();
+
+						$(function(){
+							window.remoteModal('##modelWindowDialog');
+						});
+					</script>
+			</cfcase>
 			<cfcase value="UserRegistration">
 				<cfif URL.Successfull EQ "true">
 					<div id="modelWindowDialog" class="modal fade">
@@ -312,8 +562,10 @@
 
 
 	<div class="panel panel-default">
-		<div class="panel-heading"><h2>Calendar of Events</h2></div>
 		<div class="panel-body">
+			<fieldset>
+				<legend><h2>Calendar of Events</h2></legend>
+			</fieldset>
 			<cfif Session.getFeaturedEvents.RecordCount>
 				<cfdump var="#Session.getFeaturedEvents#">
 			</cfif>

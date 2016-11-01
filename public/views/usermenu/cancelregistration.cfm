@@ -8,8 +8,10 @@
 <cfoutput>
 <cfif isDefined("URL.EventID") and Session.Mura.IsLoggedIn EQ "True" and not isDefined("URL.FormRetry")>
 	<div class="panel panel-default">
-		<div class="panel-heading"><h3 align="center">Cancel Registration for #Session.GetSelectedEvent.ShortTitle# <cfif Len(Session.GetSelectedEvent.Presenters)><br>(#Session.EventPresenter.FName# #Session.EventPresenter.Lname#)</cfif></h3></div>
 		<div class="panel-body">
+			<fieldset>
+				<legend>Cancel Registration for #Session.GetSelectedEvent.ShortTitle# <cfif Len(Session.GetSelectedEvent.Presenters)><br>(#Session.EventPresenter.FName# #Session.EventPresenter.Lname#)</cfif></legend>
+			</fieldset>
 			<table class="table" width="100%" cellspacing="0" cellpadding="0">
 				<tbody>
 					<tr>
@@ -152,8 +154,10 @@
 	</div>
 <cfelseif isDefined("URL.EventID") and Session.Mura.IsLoggedIn EQ "True" and isDefined("URL.FormRetry")>
 	<div class="panel panel-default">
-		<div class="panel-heading"><h3 align="center">Cancel Registration for #Session.GetSelectedEvent.ShortTitle# <cfif Len(Session.GetSelectedEvent.Presenters)><br>(#Session.EventPresenter.FName# #Session.EventPresenter.Lname#)</cfif></h3></div>
 		<div class="panel-body">
+			<fieldset>
+				<legend>Cancel Registration for #Session.GetSelectedEvent.ShortTitle# <cfif Len(Session.GetSelectedEvent.Presenters)><br>(#Session.EventPresenter.FName# #Session.EventPresenter.Lname#)</cfif></legend>
+			</fieldset>
 			<cfif isDefined("Session.FormErrors")>
 				<cfif ArrayLen(Session.FormErrors)>
 					<div id="modelWindowDialog" class="modal fade">

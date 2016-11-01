@@ -43,15 +43,32 @@ http://www.apache.org/licenses/LICENSE-2.0
 						Active = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and
 						EventCancelled = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
 				</cfquery>
+				<cfquery name="checkRegisteredForEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select TContent_ID, RegistrationID, RegistrationDate
+					From p_EventRegistration_UserRegistrations
+					Where EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+						User_ID = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar"> and
+						Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+				</cfquery>
 				<cfif isDefined("Session.UserRegistrationInfo")>
 					<cfset Session.UserRegistrationInfo.EventID = #URL.EventID#>
 					<cfset Session.UserRegistrationInfo.DateRegistered = #Now()#>
 					<cfset Session.UserRegistrationInfo.UserEmailDomain = #Right(Session.Mura.EMail, Len(Session.Mura.Email) - Find("@", Session.Mura.Email))#>
+					<cfif checkRegisteredForEvent.RecordCount>
+						<cfset Session.UserRegistrationInfo.UserAlreadyRegistered = true>
+					<cfelse>
+						<cfset Session.UserRegistrationInfo.UserAlreadyRegistered = false>
+					</cfif>
 				<cfelse>
 					<cfset Session.UserRegistrationInfo = StructNew()>
 					<cfset Session.UserRegistrationInfo.EventID = #URL.EventID#>
 					<cfset Session.UserRegistrationInfo.DateRegistered = #Now()#>
 					<cfset Session.UserRegistrationInfo.UserEmailDomain = #Right(Session.Mura.EMail, Len(Session.Mura.Email) - Find("@", Session.Mura.Email))#>
+					<cfif checkRegisteredForEvent.RecordCount>
+						<cfset Session.UserRegistrationInfo.UserAlreadyRegistered = true>
+					<cfelse>
+						<cfset Session.UserRegistrationInfo.UserAlreadyRegistered = false>
+					</cfif>
 				</cfif>
 
 				<cfquery name="Session.getActiveMembership" datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">

@@ -16,12 +16,14 @@
 <cfoutput>
 	<cfif not isDefined("URL.FormRetry")>
 		<div class="panel panel-default">
-			<div class="panel-heading"><h2>Registering for Event: #Session.getSelectedEvent.ShortTitle#</h2></div>
 			<cfform action="" method="post" id="RegisterAccountForm" class="form-horizontal">
 				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
 				<cfinput type="hidden" name="formSubmit" value="true">
 				<cfinput type="hidden" name="EventID" value="#Session.UserRegistrationInfo.EventID#">
 				<div class="panel-body">
+					<fieldset>
+						<legend>Registering for Event: #Session.getSelectedEvent.ShortTitle#</legend>
+					</fieldset>
 					<p class="alert alert-info">Please complete the following information to register for this event. All electronic communication from this system will be sent to the Participant's Email Address</p>
 					<cfif isDate(Session.getSelectedEvent.EventDate1) or isDate(Session.getSelectedEvent.EventDate2) or isDate(Session.getSelectedEvent.EventDate3) or isDate(Session.getSelectedEvent.EventDate4) or isDate(Session.getSelectedEvent.EventDate5)>
 						<p class="alert alert-info">You will be registered for the First Date of this event by default.<br>Event Date: #DateFormat(Session.getSelectedEvent.EventDate, "mm/dd/yyyy")#<br>
@@ -62,7 +64,13 @@
 					</div>
 					<div class="form-group">
 						<label for="RegisterAdditionalIndividuals" class="control-label col-sm-3">Register Additional Individuals?:&nbsp;</label>
-						<div class="col-sm-8"><cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect></div>
+						<div class="col-sm-8">
+							<cfif Session.UserRegistrationInfo.UserAlreadyRegistered EQ true>
+								<cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" selected="1" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+							<cfelse>
+								<cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+							</cfif>
+						</div>
 					</div>
 					<cfif Session.getSelectedEvent.MealProvided EQ 1>
 						<div class="form-group">
@@ -153,7 +161,6 @@
 		</div>
 	<cfelseif isDefined("URL.FormRetry")>
 		<div class="panel panel-default">
-			<div class="panel-heading"><h2>Registering for Event: #Session.getSelectedEvent.ShortTitle#</h2></div>
 			<cfform action="" method="post" id="RegisterAccountForm" class="form-horizontal">
 				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
 				<cfinput type="hidden" name="formSubmit" value="true">
@@ -286,6 +293,9 @@
 					</div>
 				</cfif>
 				<div class="panel-body">
+					<fieldset>
+						<legend>Registering for Event: #Session.getSelectedEvent.ShortTitle#</legend>
+					</fieldset>
 					<p class="alert alert-info">Please complete the following information to register for this event. All electronic communication from this system will be sent to the Participant's Email Address</p>
 					<div class="form-group">
 						<label for="RegistrationName" class="control-label col-sm-3">Your Name:&nbsp;</label>
@@ -308,12 +318,16 @@
 					<div class="form-group">
 						<label for="RegisterAdditionalIndividuals" class="control-label col-sm-3">Register Additional Individuals?:&nbsp;</label>
 						<div class="col-sm-8">
-							<cfif isDefined("Session.FormInput.RegisterAdditionalIndividuals")>
-								<cfselect name="RegisterAdditionalIndividuals" class="form-control" selected="#Session.FormInput.RegisterAdditionalIndividuals#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+							<cfif Session.UserRegistrationInfo.UserAlreadyRegistered EQ true>
+								<cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" selected="1" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
 							<cfelse>
-								<cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+								<cfif isDefined("Session.FormInput.RegisterAdditionalIndividuals")>
+									<cfselect name="RegisterAdditionalIndividuals" class="form-control" selected="#Session.FormInput.RegisterAdditionalIndividuals#" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+								<cfelse>
+									<cfselect name="RegisterAdditionalIndividuals" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to Register Additional Individuals</option></cfselect>
+								</cfif>
 							</cfif>
-							</div>
+						</div>
 					</div>
 					<cfif Session.getSelectedEvent.MealProvided EQ 1>
 						<div class="form-group">

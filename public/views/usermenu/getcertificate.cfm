@@ -3,6 +3,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading"><h2>List of Events with Certificates</h2></div>
 			<div class="panel-body">
+				<fieldset>
+					<legend>List of Events with Certificates</legend>
+				</fieldset>
 				<table class="table table-striped" width="100%" cellspacing="0" cellpadding="0">
 					<tr>
 						<td>Event Title</td>
@@ -33,12 +36,14 @@
 <cfelseif isDefined("URL.EventID") and isDefined("URL.DisplayCertificate")>
 	<cfoutput>
 		<div class="panel panel-default">
-			<div class="panel-heading"><h2>Certificate: #Session.GetSelectedEvent.ShortTitle#</h2></div>
 			<div class="panel-body">
+				<fieldset>
+					<legend>Certificate: #Session.GetSelectedEvent.ShortTitle#</legend>
+				</fieldset>
 				<embed src="#Session.CertificateCompletedFile#" width="100%" height="650">
 			</div>
 			<div class="panel-footer">
-				<a href="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:usermenu.getcertificate" class="btn btn-primary btn-small" alt="Event Listing Button">Get Another Certificate</a>
+				<a href="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:usermenu.eventhistory" class="btn btn-primary btn-small" alt="Event Listing Button">Return to My Event History</a>
 			</div>
 		</div>
 	</cfoutput>

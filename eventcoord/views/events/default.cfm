@@ -11,8 +11,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 </cfsilent>
 <cfoutput>
 	<div class="panel panel-default">
-		<div class="panel-heading"><h1>Available Events and/or Workshops</h1></div>
 		<div class="panel-body">
+		<fieldset>
+			<legend><h2>Available Events and/or Workshops</h2></legend>
+		</fieldset>
 			<cfif isDefined("Session.FormErrors")>
 				<cfif ArrayLen(Session.FormErrors) GTE 1>
 					<div class="alert alert-danger"><p>#Session.FormErrors[1].Message#</p></div>
@@ -168,14 +170,44 @@ http://www.apache.org/licenses/LICENSE-2.0
 									Event_ID = <cfqueryparam value="#Session.getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer">
 							</cfquery>
 							<tr>
-								<td width="50%">(<a href="http://#cgi.server_name#/?Info=#Session.getAvailableEvents.TContent_ID#">#Session.getAvailableEvents.TContent_ID#</a>) / #Session.getAvailableEvents.ShortTitle#</td>
-								<td width="15%"><cfif DateDiff("d", Now(), Session.getAvailableEvents.EventDate) GTE 0>#DateFormat(Session.getAvailableEvents.EventDate, "mmm dd, yy")#<br><cfelse></cfif>
-									<cfif LEN(Session.getAvailableEvents.EventDate1) OR LEN(Session.getAvailableEvents.EventDate2) OR LEN(Session.getAvailableEvents.EventDate3) OR LEN(Session.getAvailableEvents.EventDate4) OR LEN(Session.getAvailableEvents.EventDate5)>
-										<cfif LEN(Session.getAvailableEvents.EventDate1) and DateDiff("d", Now(), Session.getAvailableEvents.EventDate1) GTE 0>#DateFormat(Session.getAvailableEvents.EventDate1, "mmm dd, yy")#<br></cfif>
-										<cfif LEN(Session.getAvailableEvents.EventDate2) and DateDiff("d", Now(), Session.getAvailableEvents.EventDate2) GTE 0>#DateFormat(Session.getAvailableEvents.EventDate2, "mmm dd, yy")#<br></cfif>
-										<cfif LEN(Session.getAvailableEvents.EventDate3) and DateDiff("d", Now(), Session.getAvailableEvents.EventDate3) GTE 0>#DateFormat(Session.getAvailableEvents.EventDate3, "mmm dd, yy")#<br></cfif>
-										<cfif LEN(Session.getAvailableEvents.EventDate4) and DateDiff("d", Now(), Session.getAvailableEvents.EventDate4) GTE 0>#DateFormat(Session.getAvailableEvents.EventDate4, "mmm dd, yy")#<br></cfif>
-										<cfif LEN(Session.getAvailableEvents.EventDate5) and DateDiff("d", Now(), Session.getAvailableEvents.EventDate5) GTE 0>#DateFormat(Session.getAvailableEvents.EventDate5, "mmm dd, yy")#<br></cfif>
+								<td width="50%">(<a href="http://#cgi.server_name#/?Info=#Session.getAvailableEvents.TContent_ID#">#Session.getAvailableEvents.TContent_ID#</a>) / #Session.getAvailableEvents.ShortTitle#<cfif LEN(Session.getAvailableEvents.Presenters)><cfquery name="getPresenter" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">Select FName, LName From tusers where UserID = <cfqueryparam value="#Session.getAvailableEvents.Presenters#" cfsqltype="cf_sql_varchar"></cfquery><br><em>Presenter: #getPresenter.FName# #getPresenter.Lname#</em></cfif></td>
+								<td width="15%">
+									<cfif LEN(Session.getAvailableEvents.EventDate) and LEN(Session.getAvailableEvents.EventDate1) or LEN(Session.getAvailableEvents.EventDate2) or LEN(Session.getAvailableEvents.EventDate3) or LEN(Session.getAvailableEvents.EventDate4)>
+										<cfif DateDiff("d", Now(), Session.getAvailableEvents.EventDate) LT 0>
+											<div style="Color: ##CCCCCC;">#DateFormat(Session.getAvailableEvents.EventDate, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate, "ddd")#)</div>
+										<cfelse>
+											#DateFormat(Session.getAvailableEvents.EventDate, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate, "ddd")#)<br>
+										</cfif>
+										<cfif LEN(Session.getAvailableEvents.EventDate1)>
+											<cfif DateDiff("d", Now(), Session.getAvailableEvents.EventDate1) LT 0>
+												<div style="Color: ##AAAAAA;">#DateFormat(Session.getAvailableEvents.EventDate1, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate1, "ddd")#)</div>
+											<cfelse>
+												#DateFormat(Session.getAvailableEvents.EventDate1, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate1, "ddd")#)<br>
+											</cfif>
+										</cfif>
+										<cfif LEN(Session.getAvailableEvents.EventDate2)>
+											<cfif DateDiff("d", Now(), Session.getAvailableEvents.EventDate2) LT 0>
+												<div class="text-danger">#DateFormat(Session.getAvailableEvents.EventDate2, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate2, "ddd")#)</div>
+											<cfelse>
+												#DateFormat(Session.getAvailableEvents.EventDate2, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate2, "ddd")#)<br>
+											</cfif>
+										</cfif>
+										<cfif LEN(Session.getAvailableEvents.EventDate3)>
+											<cfif DateDiff("d", Now(), Session.getAvailableEvents.EventDate3) LT 0>
+												<div class="text-danger">#DateFormat(Session.getAvailableEvents.EventDate3, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate3, "ddd")#)</div>
+											<cfelse>
+												#DateFormat(Session.getAvailableEvents.EventDate3, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate3, "ddd")#)<br>
+											</cfif>
+										</cfif>
+										<cfif LEN(Session.getAvailableEvents.EventDate4)>
+											<cfif DateDiff("d", Now(), Session.getAvailableEvents.EventDate4) LT 0>
+												<div class="text-danger">#DateFormat(Session.getAvailableEvents.EventDate4, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate4, "ddd")#)</div>
+											<cfelse>
+												#DateFormat(Session.getAvailableEvents.EventDate4, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate4, "ddd")#)
+											</cfif>
+										</cfif>
+									<cfelse>
+										#DateFormat(Session.getAvailableEvents.EventDate, "mm/dd/yyyy")# (#DateFormat(Session.getAvailableEvents.EventDate, "ddd")#)
 									</cfif>
 								</td>
 								<td>

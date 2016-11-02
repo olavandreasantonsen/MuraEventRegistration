@@ -4,7 +4,7 @@
 
 		<cfset PriorDate = #DateAdd("m", -8, Now())#>
 		<cfquery name="Session.getAvailableEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-			Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, PGPAvailable, MemberCost, NonMemberCost
+			Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, PGPAvailable, MemberCost, NonMemberCost, Presenters
 			From p_EventRegistration_Events
 			Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 				EventDate >= <cfqueryparam value="#Variables.PriorDate#" cfsqltype="cf_sql_date"> and
@@ -16,6 +16,7 @@
 		<cfif isDefined("Session.getFeaturedEvents")><cfset temp = StructDelete(Session, "getFeaturedEvents")></cfif>
 		<cfif isDefined("Session.getNonFeaturedEvents")><cfset temp = StructDelete(Session, "getNonFeaturedEvents")></cfif>
 		<cfif isDefined("Session.getSpecificFacilityRoomInfo")><cfset temp = StructDelete(Session, "getSpecificFacilityRoomInfo")></cfif>
+		<cfif isDefined("Session.FormErrors")><cfset temp = StructDelete(Session, "FormErrors")></cfif>
 	</cffunction>
 
 	<cffunction name="addevent" returntype="any" output="False">
@@ -48,6 +49,8 @@
 					eventdate = {property="EventDate",message="Please enter more than 50 characters to accuratly describe this event or workshop."};
 					arrayAppend(Session.FormErrors, eventdate);
 				</cfscript>
+			<cfelse>
+				<cfset Session.UserSuppliedInfo.FirstStep.LongDescription = #FORM.LongDescription#>
 			</cfif>
 
 			<cfif not isNumericDate(FORM.EventDate)>
@@ -55,19 +58,26 @@
 					eventdate = {property="EventDate",message="Event Date is not in correct date format"};
 					arrayAppend(Session.FormErrors, eventdate);
 				</cfscript>
+			<cfelse>
+				<cfset Session.UserSuppliedInfo.FirstStep.EventDate = #FORM.EventDate#>
 			</cfif>
+
 			<cfif not isNumericDate(FORM.Registration_Deadline)>
 				<cfscript>
 					eventdate = {property="Registration_Deadline",message="Registration Deadline is not in correct date format"};
 					arrayAppend(Session.FormErrors, eventdate);
 				</cfscript>
+			<cfelse>
+				<cfset Session.UserSuppliedInfo.FirstStep.Registration_Deadline = #FORM.Registration_Deadline#>
 			</cfif>
+
 			<cfif ArrayLen(Session.FormErrors)>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent&FormRetry=True" addtoken="false">
 			<cfelse>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step2&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 			</cfif>
 		<cfelseif not isDefined("FORM.formSubmit")>
+			<!---
 			<cfif isDefined("Session.UserSuppliedInfo.AddNewEventStep")>
 				<cfswitch expression="#Session.UserSuppliedInfo.AddNewEventStep#">
 					<cfcase value="Add Event - Step 2">
@@ -87,6 +97,7 @@
 					</cfcase>
 				</cfswitch>
 			</cfif>
+			--->
 		</cfif>
 	</cffunction>
 
@@ -131,8 +142,8 @@
 				<!--- Clear out the Array from Previous Submissions --->
 				<cfset Session.FormErrors = #ArrayNew()#>
 				<cfset Session.UserSuppliedInfo.SecondStep = #StructCopy(FORM)#>
-				<cfset Session.UserSuppliedInfo.AddNewEventStep = #FORM.AddNewEventStep#>
 			</cflock>
+
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfif Session.UserSuppliedInfo.FirstStep.WebinarEvent EQ 0>
 					<cfif Session.UserSuppliedInfo.FirstStep.MealProvided EQ 1>
@@ -141,6 +152,9 @@
 								errormsg = {property="MealProvidedBy",message="Please Select a Caterer for this meal's event"};
 								arrayAppend(Session.FormErrors, errormsg);
 							</cfscript>
+							<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step2&FormRetry=True" addtoken="false">
+						<cfelse>
+							<cfset Session.UserSuppliedInfo.SecondStep.MealProvidedBy = #FORM.MealProvidedBy#>
 						</cfif>
 					</cfif>
 					<cfif FORM.LocationID EQ 0>
@@ -148,15 +162,13 @@
 							errormsg = {property="LocationID",message="Please Select Facility where event will be held"};
 							arrayAppend(Session.FormErrors, errormsg);
 						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step2&FormRetry=True" addtoken="false">
+					<cfelse>
+						<cfset Session.UserSuppliedInfo.SecondStep.LocationID = #FORM.LocationID#>
 					</cfif>
 				</cfif>
 			</cflock>
-
-			<cfif ArrayLen(Session.FormErrors)>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step2&SiteID=#rc.$.siteConfig('siteID')#&FormRetry=True" addtoken="false">
-			<cfelse>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step3&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
-			</cfif>
+			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step3&SiteID=#rc.$.siteConfig('siteID')#" addtoken="false">
 		</cfif>
 	</cffunction>
 
@@ -275,7 +287,7 @@
 			</cfif>
 
 			<cfif isDefined("FORM.EventDate1")>
-				<cfif not isNumericDate(FORM.EventDate1)>
+				<cfif not isNumericDate(FORM.EventDate1) and LEN(FORM.EventDate1)>
 					<cfscript>
 						eventdate = {property="Registration_Deadline",message="2nd Event Date is not in the correct date format."};
 						arrayAppend(Session.FormErrors, eventdate);
@@ -285,7 +297,7 @@
 			</cfif>
 
 			<cfif isDefined("FORM.EventDate2")>
-				<cfif not isNumericDate(FORM.EventDate2)>
+				<cfif not isNumericDate(FORM.EventDate2) and LEN(FORM.EventDate2)>
 					<cfscript>
 						eventdate = {property="Registration_Deadline",message="3rd Event Date is not in the correct date format."};
 						arrayAppend(Session.FormErrors, eventdate);
@@ -295,7 +307,7 @@
 			</cfif>
 
 			<cfif isDefined("FORM.EventDate3")>
-				<cfif not isNumericDate(FORM.EventDate3)>
+				<cfif not isNumericDate(FORM.EventDate3) and LEN(FORM.EventDate3)>
 					<cfscript>
 						eventdate = {property="Registration_Deadline",message="4th Event Date is not in the correct date format."};
 						arrayAppend(Session.FormErrors, eventdate);
@@ -305,7 +317,7 @@
 			</cfif>
 
 			<cfif isDefined("FORM.EventDate4")>
-				<cfif not isNumericDate(FORM.EventDate4)>
+				<cfif not isNumericDate(FORM.EventDate4) and LEN(FORM.EventDate4)>
 					<cfscript>
 						eventdate = {property="Registration_Deadline",message="5th Event Date is not in the correct date format."};
 						arrayAppend(Session.FormErrors, eventdate);

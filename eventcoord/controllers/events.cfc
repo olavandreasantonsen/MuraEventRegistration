@@ -3556,7 +3556,7 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.generateprofitlossreport&EventID=#URL.EventID#" addtoken="false">
 			</cfif>
 
-			<cfif FORM.UserAction EQ "Back to Main Menu">
+			<cfif FORM.UserAction EQ "Back to Event Listing">
 				<cfset temp = StructDelete(Session, "getSelectedEvent")>
 				<cfset temp = StructDelete(Session, "getAvailableExpenseList")>
 				<cfset temp = StructDelete(Session, "getAvailableEventExpenses")>
@@ -3623,7 +3623,7 @@
 				ORDER BY tusers.Lname ASC, tusers.Fname ASC
 			</cfquery>
 		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID") and not isDefined("URL.userAction")>
-			<cfif FORM.UserAction EQ "Back to Main Menu">
+			<cfif FORM.UserAction EQ "Back to Event Listing">
 				<cfset temp = StructDelete(Session, "FormData")>
 				<cfset temp = StructDelete(Session, "FormErrors")>
 				<cfif isDefined("Session.FormInput")><cfset temp = StructDelete(Session, "FormInput")></cfif>

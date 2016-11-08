@@ -3858,7 +3858,6 @@
 					UserID = <cfqueryparam value="#Session.getSelectedEvent.Presenters#" cfsqltype="cf_sql_varchar">
 			</cfquery>
 
-
 			<cfquery name="Session.getSelectedRoomInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select RoomName, Capacity, RoomFees
 				From p_EventRegistration_FacilityRooms
@@ -3867,7 +3866,7 @@
 					Facility_ID = <cfqueryparam value="#Session.getSelectedEvent.LocationID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		<cfelseif isDefined("FORM.FormSubmit")>
-			<cfif FORM.UserAction EQ "Back to Main Menu">
+			<cfif FORM.UserAction EQ "Back to Event Listing">
 				<cfset temp = StructDelete(Session, "FormData")>
 				<cfset temp = StructDelete(Session, "FormErrors")>
 				<cfset temp = StructDelete(Session, "getSelectedEvent")>
@@ -3876,7 +3875,7 @@
 				<cfset temp = StructDelete(Session, "getSelectedRoomInfo")>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default" addtoken="false">
 			</cfif>
-			<cfif FORM.UserAction EQ "Submit Changes">
+			<cfif FORM.UserAction EQ "Submit Event Changes">
 				<cfset temp = StructDelete(Session, "FormData")>
 				<cfset temp = StructDelete(Session, "FormErrors")>
 				<cfset temp = StructDelete(Session, "getSelectedEvent")>
@@ -3885,7 +3884,6 @@
 				<cfset temp = StructDelete(Session, "getSelectedRoomInfo")>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default" addtoken="false">
 			</cfif>
-
 		</cfif>
 	</cffunction>
 
@@ -3894,7 +3892,7 @@
 
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -3936,7 +3934,7 @@
 					Facility_ID = <cfqueryparam value="#Session.getSelectedEvent.LocationID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section" and not isDefined("URL.SelectRoom")>
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -3980,7 +3978,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4014,7 +4012,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4047,7 +4045,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4083,7 +4081,7 @@
 				Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 			</cfquery>
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4110,13 +4108,13 @@
 		</cfif>
 	</cffunction>
 
-	<cffunction name="updateevent_Grouppricing" returntype="any" output="false">
+	<cffunction name="updateevent_grouppricing" returntype="any" output="false">
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4150,7 +4148,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4184,7 +4182,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4207,7 +4205,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4241,7 +4239,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4268,7 +4266,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4303,7 +4301,7 @@
 				Where tusersmemb.GroupID = <cfqueryparam value="#getPresenterUserID.UserID#" cfsqltype="cf_sql_varchar">
 			</cfquery>
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>
@@ -4335,7 +4333,7 @@
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 
 		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
-			<cfif FORM.UserAction EQ "Back to Main Menu"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
 			<cfif FORM.UserAction EQ "Update Event Section">
 				<cfset Session.FormData = #StructCopy(FORM)#>
 				<cfset Session.FormErrors = #ArrayNew()#>

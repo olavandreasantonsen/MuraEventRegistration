@@ -38,6 +38,8 @@
 			<cfif FORM.AllowVideoConference EQ "----"><cfset FORM.AllowVideoConference = 0></cfif>
 			<cfif FORM.WebinarEvent EQ "----"><cfset FORM.WebinarEvent = 0></cfif>
 			<cfif FORM.PostEventToFB EQ "----"><cfset FORM.PostEventToFB = 0></cfif>
+			<cfif FORM.EventBreakoutSessions EQ "----"><cfset FORM.EventBreakoutSessions = 0></cfif>
+			<cfif FORM.EventHaveSessions EQ "----"><cfset FORM.EventHaveSessions = 0></cfif>
 
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfset Session.UserSuppliedInfo = StructNew()>
@@ -529,6 +531,80 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 			</cfif>
 
+			<cfif FORM.EventHaveSessions EQ "----">
+				<cfscript>
+						eventdate = {property="Registration_Deadline",message="Please select whether this single event will have multiple sessions on the same day."};
+						arrayAppend(Session.FormErrors, eventdate);
+					</cfscript>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+			</cfif>
+
+			<cfif FORM.EventHaveSessions EQ 1>
+				<!--- Create Date Object from User Inputted Time from Event First Session Begin Time  --->
+				<cfset EventSession1StartTimeHours = #ListFirst(FORM.EventSession1_StartTime, ":")#>
+				<cfset EventSession1StartTimeMinutes = #Left(ListLast(FORM.EventSession1_StartTime, ":"), 2)#>
+				<cfset EventSession1StartTimeAMPM = #Right(ListLast(FORM.EventSession1_StartTime, ":"), 2)#>
+				<cfif EventSession1StartTimeAMPM EQ "PM">
+					<cfswitch expression="#Variables.EventSession1StartTimeHours#">
+						<cfcase value="12">
+							<cfset EventSession1StartTimeHours = #Variables.EventSession1StartTimeHours#>
+						</cfcase>
+						<cfdefaultcase>
+							<cfset EventSession1StartTimeHours = #Variables.EventSession1StartTimeHours# + 12>
+						</cfdefaultcase>
+					</cfswitch>
+				</cfif>
+				<cfset EventSession1StartTimeObject = #CreateTime(Variables.EventSession1StartTimeHours, Variables.EventSession1StartTimeMinutes, 0)#>
+
+				<!--- Create Date Object from User Inputted Time from Event First Session End Time  --->
+				<cfset EventSession1EndTimeHours = #ListFirst(FORM.EventSession1_EndTime, ":")#>
+				<cfset EventSession1EndTimeMinutes = #Left(ListLast(FORM.EventSession1_EndTime, ":"), 2)#>
+				<cfset EventSession1EndTimeAMPM = #Right(ListLast(FORM.EventSession1_EndTime, ":"), 2)#>
+				<cfif EventSession1EndTimeAMPM EQ "PM">
+					<cfswitch expression="#Variables.EventSession1EndTimeHours#">
+						<cfcase value="12">
+							<cfset EventSession1EndTimeHours = #Variables.EventSession1EndTimeHours#>
+						</cfcase>
+						<cfdefaultcase>
+							<cfset EventSession1EndTimeHours = #Variables.EventSession1EndTimeHours# + 12>
+						</cfdefaultcase>
+					</cfswitch>
+				</cfif>
+				<cfset EventSession1EndTimeObject = #CreateTime(Variables.EventSession1EndTimeHours, Variables.EventSession1EndTimeMinutes, 0)#>
+
+				<cfset EventSession2StartTimeHours = #ListFirst(FORM.EventSession2_StartTime, ":")#>
+				<cfset EventSession2StartTimeMinutes = #Left(ListLast(FORM.EventSession2_StartTime, ":"), 2)#>
+				<cfset EventSession2StartTimeAMPM = #Right(ListLast(FORM.EventSession2_StartTime, ":"), 2)#>
+				<cfif EventSession2StartTimeAMPM EQ "PM">
+					<cfswitch expression="#Variables.EventSession2StartTimeHours#">
+						<cfcase value="12">
+							<cfset EventSession2StartTimeHours = #Variables.EventSession2StartTimeHours#>
+						</cfcase>
+						<cfdefaultcase>
+							<cfset EventSession2StartTimeHours = #Variables.EventSession2StartTimeHours# + 12>
+						</cfdefaultcase>
+					</cfswitch>
+				</cfif>
+				<cfset EventSession2StartTimeObject = #CreateTime(Variables.EventSession2StartTimeHours, Variables.EventSession2StartTimeMinutes, 0)#>
+
+				<!--- Create Date Object from User Inputted Time from Event First Session End Time  --->
+				<cfset EventSession2EndTimeHours = #ListFirst(FORM.EventSession2_EndTime, ":")#>
+				<cfset EventSession2EndTimeMinutes = #Left(ListLast(FORM.EventSession2_EndTime, ":"), 2)#>
+				<cfset EventSession2EndTimeAMPM = #Right(ListLast(FORM.EventSession2_EndTime, ":"), 2)#>
+				<cfif EventSession2EndTimeAMPM EQ "PM">
+					<cfswitch expression="#Variables.EventSession2EndTimeHours#">
+						<cfcase value="12">
+							<cfset EventSession2EndTimeHours = #Variables.EventSession2EndTimeHours#>
+						</cfcase>
+						<cfdefaultcase>
+							<cfset EventSession2EndTimeHours = #Variables.EventSession2EndTimeHours# + 12>
+						</cfdefaultcase>
+					</cfswitch>
+				</cfif>
+				<cfset EventSession2EndTimeObject = #CreateTime(Variables.EventSession2EndTimeHours, Variables.EventSession2EndTimeMinutes, 0)#>
+
+			</cfif>
+
 			<!--- Create Date Object from User Inputted Time from Event Start Time --->
 			<cfset EventStartTimeHours = #ListFirst(FORM.Event_StartTime, ":")#>
 			<cfset EventStartTimeMinutes = #Left(ListLast(FORM.Event_StartTime, ":"), 2)#>
@@ -735,6 +811,20 @@
 									EarlyBird_RegistrationDeadline = #CreateDate(ListLast(FORM.EarlyBird_RegistrationDeadline, "/"), ListFirst(FORM.EarlyBird_RegistrationDeadline, "/"), ListGetAt(FORM.EarlyBird_RegistrationDeadline, 2, "/"))#,
 									EarlyBird_MemberCost = "#FORM.EarlyBird_MemberCost#",
 									EarlyBird_NonMemberCost = "#FORM.EarlyBird_NonMemberCost#",
+									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
+									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
+								Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
+							</cfquery>
+						</cfif>
+
+						<cfif FORM.EventHaveSessions EQ 1>
+							<cfquery name="updateNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_Events
+								Set EventHasDailySessions = <cfqueryparam value="#FORM.EventHaveSessions#" cfsqltype="cf_sql_bit">,
+									Session1BeginTime = <cfqueryparam value="#Variables.EventSession1StartTimeObject#" cfsqltype="cf_sql_time">,
+									Session1EndTime = <cfqueryparam value="#Variables.EventSession1EndTimeObject#" cfsqltype="cf_sql_time">,
+									Session2BeginTime = <cfqueryparam value="#Variables.EventSession2StartTimeObject#" cfsqltype="cf_sql_time">,
+									Session2EndTime = <cfqueryparam value="#Variables.EventSession2EndTimeObject#" cfsqltype="cf_sql_time">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
@@ -2031,7 +2121,7 @@
 
 		<cfif isDefined("URL.EventID")>
 			<cfquery name="getSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, Featured_StartDate, Featured_EndDate, Featured_SortOrder, MemberCost, NonMemberCost, EarlyBird_RegistrationDeadline, EarlyBird_RegistrationAvailable, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewGroupPricing, GroupMemberCost, GroupNonMemberCost, GroupPriceRequirements, PGPAvailable, PGPPoints, MealProvided, MealProvidedBy, MealCost_Estimated, AllowVideoConference, VideoConferenceInfo, VideoConferenceCost, AcceptRegistrations, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, MaxParticipants, LocationID, LocationRoomID, Presenters, Facilitator, Active, EventCancelled, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost, Presenters
+				Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, Featured_StartDate, Featured_EndDate, Featured_SortOrder, MemberCost, NonMemberCost, EarlyBird_RegistrationDeadline, EarlyBird_RegistrationAvailable, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewGroupPricing, GroupMemberCost, GroupNonMemberCost, GroupPriceRequirements, PGPAvailable, PGPPoints, MealProvided, MealProvidedBy, MealCost_Estimated, AllowVideoConference, VideoConferenceInfo, VideoConferenceCost, AcceptRegistrations, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, MaxParticipants, LocationID, LocationRoomID, Presenters, Facilitator, Active, EventCancelled, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost, EventHasDailySessions, Session1BeginTime, Session1EndTime, Session2BeginTime, Session2EndTime
 				From p_EventRegistration_Events
 				Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 					TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
@@ -3831,7 +3921,7 @@
 
 		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
 			<cfquery name="Session.getSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, Featured_StartDate, Featured_EndDate, Featured_SortOrder, MemberCost, NonMemberCost, EarlyBird_RegistrationDeadline, EarlyBird_RegistrationAvailable, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewGroupPricing, GroupMemberCost, GroupNonMemberCost, GroupPriceRequirements, PGPAvailable, PGPPoints, MealProvided, MealProvidedBy, MealCost_Estimated, AllowVideoConference, VideoConferenceInfo, VideoConferenceCost, AcceptRegistrations, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, MaxParticipants, LocationID, LocationRoomID, Facilitator, Presenters, Active, EventCancelled, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost, Presenters
+				Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, Featured_StartDate, Featured_EndDate, Featured_SortOrder, MemberCost, NonMemberCost, EarlyBird_RegistrationDeadline, EarlyBird_RegistrationAvailable, EarlyBird_MemberCost, EarlyBird_NonMemberCost, ViewGroupPricing, GroupMemberCost, GroupNonMemberCost, GroupPriceRequirements, PGPAvailable, PGPPoints, MealProvided, MealProvidedBy, MealCost_Estimated, AllowVideoConference, VideoConferenceInfo, VideoConferenceCost, AcceptRegistrations, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, MaxParticipants, LocationID, LocationRoomID, Facilitator, Presenters, Active, EventCancelled, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost, EventHasDailySessions, Session1BeginTime, Session1EndTime, Session2BeginTime, Session2EndTime
 				From p_EventRegistration_Events
 				Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 					TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
@@ -4276,6 +4366,32 @@
 						Registration_BeginTime = <cfqueryparam value="#FORM.Registration_BeginTime#" cfsqltype="cf_sql_timestamp">,
 						Event_StartTime = <cfqueryparam value="#FORM.Event_StartTime#" cfsqltype="cf_sql_timestamp">,
 						Event_EndTime = <cfqueryparam value="#FORM.Event_EndTime#" cfsqltype="cf_sql_timestamp">,
+						lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
+						lastUpdateBy = <cfqueryparam value="#Session.Mura.FName# #Session.Mura.LName#" cfsqltype="cf_sql_varchar">
+					Where TContent_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">
+				</cfquery>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false">
+			</cfif>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="updateevent_dailysessions" returntype="any" output="false">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.FormSubmit") and isDefined("URL.EventID")>
+
+		<cfelseif isDefined("FORM.FormSubmit") and isDefined("FORM.EventID")>
+			<cfif FORM.UserAction EQ "Back to Event Review"><cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#URL.EventID#" addtoken="false"></cfif>
+			<cfif FORM.UserAction EQ "Update Event Section">
+				<cfset Session.FormData = #StructCopy(FORM)#>
+				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfquery name="updateEventSection" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Update p_EventRegistration_Events
+					Set EventHasDailySessions = <cfqueryparam value="#FORM.EventHaveSessions#" cfsqltype="cf_sql_bit">,
+						Session1BeginTime = <cfqueryparam value="#FORM.EventSession1_StartTime#" cfsqltype="cf_sql_timestamp">,
+						Session1EndTime = <cfqueryparam value="#FORM.EventSession1_EndTime#" cfsqltype="cf_sql_timestamp">,
+						Session2BeginTime = <cfqueryparam value="#FORM.EventSession2_StartTime#" cfsqltype="cf_sql_timestamp">,
+						Session2EndTime = <cfqueryparam value="#FORM.EventSession2_EndTime#" cfsqltype="cf_sql_timestamp">,
 						lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 						lastUpdateBy = <cfqueryparam value="#Session.Mura.FName# #Session.Mura.LName#" cfsqltype="cf_sql_varchar">
 					Where TContent_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">

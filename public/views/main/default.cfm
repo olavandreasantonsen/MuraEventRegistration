@@ -613,7 +613,7 @@
 		<div class="panel-body">
 			<cfif Session.getFeaturedEvents.RecordCount>
 				<fieldset>
-					<legend><h2>Featured Events or Workshops</h2></legend>
+					<legend><h2>Featured Calendar of Events</h2></legend>
 				</fieldset>
 				<table class="table table-striped table-bordered">
 					<thead class="thead-default">

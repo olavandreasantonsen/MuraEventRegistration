@@ -1300,7 +1300,7 @@
 						Insert into p_EventRegistration_Events(Site_ID, ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, EarlyBird_RegistrationAvailable, ViewGroupPricing, PGPAvailable, MealProvided, AllowVideoConference, AcceptRegistrations, Facilitator, dateCreated, MaxParticipants, Active, lastUpdated, lastUpdateBy, EventCancelled, WebinarAvailable, PostedTo_Facebook, PostedTo_Twitter)
 						Values (
 							<cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">,
-							<cfqueryparam value="#Session.getSelectedEvent.ShortTitle#" cfsqltype="cf_sql_varchar">,
+							<cfqueryparam value="Copy of #Session.getSelectedEvent.ShortTitle#" cfsqltype="cf_sql_varchar">,
 							<cfqueryparam value="#Session.getSelectedEvent.EventDate#" cfsqltype="cf_sql_date">,
 							<cfqueryparam value="#Session.getSelectedEvent.LongDescription#" cfsqltype="cf_sql_varchar">,
 							<cfqueryparam value="#Session.getSelectedEvent.Event_StartTime#" cfsqltype="cf_sql_time">,
@@ -1314,11 +1314,11 @@
 							<cfqueryparam value="#Session.getSelectedEvent.PGPAvailable#" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Session.getSelectedEvent.MealProvided#" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Session.getSelectedEvent.AllowVideoConference#" cfsqltype="cf_sql_bit">,
-							<cfqueryparam value="#Session.getSelectedEvent.AcceptRegistrations#" cfsqltype="cf_sql_bit">,
+							<cfqueryparam value="0" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">,
 							<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 							<cfqueryparam value="#Session.getSelectedEvent.MaxParticipants#" cfsqltype="cf_sql_integer">,
-							<cfqueryparam value="#Session.getSelectedEvent.Active#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="0" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 							<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">,
 							<cfqueryparam value="#Session.getSelectedEvent.EventCancelled#" cfsqltype="cf_sql_bit">,
@@ -1634,7 +1634,14 @@
 						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:main.default&UserAction=EventCopied&Successful=False" addtoken="false">
 					</cfcatch>
 				</cftry>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default&UserAction=EventCopied&Successful=True" addtoken="false">
+				<cfswitch expression="#application.configbean.getDBType()#">
+					<cfcase value="mysql">
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#insertNewEvent.GENERATED_KEY#" addtoken="false">
+					</cfcase>
+					<cfcase value="mssql">
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_review&EventID=#insertNewEvent.IdentityCol#" addtoken="false">
+					</cfcase>
+				</cfswitch>
 			</cfif>
 		</cfif>
 	</cffunction>
@@ -3995,9 +4002,19 @@
 					</cflock>
 					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_acceptregistrations&FormRetry=True&EventID=#URL.EventID#">
 				</cfif>
+				<cfif FORM.Active EQ "----">
+					<cflock timeout="60" scope="SESSION" type="Exclusive">
+						<cfscript>
+							address = {property="BusinessAddress",message="Please select one of the options as to whether to display this event or not."};
+							arrayAppend(Session.FormErrors, address);
+						</cfscript>
+					</cflock>
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.updateevent_acceptregistrations&FormRetry=True&EventID=#URL.EventID#">
+				</cfif>
 				<cfquery name="updateEventSection" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Update p_EventRegistration_Events
 					Set AcceptRegistrations = <cfqueryparam value="#FORM.AcceptRegistrations#" cfsqltype="cf_sql_bit">,
+						Active = <cfqueryparam value="#FORM.Active#" cfsqltype="cf_sql_bit">,
 						lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 						lastUpdateBy = <cfqueryparam value="#Session.Mura.FName# #Session.Mura.LName#" cfsqltype="cf_sql_varchar">
 					Where TContent_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">

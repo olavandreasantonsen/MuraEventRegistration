@@ -302,6 +302,10 @@
 						<label for="AcceptRegistrations" class="control-label col-sm-3">Accept Registrations:&nbsp;</label>
 						<div class="col-sm-8"><p class="form-control-static"><cfswitch expression="#Session.getSelectedEvent.AcceptRegistrations#"><cfcase value="0">No</cfcase><cfcase value="1">Yes</cfcase></cfswitch></p></div>
 					</div>
+					<div class="form-group">
+						<label for="DisplayEvent" class="control-label col-sm-3">Display Event:&nbsp;</label>
+						<div class="col-sm-8"><p class="form-control-static"><cfswitch expression="#Session.getSelectedEvent.Active#"><cfcase value="0">No</cfcase><cfcase value="1">Yes</cfcase></cfswitch></p></div>
+					</div>
 				</div>
 				<div class="panel-footer">
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Event Listing">

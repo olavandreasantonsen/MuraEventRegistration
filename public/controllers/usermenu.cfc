@@ -288,6 +288,24 @@ http://www.apache.org/licenses/LICENSE-2.0
 				Where tusers.UserID = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar"> and
 					tusers.SiteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">
 			</cfquery>
+			<cfif getUserProfile.RecordCount EQ 0>
+				<cfquery name="insertUserToUserMatrix" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Insert into p_EventRegistration_UserMatrix(Site_ID, User_ID, created, lastUpdateBy, lastUpdated)
+					Values(
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">,
+						<cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">,
+						<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
+						<cfqueryparam value="#Session.Mura.Fname# #Session.Mura.Lname#" cfsqltype="cf_sql_varchar">,
+						<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">
+					)
+				</cfquery>
+				<cfquery name="getUserProfile" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select tusers.UserName, tusers.FName, tusers.Lname, tusers.Email, tusers.Company, tusers.JobTitle, tusers.mobilePhone, tusers.Website, tusers.LastLogin, tusers.LastUpdate, tusers.LastUpdateBy, tusers.LastUpdateByID, tusers.InActive, tusers.created, p_EventRegistration_UserMatrix.School_District, p_EventRegistration_UserMatrix.TeachingGrade, p_EventRegistration_UserMatrix.TeachingSubject, p_EventRegistration_UserMatrix.ReceiveMarketingFlyers
+					From tusers INNER JOIN p_EventRegistration_UserMatrix ON p_EventRegistration_UserMatrix.User_ID = tusers.UserID
+					Where tusers.UserID = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar"> and
+						tusers.SiteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">
+				</cfquery>
+			</cfif>
 			<cfquery name="Session.getGradeLevels" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select TContent_ID, GradeLevel
 				From p_EventRegistration_GradeLevels

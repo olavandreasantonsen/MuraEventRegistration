@@ -1,3 +1,10 @@
+<cfset YesNoQuery = QueryNew("ID,OptionName", "Integer,VarChar")>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 0)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "No")#>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 1)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "Yes")#>
 <cfif not isDefined("URL.formRetry")>
 	<cfoutput>
 		<div class="panel panel-default">
@@ -57,6 +64,10 @@
 					<div class="form-group">
 						<label for="GradeSubjects" class="control-label col-sm-3">Teaching Subject:&nbsp;</label>
 						<div class="col-sm-6"><cfselect name="GradeSubjects" class="form-control" Required="No" selected="#Session.getUserProfile.TeachingSubject#" Multiple="No" query="Session.getGradeSubjects" value="TContent_ID" Display="GradeSubject"  queryposition="below"><option value="----">Select Subject you Teach</option></cfselect></div>
+					</div>
+					<div class="form-group">
+						<label for="ReceiveMarketingFlyers" class="control-label col-sm-3">Receive Upcoming Event Flyers:&nbsp;</label>
+						<div class="col-sm-6"><cfselect name="ReceiveMarketingFlyers" class="form-control" Required="No" selected="#Session.getUserProfile.ReceiveMarketingFlyers#" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to receive Upcoming Event Flyers</option></cfselect></div>
 					</div>
 					<fieldset>
 						<legend>System Account Information</legend>
@@ -202,6 +213,10 @@
 					<div class="form-group">
 						<label for="GradeSubjects" class="control-label col-sm-3">Teaching Subject:&nbsp;</label>
 						<div class="col-sm-6"><cfselect name="GradeSubjects" class="form-control" Required="No" selected="#Session.FormData.GradeSubjects#" Multiple="No" query="Session.getGradeSubjects" value="TContent_ID" Display="GradeSubject"  queryposition="below"><option value="----">Select Subject you Teach</option></cfselect></div>
+					</div>
+					<div class="form-group">
+						<label for="ReceiveMarketingFlyers" class="control-label col-sm-3">Receive Upcoming Event Flyers:&nbsp;</label>
+						<div class="col-sm-6"><cfselect name="ReceiveMarketingFlyers" class="form-control" Required="No" selected="#Session.FormData.ReceiveMarketingFlyers#" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName"  queryposition="below"><option value="----">Do you want to receive Upcoming Event Flyers</option></cfselect></div>
 					</div>
 					<fieldset>
 						<legend>System Account Information</legend>

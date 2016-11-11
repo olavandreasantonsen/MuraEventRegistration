@@ -283,7 +283,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 		<cfif not isDefined("FORM.formSubmit")>
 			<cfquery name="getUserProfile" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select tusers.UserName, tusers.FName, tusers.Lname, tusers.Email, tusers.Company, tusers.JobTitle, tusers.mobilePhone, tusers.Website, tusers.LastLogin, tusers.LastUpdate, tusers.LastUpdateBy, tusers.LastUpdateByID, tusers.InActive, tusers.created, p_EventRegistration_UserMatrix.School_District, p_EventRegistration_UserMatrix.TeachingGrade, p_EventRegistration_UserMatrix.TeachingSubject
+				Select tusers.UserName, tusers.FName, tusers.Lname, tusers.Email, tusers.Company, tusers.JobTitle, tusers.mobilePhone, tusers.Website, tusers.LastLogin, tusers.LastUpdate, tusers.LastUpdateBy, tusers.LastUpdateByID, tusers.InActive, tusers.created, p_EventRegistration_UserMatrix.School_District, p_EventRegistration_UserMatrix.TeachingGrade, p_EventRegistration_UserMatrix.TeachingSubject, p_EventRegistration_UserMatrix.ReceiveMarketingFlyers
 				From tusers INNER JOIN p_EventRegistration_UserMatrix ON p_EventRegistration_UserMatrix.User_ID = tusers.UserID
 				Where tusers.UserID = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar"> and
 					tusers.SiteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">
@@ -344,6 +344,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</cfif>
 			</cfif>
 
+			<cfif FORM.ReceiveMarketingFlyers EQ "----">
+				<cflock timeout="60" scope="SESSION" type="Exclusive">
+					<cfscript>
+						errormsg = {property="HumanChecker",message="Please select your option to receive upcoming marketing flyers that we send electronically."};
+						arrayAppend(Session.FormErrors, errormsg);
+					</cfscript>
+				</cflock>
+				<cflocation addtoken="true" url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=public:usermenu.editprofile&FormRetry=True">
+			</cfif>
+
 			<cfquery name="getOrigionalUserValues" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select fName, LName, Email, Company, JobTitle, mobilePhone, website
 				From tusers
@@ -351,7 +361,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</cfquery>
 
 			<cfquery name="getOrigionalUserMatrixValues" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select TeachingGrade, TeachingSubject
+				Select TeachingGrade, TeachingSubject, ReceiveMarketingFlyers
 				From p_EventRegistration_UserMatrix
 				Where User_ID = <cfqueryparam value="#FORM.UserID#" cfsqltype="cf_sql_varchar"> and Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 			</cfquery>
@@ -360,13 +370,24 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 			<cfif Session.FormData.fName NEQ getOrigionalUserValues.FName>
 				<cfset UserEditProfile = 1>
-				<cfquery name="setNewAccountPassword" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				<cfquery name="setNewAccountInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Update tusers
 					Set fName = <cfqueryparam value="#Session.FormData.FName#" cfsqltype="cf_sql_varchar">,
 						lastUpdate = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 						lastUpdateBy = <cfqueryparam value="#Session.FormData.FName# #Session.FormData.LName#" cfsqltype="cf_sql_varchar">,
 						lastUpdateByID = <cfqueryparam value="#Session.FormData.UserID#" cfsqltype="cf_sql_varchar">
 					Where UserID = <cfqueryparam value="#Form.UserID#" cfsqltype="cf_sql_varchar">
+				</cfquery>
+			</cfif>
+
+			<cfif Session.FormData.ReceiveMarketingFlyers NEQ getOrigionalUserMatrixValues.ReceiveMarketingFlyers>
+				<cfset UserEditProfile = 1>
+				<cfquery name="setNewAccountInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Update p_EventRegistration_UserMatrix
+					Set ReceiveMarketingFlyers = <cfqueryparam value="#FORM.ReceiveMarketingFlyers#" cfsqltype="cf_sql_bit">,
+						lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
+						lastUpdateBy = <cfqueryparam value="#Session.FormData.FName# #Session.FormData.LName#" cfsqltype="cf_sql_varchar">
+					Where User_ID = <cfqueryparam value="#Form.UserID#" cfsqltype="cf_sql_varchar">
 				</cfquery>
 			</cfif>
 

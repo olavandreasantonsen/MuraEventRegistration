@@ -25,6 +25,15 @@
 	</cfquery>
 </cfif>
 
+<cfquery name="CheckColumnNameReceiveMarketingFlyers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+	Show Columns From p_EventRegistration_UserMatrix Like 'ReceiveMarketingFlyers'
+</cfquery>
+<cfif CheckColumnNameReceiveMarketingFlyers.RecordCount EQ 0>
+	<cfquery name="AlterUserMatrixAddColumn" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_UserMatrix Add COLUMN `ReceiveMarketingFlyers` bit(1) NOT NULL DEFAULT b'0'' AFTER TeachingSubject
+	</cfquery>
+</cfif>
+
 <cfquery name="ShowGradeLevelsTable" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	Show Tables LIKE 'p_EventRegistration_GradeLevels'
 </cfquery>

@@ -576,6 +576,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 								Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 									Event_ID = <cfqueryparam value="#Session.getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer">
 							</cfquery>
+							<cfquery name="checkIncomeVerified" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Select AttendeePriceVerified
+								From p_EventRegistration_UserRegistrations
+								Where EventID = <cfqueryparam value="#Session.getAvailableEvents.TContent_ID#" cfsqltype="cf_sql_integer"> and
+									Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+								Group by AttendeePriceVerified
+							</cfquery>
 							<tr <cfif Session.getAvailableEvents.Active EQ 0></cfif>>
 								<td width="50%">(<a href="http://#cgi.server_name#/?Info=#Session.getAvailableEvents.TContent_ID#">#Session.getAvailableEvents.TContent_ID#</a>) / #Session.getAvailableEvents.ShortTitle#<cfif LEN(Session.getAvailableEvents.Presenters)><cfquery name="getPresenter" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">Select FName, LName From tusers where UserID = <cfqueryparam value="#Session.getAvailableEvents.Presenters#" cfsqltype="cf_sql_varchar"></cfquery><br><em>Presenter: #getPresenter.FName# #getPresenter.Lname#</em></cfif></td>
 								<td width="15%">
@@ -666,8 +673,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<a href="#buildURL('eventcoord:events.updateevent_review')#&EventID=#Session.getAvailableEvents.TContent_ID#" role="button" class="btn btn-primary btn-small"><small>Update Event</small></a>
 									<a href="#buildURL('eventcoord:events.cancelevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Cancel Event</small></a>
 									<a href="#buildURL('eventcoord:events.copyevent')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Copy Event</small></a><br>
-									<cfif getAttendedParticipantsForEvent.RecordCount><a href="#buildURL('eventcoord:events.enterexpenses')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Enter Expenses</small></a><cfelse><button type="button" class="btn btn-secondary btn-small"><small>Enter Expenses</small></button></cfif>
-									<cfif getEventExpenses.RecordCount><a href="#buildURL('eventcoord:events.generateprofitlossreport')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Generate Profit/Loss Report</small></a><cfelse><button type="button" class="btn btn-secondary btn-small"><small>Generate Profit/Loss Report</small></button></cfif><br />
+									<cfif getAttendedParticipantsForEvent.RecordCount and Session.getAvailableEvents.EventInvoicesGenerated EQ 0><a href="#buildURL('eventcoord:events.enterexpenses')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Expenses</small></a><cfelse><button type="button" class="btn btn-secondary btn-small"><small>Expenses</small></button></cfif>
+									<cfif getAttendedParticipantsForEvent.RecordCount and Session.getAvailableEvents.EventInvoicesGenerated EQ 0><a href="#buildURL('eventcoord:events.enterrevenue')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>Revenue</small></a><cfelse><button type="button" class="btn btn-secondary btn-small"><small>Revenue</small></button></cfif>
+									<cfset IncomeCompleted = 0>
+									<cfif checkIncomeVerified.RecordCount EQ 1 and CheckIncomeVerified.AttendeePriceVerified EQ 1><cfset IncomeCOmpleted = 1></cfif>
+									<cfif getEventExpenses.RecordCount and Variables.IncomeCompleted EQ 1><a href="#buildURL('eventcoord:events.viewprofitlossreport')#&EventID=#Session.getAvailableEvents.TContent_ID#" class="btn btn-primary btn-small"><small>View Profit/Loss Report</small></a><cfelse><button type="button" class="btn btn-secondary btn-small"><small>View Profit/Loss Report</small></button></cfif><br />
 								</td>
 							</tr>
 						</cfloop>

@@ -99,4 +99,13 @@
 	</cfquery>
 </cfif>
 
+<cfquery name="CheckColumnNameEventInvoicesGenerated" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+	Show Columns From p_EventRegistration_Events Like 'EventInvoicesGenerated'
+</cfquery>
+<cfif CheckColumnNameEventInvoicesGenerated.RecordCount EQ 0>
+	<cfquery name="Alter-p_EventRegistration_Events" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_Events Add COLUMN `EventInvoicesGenerated` bit(1) NOT NULL DEFAULT b'0' AFTER Session2EndTime
+	</cfquery>
+</cfif>
+
 

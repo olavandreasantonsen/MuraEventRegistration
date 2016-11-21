@@ -1658,6 +1658,12 @@
 				Where TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="CF_SQL_INTEGER"> and
 					Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 			</cfquery>
+			<cfquery name="Session.getEventLocation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select FacilityName, PhysicalAddress, PhysicalCity, PhysicalState, PhysicalZipCode
+				From p_EventRegistration_Facility
+				Where TContent_ID = <cfqueryparam value="#Session.getSelectedEvent.LocationID#" cfsqltype="CF_SQL_INTEGER"> and
+					Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+			</cfquery>
 			<cfquery name="Session.GetMembershipOrganizations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Active
 				From p_EventRegistration_Membership
@@ -1693,15 +1699,6 @@
 			</cflock>
 			<cfif FORM.UserAction EQ "Back to Event Listing">
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default" addtoken="false">
-			</cfif>
-			<cfif isDefined("FORM.EmailConfirmations")>
-				<cfif FORM.EmailConfirmations EQ "----">
-					<cfscript>
-						eventdate = {property="EventDate",message="Please select an option as to whether you want to send email confirmations to individuals you are registering for this event or not."};
-						arrayAppend(Session.FormErrors, eventdate);
-					</cfscript>
-					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&FormRetry=True" addtoken="false">
-				</cfif>
 			</cfif>
 			<cfif isDefined("FORM.DistrictName")>
 				<cfif FORM.DistrictName EQ "----">
@@ -1761,14 +1758,12 @@
 						</cfscript>
 						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventID=#URL.EventID#&EventStatus=RegisterParticipants&FormRetry=True" addtoken="false">
 					</cfif>
-					<cfif Session.getSelectedEvent.MealProvided EQ 1>
-						<cfif FORM.RegisterParticipantStayForMeal EQ "----">
-							<cfscript>
-								eventdate = {property="EventDate",message="Please select whether each participant you are registering will be staying for the provided meal."};
-								arrayAppend(Session.FormErrors, eventdate);
-							</cfscript>
-							<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.registeruserforevent&EventStatus=RegisterParticipants&EventID=#URL.EventID#&FormRetry=True" addtoken="false">
+					<cfif isDefined("FORM.RegisterParticipantStayForMeal")>
+						<cfif FORM.RegisterParticipantStayForMeal EQ "on">
+							<cfset FORM.RegisterParticipantStayForMeal = 1>
 						</cfif>
+					<cfelse>
+						<cfset FORM.RegisterParticipantStayForMeal = 0>
 					</cfif>
 					<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
 						<cfif FORM.RegisterParticipantWebinarOption EQ "----">
@@ -1978,7 +1973,7 @@
 									<cfif Session.getSelectedEvent.MealProvided EQ 1>
 										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 											Update p_EventRegistration_UserRegistrations
-											Set RequestsMeal = <cfqueryparam value="#Session.UserRegister.SecondStep.RegisterParticipantStayForMeal#" cfsqltype="cf_sql_bit">
+											Set RequestsMeal = <cfqueryparam value="#FORM.RegisterParticipantStayForMeal#" cfsqltype="cf_sql_bit">
 											Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_integer">
 										</cfquery>
 									</cfif>
@@ -2027,8 +2022,10 @@
 											and OnWaitingList = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
 									</cfquery>
 									<cfif GetEventRegistered.RecordCount LTE Session.getSelectedEvent.MaxParticipants>
-										<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ 1>
-											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(rc, insertNewRegistration.GENERATED_KEY)#>
+										<cfif isDefined("Session.UserRegister.FirstStep.EmailConfirmations")>
+											<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ "on">
+												<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(rc, insertNewRegistration.GENERATED_KEY)#>
+											</cfif>
 										</cfif>
 									<cfelse>
 										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -2036,8 +2033,10 @@
 											Set OnWaitingList = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
 											Where TContent_ID = <cfqueryparam value="#insertNewRegistration.GENERATED_KEY#" cfsqltype="cf_sql_integer">
 										</cfquery>
-										<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ 1>
+										<cfif isDefined("Session.UserRegister.FirstStep.EmailConfirmations")>
+										<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ "on">
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(rc, insertNewRegistration.GENERATED_KEY)#>
+										</cfif>
 										</cfif>
 									</cfif>
 								</cfcase>
@@ -2093,11 +2092,11 @@
 										Where EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 											and OnWaitingList = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
 									</cfquery>
-									<cfdump var="#Session.UserRegister#">
-									<cfabort>
 									<cfif GetEventRegistered.RecordCount LTE Session.getSelectedEvent.MaxParticipants>
-										<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ 1>
+										<cfif isDefined("Session.UserRegister.FirstStep.EmailConfirmations")>
+										<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ "on">
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(rc, insertNewRegistration.IdentityCol)#>
+										</cfif>
 										</cfif>
 									<cfelse>
 										<cfquery name="UpdateRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -2105,8 +2104,10 @@
 											Set OnWaitingList = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
 											Where TContent_ID = <cfqueryparam value="#insertNewRegistration.IdentityCol#" cfsqltype="cf_sql_integer">
 										</cfquery>
-										<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ 1>
+										<cfif isDefined("Session.UserRegister.FirstStep.EmailConfirmations")>
+										<cfif Session.UserRegister.FirstStep.EmailConfirmations EQ "on">
 											<cfset temp = #Variables.SendEmailCFC.SendEventRegistrationToSingleParticipant(rc, insertNewRegistration.IdentityCol)#>
+										</cfif>
 										</cfif>
 									</cfif>
 								</cfcase>
@@ -2504,13 +2505,14 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.deregisteruserforevent&EventID=#URL.EventID#&FormRetry=True" addtoken="false">
 			</cfif>
 
-			<cfif FORM.SendConfirmation EQ "----">
-				<cfscript>
-					eventdate = {property="EventDate",message="Please select the option as to whether the participant will receive an email confirmation regarding the removal of this registration."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.deregisteruserforevent&EventID=#URL.EventID#&FormRetry=True" addtoken="false">
+			<cfif isDefined("FORM.SendConfirmation")>
+				<cfif FORM.SendConfirmation EQ "on">
+					<cfset FORM.SendConfirmation = 1>
+				</cfif>
+			<cfelse>
+				<cfset FORM.SendConfirmation = 0>
 			</cfif>
+
 			<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
 
 			<cfloop list="#FORM.ParticipantEmployee#" delimiters="," index="i">

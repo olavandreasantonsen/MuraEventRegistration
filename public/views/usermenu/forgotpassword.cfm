@@ -14,7 +14,7 @@
 					</fieldset>
 					<div class="well">Please enter your school/business email address and this system will send a special link to you.</div>
 					<div class="form-group">
-						<label for="EmailAddress" class="control-label col-sm-3">Email Address:&nbsp;</label>
+						<label for="EmailAddress" class="control-label col-sm-3">Email Address:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" id="Email" name="Email" required="yes"></div>
 					</div>
 					<fieldset>
@@ -105,7 +105,7 @@
 					</fieldset>
 					<div class="well">Please enter your school/business email address and this system will send a special link to you.</div>
 					<div class="form-group">
-						<label for="EmailAddress" class="control-label col-sm-3">Email Address:&nbsp;</label>
+						<label for="EmailAddress" class="control-label col-sm-3">Email Address:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" id="Email" name="Email" required="yes" value="#Session.FormData.Email#"></div>
 					</div>
 					<fieldset>
@@ -158,11 +158,11 @@
 					</fieldset>
 					<div class="well">Please enter a new password in the fields below and click the Change Password Button</div>
 					<div class="form-group">
-						<label for="DesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;</label>
+						<label for="DesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" id="DesiredPassword" name="DesiredPassword" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="VerifyPassword" class="control-label col-sm-3">Verify Password:&nbsp;</label>
+						<label for="VerifyPassword" class="control-label col-sm-3">Verify Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" id="VerifyPassword" name="VerifyPassword" required="yes"></div>
 					</div>
 				</div>
@@ -186,11 +186,11 @@
 					</fieldset>
 					<div class="well">Please enter a new password in the fields below and click the Change Password Button</div>
 					<div class="form-group">
-						<label for="DesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;</label>
+						<label for="DesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" id="DesiredPassword" name="DesiredPassword" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="VerifyPassword" class="control-label col-sm-3">Verify Password:&nbsp;</label>
+						<label for="VerifyPassword" class="control-label col-sm-3">Verify Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" id="VerifyPassword" name="VerifyPassword" required="yes"></div>
 					</div>
 				</div>

@@ -108,4 +108,16 @@
 	</cfquery>
 </cfif>
 
+<cfquery name="CheckColumnNameGoogleReCaptchSiteKey" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+	Show Columns From p_EventRegistration_SiteConfig Like 'Google_ReCaptchaSiteKey'
+</cfquery>
+<cfif CheckColumnNameGoogleReCaptchSiteKey.RecordCount EQ 0>
+	<cfquery name="Alter-p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_SiteConfig Add COLUMN `Google_ReCaptchaSiteKey` tinytext AFTER Facebook_AppScope
+	</cfquery>
+	<cfquery name="Alter-p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE p_EventRegistration_SiteConfig Add COLUMN `Google_ReCaptchaSecretKey` tinytext AFTER Google_ReCaptchaSiteKey
+	</cfquery>
+</cfif>
+
 

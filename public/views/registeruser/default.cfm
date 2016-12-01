@@ -18,23 +18,23 @@
 						<legend>Your Information</legend>
 					</fieldset>
 					<div class="form-group">
-						<label for="YourFirstName" class="control-label col-sm-3">First Name:&nbsp;</label>
+						<label for="YourFirstName" class="control-label col-sm-3">First Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" id="fName" name="fName" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="YourLastName" class="control-label col-sm-3">Last Name:&nbsp;</label>
+						<label for="YourLastName" class="control-label col-sm-3">Last Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" id="lName" name="lName" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="YourEmail" class="control-label col-sm-3">School/Business Email:&nbsp;</label>
+						<label for="YourEmail" class="control-label col-sm-3">School/Business Email:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" id="UserName" name="UserName" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="YourDesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;</label>
+						<label for="YourDesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" id="Password" name="Password" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="VerifyDesiredPassword" class="control-label col-sm-3">Verify Password:&nbsp;</label>
+						<label for="VerifyDesiredPassword" class="control-label col-sm-3">Verify Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" id="VerifyPassword" name="VerifyPassword" required="yes"></div>
 					</div>
 					<div class="form-group">
@@ -97,23 +97,23 @@
 						<legend>Your Information</legend>
 					</fieldset>
 					<div class="form-group">
-						<label for="YourFirstName" class="control-label col-sm-3">First Name:&nbsp;</label>
+						<label for="YourFirstName" class="control-label col-sm-3">First Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" value="#Session.FormData.fName#" id="fName" name="fName" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="YourLastName" class="control-label col-sm-3">Last Name:&nbsp;</label>
+						<label for="YourLastName" class="control-label col-sm-3">Last Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" value="#Session.FormData.lName#" id="lName" name="lName" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="YourEmail" class="control-label col-sm-3">Email Address:&nbsp;</label>
+						<label for="YourEmail" class="control-label col-sm-3">Email Address:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" value="#Session.FormData.UserName#" id="UserName" name="UserName" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="YourDesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;</label>
+						<label for="YourDesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" value="#Session.FormData.Password#" id="Password" name="Password" required="yes"></div>
 					</div>
 					<div class="form-group">
-						<label for="VerifyDesiredPassword" class="control-label col-sm-3">Verify Password:&nbsp;</label>
+						<label for="VerifyDesiredPassword" class="control-label col-sm-3">Verify Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 						<div class="col-sm-6"><cfinput type="password" class="form-control" value="#Session.FormData.VerifyPassword#" id="VerifyPassword" name="VerifyPassword" required="yes"></div>
 					</div>
 					<div class="form-group">

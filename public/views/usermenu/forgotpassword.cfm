@@ -1,11 +1,11 @@
 <cfif not isDefined("URL.FormRetry") and not isDefined("URL.Key")>
 	<cfoutput>
-		<cfset captcha = #Session.Captcha#>
-		<cfset captchaHash = Hash(captcha)>
+		<cfscript>
+			lang = 'en';
+		</cfscript>
+		<script src='https://www.google.com/recaptcha/api.js?h1=#lang#'></script>
 		<cfform action="" method="post" id="ForgotPasswordForm" class="form-horizontal">
 			<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-			<cfinput type="hidden" name="CaptchaEncrypted" value="#Variables.CaptchaHash#">
-			<cfinput type="hidden" name="HumanValidation" value="#Variables.Captcha#">
 			<cfinput type="hidden" name="formSubmit" value="true">
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -17,13 +17,18 @@
 						<label for="EmailAddress" class="control-label col-sm-3">Email Address:&nbsp;</label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" id="Email" name="Email" required="yes"></div>
 					</div>
-					<div class="panel-heading"><h2>Account Security</h2></div>
+					<fieldset>
+						<legend>Account Security</legend>
+					</fieldset>
 					<div class="form-group">
+						<div class="col-sm-6"><div class="g-recaptcha" data-sitekey="6Le6hw0UAAAAAHty8-RZLBzpnHjc348j7U0nrxdh"></div></div>
+						<!---
 						<label for="HumanChecker" class="control-label col-sm-3">In order to prevent abuse from automatic systems, please type the letters or numbers in the box below:&nbsp;</label>
 						<div class="col-sm-6">
 							<cfimage action="captcha" difficulty="medium" text="#captcha#" fonts="arial,times roman, tahoma" height="150" width="500" /><br><br />
 							<cfinput name="ValidateCaptcha" type="text" required="yes" message="Input Captcha Text" />
 						</div>
+						--->
 					</div>
 				</div>
 				<div class="panel-footer">
@@ -34,10 +39,12 @@
 	</cfoutput>
 <cfelseif isDefined("URL.FormRetry") and not isDefined("URL.Key")>
 	<cfoutput>
+		<cfscript>
+			lang = 'en';
+		</cfscript>
+		<script src='https://www.google.com/recaptcha/api.js?h1=#lang#'></script>
 		<cfform action="" method="post" id="ForgotPasswordForm" class="form-horizontal">
 			<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-			<cfinput type="hidden" name="CaptchaEncrypted" value="#Session.FormData.CaptchaEncrypted#">
-			<cfinput type="hidden" name="HumanValidation" value="#Session.FormData.HumanValidation#">
 			<cfinput type="hidden" name="formSubmit" value="true">
 			<cfif isDefined("Session.FormErrors")>
 					<cfif ArrayLen(Session.FormErrors)>
@@ -101,13 +108,18 @@
 						<label for="EmailAddress" class="control-label col-sm-3">Email Address:&nbsp;</label>
 						<div class="col-sm-6"><cfinput type="text" class="form-control" id="Email" name="Email" required="yes" value="#Session.FormData.Email#"></div>
 					</div>
-					<div class="panel-heading"><h2>Account Security</h2></div>
+					<fieldset>
+						<legend>Account Security</legend>
+					</fieldset>
 					<div class="form-group">
+						<div class="col-sm-6"><div class="g-recaptcha" data-sitekey="6Le6hw0UAAAAAHty8-RZLBzpnHjc348j7U0nrxdh"></div></div>
+						<!---
 						<label for="HumanChecker" class="control-label col-sm-3">In order to prevent abuse from automatic systems, please type the letters or numbers in the box below:&nbsp;</label>
 						<div class="col-sm-6">
-							<cfimage action="captcha" difficulty="medium" text="#Session.FormData.HumanValidation#" fonts="arial,times roman, tahoma" height="150" width="500" /><br><br />
+							<cfimage action="captcha" difficulty="medium" text="#captcha#" fonts="arial,times roman, tahoma" height="150" width="500" /><br><br />
 							<cfinput name="ValidateCaptcha" type="text" required="yes" message="Input Captcha Text" />
 						</div>
+						--->
 					</div>
 				</div>
 				<div class="panel-footer">

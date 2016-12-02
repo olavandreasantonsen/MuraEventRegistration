@@ -29,17 +29,17 @@
 
 			<cflock timeout="60" scope="Session" type="Exclusive"><cfset Session.FormErrors = #ArrayNew()#></cflock>
 
-			<cfif FORM.EventFeatured EQ "----"><cfset FORM.EventFeatured = 0></cfif>
-			<cfif FORM.EventSpanDates EQ "----"><cfset FORM.EventSpanDates = 0></cfif>
-			<cfif FORM.EarlyBird_RegistrationAvailable EQ "----"><cfset FORM.EarlyBird_RegistrationAvailable = 0></cfif>
-			<cfif FORM.ViewGroupPricing EQ "----"><cfset FORM.ViewGroupPricing = 0></cfif>
-			<cfif FORM.PGPAvailable EQ "----"><cfset FORM.PGPAvailable = 0></cfif>
-			<cfif FORM.MealProvided EQ "----"><cfset FORM.MealProvided = 0></cfif>
-			<cfif FORM.AllowVideoConference EQ "----"><cfset FORM.AllowVideoConference = 0></cfif>
-			<cfif FORM.WebinarEvent EQ "----"><cfset FORM.WebinarEvent = 0></cfif>
-			<cfif FORM.PostEventToFB EQ "----"><cfset FORM.PostEventToFB = 0></cfif>
-			<cfif FORM.EventBreakoutSessions EQ "----"><cfset FORM.EventBreakoutSessions = 0></cfif>
-			<cfif FORM.EventHaveSessions EQ "----"><cfset FORM.EventHaveSessions = 0></cfif>
+			<cfif not isDefined("FORM.EventSpanDates")><cfset FORM.EventSpanDates = 0><cfelse><cfset FORM.EventSpanDates = 1></cfif>
+			<cfif not isDefined("FORM.EventFeatured")><cfset FORM.EventFeatured = 0><cfelse><cfset FORM.EventFeatured = 1></cfif>
+			<cfif not isDefined("FORM.EarlyBird_RegistrationAvailable")><cfset FORM.EarlyBird_RegistrationAvailable = 0><cfelse><cfset FORM.EarlyBird_RegistrationAvailable = 1></cfif>
+			<cfif not isDefined("FORM.ViewGroupPricing")><cfset FORM.ViewGroupPricing = 0><cfelse><cfset FORM.ViewGroupPricing = 1></cfif>
+			<cfif not isDefined("FORM.PGPAvailable")><cfset FORM.PGPAvailable = 0><cfelse><cfset FORM.PGPAvailable = 1></cfif>
+			<cfif not isDefined("FORM.AllowVideoConference")><cfset FORM.AllowVideoConference = 0><cfelse><cfset FORM.AllowVideoConference = 1></cfif>
+			<cfif not isDefined("FORM.WebinarEvent")><cfset FORM.WebinarEvent = 0><cfelse><cfset FORM.WebinarEvent = 1></cfif>
+			<cfif not isDefined("FORM.MealProvided")><cfset FORM.MealProvided = 0><cfelse><cfset FORM.MealProvided = 1></cfif>
+			<cfif not isDefined("FORM.PostEventToFB")><cfset FORM.PostEventToFB = 0><cfelse><cfset FORM.PostEventToFB = 1></cfif>
+			<cfif not isDefined("FORM.EventBreakoutSessions")><cfset FORM.EventBreakoutSessions = 0><cfelse><cfset FORM.EventBreakoutSessions = 1></cfif>
+			<cfif not isDefined("FORM.EventHaveSessions")><cfset FORM.EventHaveSessions = 0><cfelse><cfset FORM.EventHaveSessions = 1></cfif>
 
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfset Session.UserSuppliedInfo = StructNew()>
@@ -4703,12 +4703,22 @@
 
 			<cfset MoreInfoImage = ArrayNew(1)>
 			<cfset MoreInfoURL = ArrayNew(1)>
+			<cfset MobileLink = ArrayNew(1)>
+			<cfset LogoPath = ArrayNew(1)>
 			<cfloop from="1" to="#GetUpComingEvents.RecordCount#" step="1" index="i">
 				<cfset MoreInfoImage[i] = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/images/MoreInfoButton_SM.png")#>
 				<cfset MoreInfoURL[i] = "http://" & #CGI.Server_Name# & #CGI.Script_name# & #CGI.path_info# & "?" & #HTMLEditFormat(rc.pc.getPackage())# & "action=public:main.eventinfo&EventID=" & #GetUpComingEvents.TContent_ID#>
+				<cfset MobileLink[i] = "Link">
+				<cfset LogoPath[i] = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/images/NIESC_Logo.png")#>
 			</cfloop>
 			<cfset temp = QueryAddColumn(GetUpComingEvents, "MoreInfoImage", "VarChar", Variables.MoreInfoImage)>
 			<cfset temp = QueryAddColumn(GetUpComingEvents, "LinkURL", "VarChar", Variables.MoreInfoURL)>
+			<cfset temp = QueryAddColumn(GetUpComingEvents, "MobileLink", "VarChar", Variables.MobileLink)>
+			<cfset temp = QueryAddColumn(GetUpComingEvents, "NIESCLogoPath", "VarChar", Variables.LogoPath)>
+			<cfset temp = QueryAddColumn(GetUpComingEvents, "EventDateFormat")>
+			<cfloop query="#GetUpComingEvents#">
+				<cfset temp = QuerySetCell(GetUpComingEvents, "EventDateFormat", DateFormat(GetUpComingEvents.EventDate, "ddd, mmm dd, yyyy"), GetUpComingEvents.CurrentRow)>
+			</cfloop>
 
 			<cfset Session.EmailMarketing = #StructNew()#>
 			<cfset Session.EmailMarketing.MasterTemplate = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/reports/EventUpcomingList.jrxml")#>
@@ -4729,7 +4739,7 @@
 						arrayAppend(Session.FormErrors, address);
 					</cfscript>
 				</cflock>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.emaileventlisting&FormRetry=True">
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.e&FormRetry=True">
 			<cfelse>
 				<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
 				<cfif FORM.WhoToSendTo EQ 0>

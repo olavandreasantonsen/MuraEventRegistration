@@ -45,16 +45,7 @@
 				<cfset Session.UserSuppliedInfo = StructNew()>
 				<cfset Session.UserSuppliedInfo.FirstStep = #StructCopy(FORM)#>
 			</cflock>
-
-			<cfif LEN(FORM.LongDescription) LT 50>
-				<cfscript>
-					eventdate = {property="EventDate",message="Please enter more than 50 characters to accuratly describe this event or workshop."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-			<cfelse>
-				<cfset Session.UserSuppliedInfo.FirstStep.LongDescription = #FORM.LongDescription#>
-			</cfif>
-
+			<cfset Session.UserSuppliedInfo.FirstStep.LongDescription = #FORM.LongDescription#>
 			<cfif not isNumericDate(FORM.EventDate)>
 				<cfscript>
 					eventdate = {property="EventDate",message="Event Date is not in correct date format"};
@@ -264,15 +255,6 @@
 			</cfif>
 			<cfset Session.UserSuppliedInfo.FinalStep = #StructCopy(FORM)#>
 			<cfset Session.UserSuppliedInfo.AddNewEventStep = #FORM.AddNewEventStep#>
-
-			<cfif LEN(FORM.LongDescription) LT 50>
-				<cfscript>
-					eventdate = {property="EventDate",message="Please enter more than 50 characters to accuratly describe this event or workshop."};
-					arrayAppend(Session.FormErrors, eventdate);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
-			</cfif>
-
 			<cfif not isNumericDate(FORM.EventDate)>
 				<cfscript>
 					eventdate = {property="EventDate",message="Event Date is not in correct date format"};
@@ -436,14 +418,6 @@
 			</cfif>
 
 			<cfif FORM.MealProvided EQ 1>
-				<cfif FORM.MealProvided EQ 1 and LEN(FORM.MealCost_Estimated) EQ 0>
-					<cfscript>
-						eventdate = {property="Registration_Deadline",message="Please enter an amount for the cost of each participant's meal. To not use this feature simply select No Meal is Provided."};
-						arrayAppend(Session.FormErrors, eventdate);
-					</cfscript>
-					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
-				</cfif>
-
 				<cfif FORM.MealProvided EQ 1 and FORM.MealProvidedBy EQ "----">
 					<cfscript>
 						eventdate = {property="Registration_Deadline",message="Please enter who will be providing the meal for this event or workshop. To not use this feature simply change the option of Meal Provided to 'No'"};
@@ -858,8 +832,7 @@
 						<cfif FORM.MealProvided EQ 1>
 							<cfquery name="updateNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 								Update p_EventRegistration_Events
-								Set MealCost_Estimated = <cfqueryparam value="#FORM.MealCost_Estimated#" cfsqltype="CF_SQL_MONEY">,
-									MealProvidedBy = <cfqueryparam value="#FORM.MealProvidedBy#" cfsqltype="CF_SQL_INTEGER">,
+								Set MealProvidedBy = <cfqueryparam value="#FORM.MealProvidedBy#" cfsqltype="CF_SQL_INTEGER">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
@@ -1051,8 +1024,7 @@
 						<cfif FORM.MealProvided EQ 1>
 							<cfquery name="updateNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 								Update p_EventRegistration_Events
-								Set MealCost_Estimated = <cfqueryparam value="#FORM.MealCost_Estimated#" cfsqltype="CF_SQL_MONEY">,
-									MealProvidedBy = <cfqueryparam value="#FORM.MealProvidedBy#" cfsqltype="CF_SQL_INTEGER">,
+								Set MealProvidedBy = <cfqueryparam value="#FORM.MealProvidedBy#" cfsqltype="CF_SQL_INTEGER">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.IdentityCol#" cfsqltype="cf_sql_integer">
@@ -1415,11 +1387,6 @@
 									Update p_EventRegistration_Events Set MealProvidedBy = <cfqueryparam value="#Session.getSelectedEvent.MealProvidedBy#" cfsqltype="cf_sql_integer"> Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
 								</cfquery>
 							</cfif>
-							<cfif LEN(Session.getSelectedEvent.MealCost_Estimated)>
-								<cfquery name="updateEventInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-									Update p_EventRegistration_Events Set MealCost_Estimated = <cfqueryparam value="#Session.getSelectedEvent.MealCost_Estimated#" cfsqltype="cf_sql_float"> Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
-								</cfquery>
-							</cfif>
 							<cfif LEN(Session.getSelectedEvent.VideoConferenceInfo)>
 								<cfquery name="updateEventInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 									Update p_EventRegistration_Events Set VideoConferenceInfo = <cfqueryparam value="#Session.getSelectedEvent.VideoConferenceInfo#" cfsqltype="cf_sql_varchar"> Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
@@ -1560,11 +1527,6 @@
 							<cfif LEN(Session.getSelectedEvent.MealProvidedBy)>
 								<cfquery name="updateEventInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 									Update p_EventRegistration_Events Set MealProvidedBy = <cfqueryparam value="#Session.getSelectedEvent.MealProvidedBy#" cfsqltype="cf_sql_integer"> Where TContent_ID = <cfqueryparam value="#insertNewEvent.IdentityCol#" cfsqltype="cf_sql_integer">
-								</cfquery>
-							</cfif>
-							<cfif LEN(Session.getSelectedEvent.MealCost_Estimated)>
-								<cfquery name="updateEventInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-									Update p_EventRegistration_Events Set MealCost_Estimated = <cfqueryparam value="#Session.getSelectedEvent.MealCost_Estimated#" cfsqltype="cf_sql_float"> Where TContent_ID = <cfqueryparam value="#insertNewEvent.IdentityCol#" cfsqltype="cf_sql_integer">
 								</cfquery>
 							</cfif>
 							<cfif LEN(Session.getSelectedEvent.VideoConferenceInfo)>
@@ -4396,7 +4358,6 @@
 					Update p_EventRegistration_Events
 					Set MealProvided = <cfqueryparam value="#FORM.MealProvided#" cfsqltype="cf_sql_bit">,
 						MealProvidedBy = <cfqueryparam value="#FORM.MealProvidedBy#" cfsqltype="cf_sql_integer">,
-						MealCost_Estimated = <cfqueryparam value="#FORM.MealCost_Estimated#" cfsqltype="cf_sql_decimal">,
 						lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 						lastUpdateBy = <cfqueryparam value="#Session.Mura.FName# #Session.Mura.LName#" cfsqltype="cf_sql_varchar">
 					Where TContent_ID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer">

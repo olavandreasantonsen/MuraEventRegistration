@@ -40,15 +40,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<div class="form-group">
 							<div class="col-sm-12">
 								<cfimport taglib="/plugins/EventRegistration/library/cfjasperreports/tag/cfjasperreport" prefix="jr">
-								<cfset LogoPath = ArrayNew(1)>
-								<cfloop from="1" to="#Session.EmailMarketing.QueryResults.RecordCount#" step="1" index="i">
-									<cfset LogoPath[i] = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/images/NIESC_Logo.png")#>
-								</cfloop>
-								<cfset temp = QueryAddColumn(Session.EmailMarketing.QueryResults, "NIESCLogoPath", "VarChar", Variables.LogoPath)>
-								<cfset temp = QueryAddColumn(Session.EmailMarketing.QueryResults, "EventDateFormat")>
-								<cfloop query="#Session.EmailMarketing.QueryResults#">
-									<cfset temp = QuerySetCell(Session.EmailMarketing.QueryResults, "EventDateFormat", DateFormat(Session.EmailMarketing.QueryResults.EventDate, "ddd, mmm dd, yyyy"), Session.EmailMarketing.QueryResults.CurrentRow)>
-								</cfloop>
 								<jr:jasperreport jrxml="#Session.EmailMarketing.MasterTemplate#" query="#Session.EmailMarketing.QueryResults#" exportfile="#Session.EmailMarketing.CompletedFile#" exportType="pdf" />
 								<embed src="#Session.EmailMarketing.WebExportCompletedFile#" width="100%" height="650">
 							</div>

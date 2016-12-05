@@ -30,7 +30,7 @@
 </cfquery>
 <cfif CheckColumnNameReceiveMarketingFlyers.RecordCount EQ 0>
 	<cfquery name="AlterUserMatrixAddColumn" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_UserMatrix Add COLUMN `ReceiveMarketingFlyers` bit(1) NOT NULL DEFAULT b'0'' AFTER TeachingSubject
+		ALTER TABLE p_EventRegistration_UserMatrix Add COLUMN `ReceiveMarketingFlyers` bit(1) NOT NULL DEFAULT b'0' AFTER TeachingSubject
 	</cfquery>
 </cfif>
 
@@ -77,7 +77,7 @@
 </cfquery>
 <cfif CheckColumnNameSession1EndTime.RecordCount EQ 0>
 	<cfquery name="Alter-p_EventRegistration_Events" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_Events Add COLUMN `Session1EndTime` time DEFAULT NULL AFTER Sesson1BeginTime
+		ALTER TABLE p_EventRegistration_Events Add COLUMN `Session1EndTime` time DEFAULT NULL AFTER Session1BeginTime
 	</cfquery>
 </cfif>
 
@@ -86,7 +86,7 @@
 </cfquery>
 <cfif CheckColumnNameSession2BeginTime.RecordCount EQ 0>
 	<cfquery name="Alter-p_EventRegistration_Events" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_Events Add COLUMN `Session2BeginTime` time DEFAULT NULL AFTER Sesson1EndTime
+		ALTER TABLE p_EventRegistration_Events Add COLUMN `Session2BeginTime` time DEFAULT NULL AFTER Session1EndTime
 	</cfquery>
 </cfif>
 
@@ -95,7 +95,7 @@
 </cfquery>
 <cfif CheckColumnNameSession2EndTime.RecordCount EQ 0>
 	<cfquery name="Alter-p_EventRegistration_Events" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_Events Add COLUMN `Session2EndTime` time DEFAULT NULL AFTER Sesson2BeginTime
+		ALTER TABLE p_EventRegistration_Events Add COLUMN `Session2EndTime` time DEFAULT NULL AFTER Session2BeginTime
 	</cfquery>
 </cfif>
 

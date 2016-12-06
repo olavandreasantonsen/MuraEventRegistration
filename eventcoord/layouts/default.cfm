@@ -79,6 +79,9 @@
 								<li class="<cfif rc.action eq 'eventcoord:membership.default'>active</cfif>">
 									<a href="#buildURL('eventcoord:membership.default')#">List Membership</a>
 								</li>
+								<li class="<cfif rc.action eq 'eventcoord:membership.default'>active</cfif>">
+									<a href="#buildURL('eventcoord:membership.listescesa')#">List State ESC/ESA</a>
+								</li>
 								<li class="<cfif rc.action eq 'eventcoord:membership.addevent'>active</cfif>">
 									<a href="#buildURL('eventcoord:membership.addmembership')#">Add New Membership</a>
 								</li>

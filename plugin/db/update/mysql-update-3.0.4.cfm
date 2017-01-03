@@ -313,21 +313,46 @@
 	<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 		ALTER TABLE p_EventRegistration_UserRegistrations CHANGE `AttendedEvent` `AttendedEventDate1` Bit(1) NOT NULL DEFAULT B'0'
 	</cfquery>
-	<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate2 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate1
+	<cfquery name="CheckTableField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		SHOW COLUMNS FROM p_EventRegistration_Events LIKE 'AttendedEventDate2'
 	</cfquery>
-	<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate3 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate2
+	<cfif CheckTableField.RecordCount>
+		<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+			ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate2 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate1
+		</cfquery>
+	</cfif>
+	<cfquery name="CheckTableField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		SHOW COLUMNS FROM p_EventRegistration_Events LIKE 'AttendedEventDate3'
 	</cfquery>
-	<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate4 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate3
+	<cfif CheckTableField.RecordCount>
+		<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+			ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate3 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate2
+		</cfquery>
+	</cfif>
+	<cfquery name="CheckTableField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		SHOW COLUMNS FROM p_EventRegistration_Events LIKE 'AttendedEventDate4'
 	</cfquery>
-	<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate5 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate4
+	<cfif CheckTableField.RecordCount>
+		<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+			ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate4 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate3
+		</cfquery>
+	</cfif>
+	<cfquery name="CheckTableField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		SHOW COLUMNS FROM p_EventRegistration_Events LIKE 'AttendedEventDate5'
 	</cfquery>
-	<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate6 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate5
+	<cfif CheckTableField.RecordCount>
+		<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+			ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate5 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate4
+		</cfquery>
+	</cfif>
+	<cfquery name="CheckTableField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		SHOW COLUMNS FROM p_EventRegistration_Events LIKE 'AttendedEventDate6'
 	</cfquery>
+	<cfif CheckTableField.RecordCount>
+		<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+			ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventDate6 Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate5
+		</cfquery>
+	</cfif>
 	<cfquery name="AlterTableeRegistrationsAddField" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 		ALTER TABLE p_EventRegistration_UserRegistrations Add COLUMN AttendedEventSessionAM Bit(1) NOT NULL DEFAULT B'0' AFTER AttendedEventDate6
 	</cfquery>

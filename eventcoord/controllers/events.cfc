@@ -218,20 +218,16 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step3&FormRetry=True" addtoken="false">
 			</cfif>
 			<cfset Session.FormErrors = #ArrayNew()#>
-			<cfset Session.UserSuppliedInfo.FourthStep = #StructCopy(FORM)#>
 
+			<cfif not isDefined("FORM.AcceptRegistrations")>
+				<cfset FORM.AcceptRegistrations = 0>
+			</cfif>
+
+			<cfset Session.UserSuppliedInfo.FourthStep = #StructCopy(FORM)#>
 
 			<cfif LEN(FORM.RoomMaxParticipants) EQ 0>
 				<cfscript>
 					errormsg = {property="MealProvidedBy",message="Please Enter the maximum number of participants for this event or workshop"};
-					arrayAppend(Session.FormErrors, errormsg);
-				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step4&SiteID=#rc.$.siteConfig('siteID')#&FormRetry=True" addtoken="false">
-			</cfif>
-
-			<cfif FORM.AcceptRegistrations EQ "----">
-				<cfscript>
-					errormsg = {property="MealProvidedBy",message="Please select whether to accept individuals to register for this event or not at this time."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step4&SiteID=#rc.$.siteConfig('siteID')#&FormRetry=True" addtoken="false">

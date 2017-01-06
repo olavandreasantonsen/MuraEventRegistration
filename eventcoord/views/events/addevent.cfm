@@ -51,7 +51,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfinput type="hidden" name="PerformAction" value="Step2">
 				<div class="panel-body">
 					<fieldset>
-						<legend><h2>Add New Event or Workshop - Step 1</h2></legend>
+						<legend><h2>Step 1 of 5 - Add New Event</h2></legend>
 					</fieldset>
 					<div class="alert alert-info">Please complete the following information to add a new workshop or event so that individuals will be allowed to register for.</div>
 					<fieldset>
@@ -142,7 +142,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</div>
 				<div class="panel-footer">
 					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-left" value="Back to Main Menu">
-					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-right" value="Add Event - Step 2"><br /><br />
+					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-right" value="Proceed to Step 2"><br /><br />
 				</div>
 			</cfform>
 		</div>
@@ -172,7 +172,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</cfif>
 				<div class="panel-body">
 					<fieldset>
-						<legend><h2>Add New Event or Workshop - Step 1</h2></legend>
+						<legend><h2>Step 1 of 5 - Add New Event</h2></legend>
 					</fieldset>
 					<div class="alert alert-info">Please complete the following information to add a new workshop or event so that individuals will be allowed to register for.</div>
 					<fieldset>
@@ -220,11 +220,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<div class="alert alert-info">The default option for each one of the following is No unless you specifically select Yes on these questions.</div>
 					<div class="form-group">
 						<label for="EventFeatured" class="control-label col-sm-3">Event is Featured:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="EventFeatured" id="EventFeatured" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="EventFeatured" id="EventFeatured" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Event Listing Page)</div></div>
 					</div>
 					<div class="form-group">
 						<label for="EventHaveSessions" class="control-label col-sm-3">Event has Daily Sessions:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="EventHaveSessions" id="EventHaveSessions" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="EventHaveSessions" id="EventHaveSessions" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable Event Sessions for this event)</div></div>
 					</div>
 					<!---
 					<div class="form-group">
@@ -234,36 +234,36 @@ http://www.apache.org/licenses/LICENSE-2.0
 					--->
 					<div class="form-group">
 						<label for="EarlyBird_RegistrationAvailable" class="control-label col-sm-3">Earlybird Registration Available:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="EarlyBird_RegistrationAvailable" id="EarlyBird_RegistrationAvailable" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="EarlyBird_RegistrationAvailable" id="EarlyBird_RegistrationAvailable" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable Early Bird Registration for this event)</div></div>
 					</div>
 					<div class="form-group">
 						<label for="ViewGroupPricing" class="control-label col-sm-3">Group Pricing Available:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="ViewGroupPricing" id="ViewGroupPricing" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="ViewGroupPricing" id="ViewGroupPricing" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable Group Pricing for this event)</div></div>
 					</div>
 					<div class="form-group">
 						<label for="PGPAvailable" class="control-label col-sm-3">PGP Certificate Available:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="PGPAvailable" id="PGPAvailable" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="PGPAvailable" id="PGPAvailable" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable PGP Points for this event)</div></div>
 					</div>
 					<div class="form-group">
 						<label for="MealAvailable" class="control-label col-sm-3">Meal Provided:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="MealAvailable" id="MealAvailable" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="MealAvailable" id="MealAvailable" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable Meal Options for this event)</div></div>
 					</div>
 					<div class="form-group">
 						<label for="AllowVideoConference" class="control-label col-sm-3">Is Distance Education Available:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="AllowVideoConference" id="AllowVideoConference" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="AllowVideoConference" id="AllowVideoConference" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable distance education for this event)</div></div>
 					</div>
 					<div class="form-group">
 						<label for="WebinarEvent" class="control-label col-sm-3">Webinar Only Event:&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="WebinarEvent" id="WebinarEvent" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="WebinarEvent" id="WebinarEvent" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable Webinar Only Event)</div></div>
 					</div>
 					<div class="form-group">
 						<label for="PostEventToFB" class="control-label col-sm-3">Post to FB Fan Page:&nbsp;&nbsp;</label>
-						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="PostEventToFB" id="PostEventToFB" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to Feature Event at top of Current Events Page)</div></div>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="PostEventToFB" id="PostEventToFB" value="Yes"> <div style="Color: ##CCCCCC;">(Check Box to enable a posting on organizations Facebook Page)</div></div>
 					</div>
 				</div>
 				<div class="panel-footer">
 					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-left" value="Back to Main Menu">
-					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-right" value="Add Event - Step 2"><br /><br />
+					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-right" value="Proceed to Step 2"><br /><br />
 				</div>
 			</cfform>
 		</div>

@@ -85,7 +85,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<uform:field label="NonMember Pricing" name="EarlyBird_NonMemberCost" isDisabled="true" type="text" value="#Session.UserSuppliedInfo.EarlyBird_NonMemberCost#" hint="The Early Bird Price for this event from a NonMember School Districts" />
 						</uForm:fieldset>
 					</cfif>
-					<cfif Session.UserSuppliedInfo.MealProvided EQ 1>
+					<cfif Session.UserSuppliedInfo.MealAvailable EQ 1>
 						<cfquery name="getCatererInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 							Select TContent_ID, FacilityName
 							From eCaterers
@@ -94,9 +94,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 								TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.MealProvidedBy#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<uForm:fieldset legend="Event Meal Information">
-						<cfif Session.UserSuppliedInfo.MealProvided EQ 1><cfset MealProvided_AvailableText = "Yes"><cfelse><cfset MealProvided_AvailableText = "No"></cfif>
-						<uform:field label="Meal Provided <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="MealProvided" type="text" isDisabled="true" value="#Variables.MealProvided_AvailableText#" hint="Does this event have a meal available to attendee(s)?" />
-						<uform:field label="Cost Per Person " name="MealCost_Estimated" isDisabled="true" value="#Session.UserSuppliedInfo.MealCost_Estimated#" type="text" hint="The estimated cost per person for providing this meal." />
+						<cfif Session.UserSuppliedInfo.MealAvailable EQ 1><cfset MealProvided_AvailableText = "Yes"><cfelse><cfset MealProvided_AvailableText = "No"></cfif>
+						<uform:field label="Meal Provided <a href='#buildURL('admin:events.addevent')#' class='ui-icon ui-icon-pencil'></a>" name="MealAvailable" type="text" isDisabled="true" value="#Variables.MealProvided_AvailableText#" hint="Does this event have a meal available to attendee(s)?" />
+						<uform:field label="Cost Per Person " name="MealCost" isDisabled="true" value="#Session.UserSuppliedInfo.MealCost#" type="text" hint="The estimated cost per person for providing this meal." />
 						<uform:field label="Meal Provided By" name="MealProvidedBy" isDisabled="true" value="#getCatererInformation.FacilityName#" type="text" hint="Which Caterer is providing this meal?" />
 						</uForm:fieldset>
 					</cfif>

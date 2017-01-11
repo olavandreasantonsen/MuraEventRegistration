@@ -9,62 +9,100 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 --->
 </cfsilent>
-<cfimport taglib="/plugins/EventRegistration/library/uniForm/tags/" prefix="uForm">
-<cflock timeout="60" scope="SESSION" type="Exclusive">
-	<cfset Session.FormData = #StructNew()#>
-	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
-</cflock>
+<cfset YesNoQuery = QueryNew("ID,OptionName", "Integer,VarChar")>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 0)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "No")#>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 1)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "Yes")#>
 <cfoutput>
-	<cfscript>
-		timeConfig = structNew();
-		timeConfig['show24Hours'] = true;
-		timeConfig['showSeconds'] = false;
-	</cfscript>
-	<div class="art-block clearfix">
-		<div class="art-blockheader">
-			<h3 class="t">Add new Event or Workshop</h3>
+	<cfif not isDefined("URL.FormRetry")>
+		<div class="panel panel-default">
+			<cfform action="" method="post" id="AddEvent" class="form-horizontal">
+				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+				<cfinput type="hidden" name="formSubmit" value="true">
+				<div class="panel-body">
+					<fieldset>
+						<legend><h2>Step 4 of 5 - Add New Event</h2></legend>
+					</fieldset>
+					<div class="alert alert-info">Please complete any additional information and click the Proceed Button Below to continue.</div>
+					<fieldset>
+						<legend><h2>Maximum Participants for Event or Workshop</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="RoomMaxParticipants" class="control-label col-sm-3">Maximum Registrations:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8">
+							<cfif Session.UserSuppliedInfo.FirstStep.WebinarEvent EQ 0>
+								<cfinput type="text" class="form-control" id="RoomMaxParticipants" name="RoomMaxParticipants" value="#Session.getSpecificFacilityRoomInfo.Capacity#" required="yes">
+							<cfelse>
+								<cfinput type="text" class="form-control" id="RoomMaxParticipants" name="RoomMaxParticipants" required="yes">
+							</cfif>
+						</div>
+					</div>
+					<fieldset>
+						<legend><h2>Allow Online Registrations</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="AcceptRegistrations" class="control-label col-sm-3">Accept Registrations:&nbsp;</label>
+						<div class="checkbox col-sm-6"><cfinput type="checkbox" name="AcceptRegistrations" id="AcceptRegistrations" value="1"> <div style="Color: ##CCCCCC;">(Check Box to allow participants to register)</div></div>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-left" value="Back to Step 3">
+					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-right" value="Proceed to Review Step"><br /><br />
+				</div>
+			</cfform>
 		</div>
-		<div class="art-blockcontent">
-			<div class="alert-box notice">This is Step 4 of the New Workshop or Event Creation Process. Please complete this information and click the button below to move to the next screen.</div>
-			<hr>
-			<uForm:form action="" method="Post" id="AddEvent" errors="#Session.FormErrors#" errorMessagePlacement="both"
-				commonassetsPath="/plugins/EventRegistration/library/uniForm/" showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
-				cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step3&PerformAction=Step2&compactDisplay=false"
-				submitValue="Proceed To Event Review" loadValidation="true" loadMaskUI="true" loadDateUI="true"
-				loadTimeUI="true">
-				<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-				<input type="hidden" name="formSubmit" value="true">
-				<input type="hidden" name="AcceptRegistrations" value="0">
-				<input type="hidden" name="PerformAction" value="Step5">
-
-				<cfif Session.UserSuppliedInfo.WebinarEvent EQ 0>
-					<cfquery name="getFacilityInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Select FacilityName
-						From eFacility
-						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-							Active = <cfqueryparam value="1" cfsqltype="CF_SQL_BIT"> and
-							FacilityType = <cfqueryparam value="#Session.UserSuppliedInfo.LocationType#" cfsqltype="cf_sql_varchar"> and
-							TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.LocationID#" cfsqltype="cf_sql_integer">
-					</cfquery>
-					<cfquery name="getFacilityRoomInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Select TContent_ID, RoomName, Capacity
-						From eFacilityRooms
-						Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-							Facility_ID = <cfqueryparam value="#Session.UserSuppliedInfo.LocationID#" cfsqltype="cf_sql_integer"> and
-							TContent_ID = <cfqueryparam value="#Session.UserSuppliedInfo.LocationRoomID#" cfsqltype="cf_sql_integer"> and
-							Active = <cfqueryparam value="1" cfsqltype="CF_SQL_BIT">
-					</cfquery>
-					<uForm:fieldset legend="Facility Room Information">
-						<uform:field label="Facility Location" name="LocationIDName" isDisabled="true" type="text" value="#GetFacilityInformation.FacilityName#" hint="Where is this facility being held at?" />
-						<uform:field label="Facility Room Name" name="LocationRoomID" isDisabled="true" type="text" value="#GetFacilityRoomInformation.RoomName#" hint="Which room at this facility would this event be held?" />
-						<uform:field label="Maximum Participants" name="RoomMaxParticipants" type="text" value="#getFacilityRoomInformation.Capacity#" hint="Maximum Participants allowed to register for this event?" />
-					</uForm:fieldset>
-				<cfelse>
-					<uForm:fieldset legend="Maximum Participants Allowed">
-						<uform:field label="Maximum Participants" name="RoomMaxParticipants" type="text" hint="How many participants would you want to limit this Webinar Event to?" />
-					</uForm:fieldset>
+	<cfelseif isDefined("URL.FormRetry")>
+		<div class="panel panel-default">
+			<cfform action="" method="post" id="AddEvent" class="form-horizontal">
+				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+				<cfinput type="hidden" name="formSubmit" value="true">
+				<cfif isDefined("Session.FormErrors")>
+					<div class="panel-body">
+						<cfif ArrayLen(Session.FormErrors) GTE 1>
+							<div class="alert alert-danger"><p>#Session.FormErrors[1].Message#</p></div>
+						</cfif>
+					</div>
 				</cfif>
-			</uForm:form>
+				<div class="panel-body">
+					<fieldset>
+						<legend><h2>Step 4 of 5 - Add New Event</h2></legend>
+					</fieldset>
+					<div class="alert alert-info">Please complete any additional information and click the Proceed Button Below to continue.</div>
+					<fieldset>
+						<legend><h2>Maximum Participants for Event or Workshop</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="RoomMaxParticipants" class="control-label col-sm-3">Maximum Registrations:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8">
+							<cfif Session.UserSuppliedInfo.FirstStep.WebinarEvent EQ 0>
+								<cfinput type="text" class="form-control" id="RoomMaxParticipants" name="RoomMaxParticipants" value="#Session.getFacilityRoomInfo.Capacity#" required="yes">
+							<cfelse>
+								<cfinput type="text" class="form-control" id="RoomMaxParticipants" name="RoomMaxParticipants" value="#Session.UserSuppliedInfo.FourthStep.MaxRoomParticipants#"required="yes">
+							</cfif>
+						</div>
+					</div>
+					<fieldset>
+						<legend><h2>Allow Online Registrations</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="AcceptRegistrations" class="control-label col-sm-3">Accept Registrations:&nbsp;</label>
+						<div class="checkbox col-sm-6">
+							<cfif Session.UserSuppliedInfo.FourthStep.AcceptRegistrations EQ 1>
+								<cfinput type="checkbox" name="AcceptRegistrations" id="AcceptRegistrations" value="1" checked>
+							<cfelse>
+								<cfinput type="checkbox" name="AcceptRegistrations" id="AcceptRegistrations" value="1">
+							</cfif>
+						 <div style="Color: ##CCCCCC;">(Check Box to allow participants to register)</div></div>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-left" value="Back to Step 3">
+					<cfinput type="Submit" name="AddNewEventStep" class="btn btn-primary pull-right" value="Proceed to Review Step"><br /><br />
+				</div>
+			</cfform>
 		</div>
-	</div>
+	</cfif>
 </cfoutput>

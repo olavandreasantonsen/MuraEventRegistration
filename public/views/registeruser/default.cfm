@@ -1,100 +1,151 @@
-<cfimport taglib="/plugins/EventRegistration/library/uniForm/tags/" prefix="uForm">
-<cfif not isDefined("URL.UserRegistrationSuccessfull")>
-	<cflock timeout="60" scope="SESSION" type="Exclusive">
-		<cfset Session.FormData = #StructNew()#>
-		<cfset Session.FormErrors = #ArrayNew()#>
-		<cfset Session.UserRegistrationInfo = #StructNew()#>
-	</cflock>
-	<cfquery name="getSchoolDistricts" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-		Select OrganizationName, StateDOE_IDNumber
-		From eMembership
-		Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-		Order by OrganizationName
-	</cfquery>
-
+<cfif not isDefined("URL.FormRetry")>
 	<cfoutput>
-		<div class="art-block clearfix">
-			<div class="art-blockheader">
-				<h3 class="t">Register New User Account</h3>
+		<cfscript>
+			lang = 'en';
+		</cfscript>
+		<script src='https://www.google.com/recaptcha/api.js?h1=#lang#'></script>
+		<cfform action="" method="post" id="RegisterAccountForm" class="form-horizontal">
+			<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+			<cfinput type="hidden" name="InActive" value="1">
+			<cfinput type="hidden" name="formSubmit" value="true">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<fieldset>
+						<legend>Register New User Account</legend>
+					</fieldset>
+					<div class="well">Please complete the following information to register for a user account on this event registration system. All electric communications from this system will be sent to the email address you provide. Any certificates that will be generated upon successfull completion of an event that issues certificates will use the information on this screen. Please make sure the information listed below is correct.</div>
+					<fieldset>
+						<legend>Your Information</legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="YourFirstName" class="control-label col-sm-3">First Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" id="fName" name="fName" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="YourLastName" class="control-label col-sm-3">Last Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" id="lName" name="lName" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="YourEmail" class="control-label col-sm-3">School/Business Email:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" id="UserName" name="UserName" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="YourDesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="password" class="form-control" id="Password" name="Password" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="VerifyDesiredPassword" class="control-label col-sm-3">Verify Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="password" class="form-control" id="VerifyPassword" name="VerifyPassword" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="ContactNumber" class="control-label col-sm-3">Phone Number:&nbsp;</label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" id="mobilePhone" name="mobilePhone" required="no"><div class="alert alert-warning small" role="alert"><em>This phone number will be used if an event needs to be cancelled or postponed</em></div></div>
+					</div>
+					<div class="form-group">
+						<label for="GradeLevel" class="control-label col-sm-3">Teaching Grade Level:&nbsp;</label>
+						<div class="col-sm-6"><cfselect name="GradeLevel" class="form-control" Required="No" Multiple="No" query="Session.getGradeLevels" value="TContent_ID" Display="GradeLevel"  queryposition="below"><option value="----">Select Grade Level you Teach</option></cfselect></div>
+					</div>
+					<div class="form-group">
+						<label for="GradeSubjects" class="control-label col-sm-3">Teaching Subject:&nbsp;</label>
+						<div class="col-sm-6"><cfselect name="GradeSubjects" class="form-control" Required="No" Multiple="No" query="Session.getGradeSubjects" value="TContent_ID" Display="GradeSubject"  queryposition="below"><option value="----">Select Subject you Teach</option></cfselect></div>
+					</div>
+					<fieldset>
+						<legend>Account Security</legend>
+					</fieldset>
+					<div class="form-group">
+						<div class="col-sm-6"><div class="g-recaptcha" data-sitekey="6Le6hw0UAAAAAHty8-RZLBzpnHjc348j7U0nrxdh"></div></div>
+						<!---
+						<label for="HumanChecker" class="control-label col-sm-3">In order to prevent abuse from automatic systems, please type the letters or numbers in the box below:&nbsp;</label>
+						<div class="col-sm-6">
+							<cfimage action="captcha" difficulty="medium" text="#captcha#" fonts="arial,times roman, tahoma" height="150" width="500" /><br><br />
+							<cfinput name="ValidateCaptcha" type="text" required="yes" message="Input Captcha Text" />
+						</div>
+						--->
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="RegisterAccount" class="btn btn-primary pull-right" value="Register Account"><br /><br />
+				</div>
 			</div>
-			<div class="art-blockcontent"><p class="alert-box notice">Please complete the following information to register for a user account on this event registration system. All electric communications from this system will be sent to the email address you provide. Any certificates that will be generated upon successfull completion of an event that issues certificates will use the information on this screen. Please make sure the information listed below is correct.</p>
-				<hr>
-				<uForm:form action="" method="Post" id="RegisterUser" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/plugins/EventRegistration/library/uniForm/"
-					showCancel="no" cancelValue="<--- Return to Available Events" cancelName="cancelButton" cancelAction="/index.cfm"
-					submitValue="Create User Account" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
-						<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-						<input type="hidden" name="InActive" valule="1">
-						<input type="hidden" name="formSubmit" value="true">
-					<uForm:fieldset legend="User Account Fields">
-						<uForm:field label="Your First Name" name="fName" isRequired="true" isDisabled="false" maxFieldLength="50" type="text" hint="Your First Name as you would like printed on certificates" />
-						<uForm:field label="Your Last Name" name="lName" isRequired="true" isDisabled="false" maxFieldLength="50" type="text" hint="Your Last Name as you would like printed on certificates" />
-						<uForm:field label="Your Email Address" name="UserName" isRequired="true" isDisabled="false" maxFieldLength="50" type="text" hint="Your Primary Email Address" />
-						<uForm:field label="Your Desired Password" name="Password" isRequired="true" isDisabled="false" maxFieldLength="50" type="password" hint="The Password for this site" />
-						<uForm:field label="Confirm Desired Password" name="VerifyPassword" isRequired="true" isDisabled="false" maxFieldLength="50" type="password" hint="Confirm Password for Site" />
-					</uForm:fieldset>
-					<uForm:fieldset legend="Optional Fields">
-						<uform:field label="School District" name="Company" type="select" hint="School District employeed at?">
-							<uform:option display="Corporate Business" value="0000" isSelected="true" />
-							<uform:option display="School District Not Listed" value="0001"  />
-							<cfloop query="getSchoolDistricts">
-								<uform:option display="#getSchoolDistricts.OrganizationName#" value="#getSchoolDistricts.StateDOE_IDNumber#" />
-							</cfloop>
-						</uform:field>
-						<uForm:field label="Phone Number" name="mobilePhone" type="text" maxFieldLength="14" mask="(999) 999-9999" hint="Your contact number in case of cancellation of event" />
-					</uForm:fieldset>
-				</uForm:form>
-			</div>
-		</div>
+		</cfform>
 	</cfoutput>
-<cfelseif isDefined("URL.UserRegistrationSuccessfull")>
-	<cfquery name="getSchoolDistricts" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-		Select OrganizationName, StateDOE_IDNumber
-		From eMembership
-		Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-		Order by OrganizationName
-	</cfquery>
-
+<cfelseif isDefined("URL.FormRetry")>
 	<cfoutput>
-		<div class="art-block clearfix">
-			<div class="art-blockheader">
-				<h3 class="t">Register New User Account</h3>
+		<cfscript>
+			lang = 'en';
+		</cfscript>
+		<script src='https://www.google.com/recaptcha/api.js?h1=#lang#'></script>
+		<cfform action="" method="post" id="RegisterAccountForm" class="form-horizontal">
+			<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+			<cfinput type="hidden" name="InActive" value="1">
+			<cfinput type="hidden" name="formSubmit" value="true">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<fieldset>
+						<legend>Register New User Account</legend>
+					</fieldset>
+					<cfif isDefined("Session.FormErrors")>
+						<div class="panel-body">
+							<cfif ArrayLen(Session.FormErrors) GTE 1>
+								<div class="alert alert-danger"><p>#Session.FormErrors[1].Message#</p></div>
+							</cfif>
+						</div>
+						<br />
+					</cfif>
+					<div class="well">Please complete the following information to register for a user account on this event registration system. All electric communications from this system will be sent to the email address you provide. Any certificates that will be generated upon successfull completion of an event that issues certificates will use the information on this screen. Please make sure the information listed below is correct.</div>
+					<fieldset>
+						<legend>Your Information</legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="YourFirstName" class="control-label col-sm-3">First Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" value="#Session.FormData.fName#" id="fName" name="fName" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="YourLastName" class="control-label col-sm-3">Last Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" value="#Session.FormData.lName#" id="lName" name="lName" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="YourEmail" class="control-label col-sm-3">Email Address:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" value="#Session.FormData.UserName#" id="UserName" name="UserName" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="YourDesiredPassword" class="control-label col-sm-3">Desired Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="password" class="form-control" value="#Session.FormData.Password#" id="Password" name="Password" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="VerifyDesiredPassword" class="control-label col-sm-3">Verify Password:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-6"><cfinput type="password" class="form-control" value="#Session.FormData.VerifyPassword#" id="VerifyPassword" name="VerifyPassword" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="ContactNumber" class="control-label col-sm-3">Phone Number:&nbsp;</label>
+						<div class="col-sm-6"><cfinput type="text" class="form-control" id="mobilePhone" value="#Session.FormData.mobilePhone#" name="mobilePhone" required="no"><div class="alert alert-warning small" role="alert"><em>This phone number will be used if an event needs to be cancelled or postponed</em></div></div>
+					</div>
+					<div class="form-group">
+						<label for="GradeLevel" class="control-label col-sm-3">Teaching Grade Level:&nbsp;</label>
+						<div class="col-sm-6"><cfselect name="GradeLevel" class="form-control" Required="No" selected="#Session.FormData.GradeLevel#" Multiple="No" query="Session.getGradeLevels" value="TContent_ID" Display="GradeLevel"  queryposition="below"><option value="----">Select Grade Level you Teach</option></cfselect></div>
+					</div>
+					<div class="form-group">
+						<label for="GradeSubjects" class="control-label col-sm-3">Teaching Subject:&nbsp;</label>
+						<div class="col-sm-6"><cfselect name="GradeSubjects" class="form-control" Required="No" selected="#Session.FormData.GradeSubjects#" Multiple="No" query="Session.getGradeSubjects" value="TContent_ID" Display="GradeSubject"  queryposition="below"><option value="----">Select Subject you Teach</option></cfselect></div>
+					</div>
+					<fieldset>
+						<legend>Account Security</legend>
+					</fieldset>
+					<div class="form-group">
+						<div class="col-sm-6"><div class="g-recaptcha" data-sitekey="6Le6hw0UAAAAAHty8-RZLBzpnHjc348j7U0nrxdh"></div></div>
+						<!---
+						<label for="HumanChecker" class="control-label col-sm-3">In order to prevent abuse from automatic systems, please type the letters or numbers in the box below:&nbsp;</label>
+						<div class="col-sm-6">
+							<cfimage action="captcha" difficulty="medium" text="#captcha#" fonts="arial,times roman, tahoma" height="150" width="500" /><br><br />
+							<cfinput name="ValidateCaptcha" type="text" required="yes" message="Input Captcha Text" />
+						</div>
+						--->
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="RegisterAccount" class="btn btn-primary pull-right" value="Register Account"><br /><br />
+				</div>
 			</div>
-			<div class="art-blockcontent"><p class="alert-box notice">Please complete the following information to register for a user account on this event registration system. All electric communications from this system will be sent to the email address you provide. Any certificates that will be generated upon successfull completion of an event that issues certificates will use the information on this screen. Please make sure the information listed below is correct.</p>
-				<hr>
-				<uForm:form action="" method="Post" id="RegisterUser" errors="#Session.FormErrors#" errorMessagePlacement="both" commonassetsPath="/properties/uniForm/"
-					showCancel="no" cancelValue="<--- Return to Available Events" cancelName="cancelButton" cancelAction="/index.cfm"
-					submitValue="Create User Account" loadValidation="true" loadMaskUI="true" loadDateUI="true" loadTimeUI="true">
-						<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-						<input type="hidden" name="InActive" valule="1">
-						<input type="hidden" name="formSubmit" value="true">
-						<uForm:fieldset legend="User Account Fields">
-							<uForm:field label="Your First Name" name="fName" isRequired="true" isDisabled="false" value="#Session.FormData.fName#" maxFieldLength="50" type="text" hint="Your First Name as you would like printed on certificates" />
-							<uForm:field label="Your Last Name" name="lName" isRequired="true" isDisabled="false" value="#Session.FormData.lName#" maxFieldLength="50" type="text" hint="Your Last Name as you would like printed on certificates" />
-							<uForm:field label="Your Email Address" name="UserName" isRequired="true" isDisabled="false" value="#Session.FormData.UserName#" maxFieldLength="50" type="text" hint="Your Primary Email Address" />
-							<uForm:field label="Your Desired Password" name="Password" isRequired="true" isDisabled="false" value="#Session.FormData.Password#" maxFieldLength="50" type="password" hint="The Password for this site" />
-							<uForm:field label="Confirm Desired Password" name="VerifyPassword" isRequired="true" isDisabled="false" value="#Session.FormData.VerifyPassword#" maxFieldLength="50" type="password" hint="Confirm Password for Site" />
-						</uForm:fieldset>
-						<uForm:fieldset legend="Optional Fields">
-							<uform:field label="School District" name="Company" type="select" hint="School District employeed at?">
-								<cfif Session.FormData.Company eq "0000">
-									<uform:option display="Corporate Business" value="0000" isSelected="true" />
-								<cfelse>
-									<uform:option display="Corporate Business" value="0000" />
-								</cfif>
-								<cfif Session.FormData.Company eq "0001">
-									<uform:option display="School District Not Listed" value="0001" isSelected="true" />
-								<cfelse>
-									<uform:option display="School District Not Listed" value="0001" />
-								</cfif>
-								<cfloop query="getSchoolDistricts">
-									<uform:option display="#getSchoolDistricts.OrganizationName#" value="#getSchoolDistricts.StateDOE_IDNumber#" />
-								</cfloop>
-							</uform:field>
-							<uForm:field label="Phone Number" name="mobilePhone" type="text" maxFieldLength="14" mask="(999) 999-9999" value="#Session.FOrmData.mobilePhone#" hint="Your contact number in case of cancellation of event" />
-							<uform:field name="HumanChecker" isRequired="true" label="Please enter the characters you see below" type="captcha" captchaWidth="800" captchaMinChars="5" captchaMaxChars="8" />
-						</uForm:fieldset>
-				</uForm:form>
-			</div>
-		</div>
+		</cfform>
 	</cfoutput>
 </cfif>

@@ -3,103 +3,230 @@
 
 --->
 </cfsilent>
-
-<cfimport taglib="/plugins/EventRegistration/library/uniForm/tags/" prefix="uForm">
-
-<cfif not isDefined("URL.PerformAction")>
-	<cflock timeout="60" scope="SESSION" type="Exclusive">
-		<cfset Session.FormData = #StructNew()#>
-		<cfset Session.FormErrors = #ArrayNew()#>
-		<cfset Session.UserSuppliedInfo = #StructNew()#>
-	</cflock>
-	<cfoutput>
-		<div class="art-block clearfix">
-			<div class="art-blockheader">
-				<h3 class="t">Add New Caterer</h3>
-			</div>
-			<div class="art-blockcontent">
-				<p class="alert-box notice">Please complete the following information to add a new caterer where meals are received for your events.</p>
-				<hr>
-				<uForm:form action="" method="Post" id="AddCaterer" errors="#Session.FormErrors#" errorMessagePlacement="both"
-					commonassetsPath="/plugins/EventRegistration/library/uniForm/" showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
-					cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:caterers&compactDisplay=false"
-					submitValue="Add Caterer" loadValidation="true" loadMaskUI="true" loadDateUI="true"
-					loadTimeUI="true">
-					<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-					<input type="hidden" name="formSubmit" value="true">
-					<uForm:fieldset legend="Required Fields">
-						<uForm:field label="Facility Name" name="FacilityName" isRequired="true" maxFieldLength="35" type="text" hint="Official Registered Business Name" />
-						<uForm:field label="Physical Address" name="PhysicalAddress" isRequired="true" maxFieldLength="70" type="text" hint="Business Physical Address" />
-						<uForm:field label="Physical Address City" name="PhysicalCity" isRequired="true" maxFieldLength="70" type="text" hint="City of Physical Address" />
-						<uForm:field label="Physical Address State" name="PhysicalState" isRequired="true" type="select" hint="State of Physical Address"><uForm:states-us /><uForm:states-can showSelect="false" /></uForm:field>
-						<uForm:field label="Physical Address ZipCode" name="PhysicalZipCode" isRequired="true" maxFieldLength="5" type="text" hint="Zip Code of Physical Address" />
-					</uForm:fieldset>
-					<uForm:fieldset legend="Optional Fields">
-						<uForm:field label="Business Phone Number" name="PrimaryVoiceNumber" type="text" maxFieldLength="14" hint="Primary Phone Number of Business" mask="(999) 999-9999" />
-						<uForm:field label="Business Website" name="BusinessWebsite" type="text" maxFieldLength="100" hint="Business Website, if any" />
-						<uForm:field label="Payment Terms" name="PaymentTerms" type="textarea" maxFieldLength="100" hint="Payment Terms, if any" />
-						<uForm:field label="Delivery Info" name="DeliveryInfo" type="textarea" maxFieldLength="100" hint="Delivery Info, if any" />
-						<uForm:field label="Guarantee Info" name="GuaranteeInformation" type="textarea" maxFieldLength="100" hint="Guarantee Info, if any" />
-						<uForm:field label="Additional Notes" name="AdditionalNotes" type="textarea" maxFieldLength="100" hint="Additional Notes, if any" />
-					</uForm:fieldset>
-					<uForm:fieldset legend="Contact Information">
-						<uForm:field label="Contact Person" name="ContactName" type="text" hint="Contact Person for Business" />
-						<uForm:field label="Contact's Phone Number" name="ContactPhoneNumber" type="text" hint="Contact Person's Phone Number" mask="(999) 999-9999" />
-						<uForm:field label="Contact's Email Address" name="ContactEmail" type="text" hint="Contact Person's Email Address" />
-					</uForm:fieldset>
-					<uForm:fieldset legend="Informational Fields">
-						<uForm:field label="Date Created" name="dateCreated" type="text" isDisabled="true" value="#DateFormat(Now(), 'FULL')#" hint="Preferred Vendor Created Date" />
-						<uForm:field label="Date Updated" name="lastUpdated" type="text" isDisabled="true" value="#DateFormat(Now(), 'FULL')#" hint="Preferred Vendor Last Updated" />
-						<uForm:field label="Updated By" name="lastUpdateBy" type="text" isDisabled="true" value="#rc.$.currentUser('userName')#" hint="Preferred Vendor Last Updated By" />
-					</uForm:fieldset>
-				</uForm:form>
-			</div>
+<cfset YesNoQuery = QueryNew("ID,OptionName", "Integer,VarChar")>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 0)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "No")#>
+<cfset temp = QueryAddRow(YesNoQuery, 1)>
+<cfset temp = #QuerySetCell(YesNoQuery, "ID", 1)#>
+<cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "Yes")#>
+<cfoutput>
+	<cfif not isDefined("URL.FormRetry")>
+		<div class="panel panel-default">
+			<cfform action="" method="post" id="AddEvent" class="form-horizontal">
+				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+				<cfinput type="hidden" name="formSubmit" value="true">
+				<div class="panel-body">
+					<fieldset>
+						<legend><h2>Add new Caterer Information</h2></legend>
+					</fieldset>
+					<div class="alert alert-info">Please complete the following information to edit information regarding this Caterering Facility</div>
+					<div class="form-group">
+						<label for="FacilityName" class="control-label col-sm-3">Business Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="FacilityName" name="FacilityName" required="yes"></div>
+					</div>
+					<fieldset>
+						<legend><h2>Physical Location Information</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="PhysicalAddress" class="control-label col-sm-3">Address:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalAddress" name="PhysicalAddress" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PhysicalCity" class="control-label col-sm-3">City:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalCity" name="PhysicalCity" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PhysicalState" class="control-label col-sm-3">State:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalState" name="PhysicalState" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PhysicalZipCode" class="control-label col-sm-3">ZipCode:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalZipCode" name="PhysicalZipCode" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PrimaryVoiceNumber" class="control-label col-sm-3">Voice Number:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PrimaryVoiceNumber" name="PrimaryVoiceNumber" required="no"></div>
+					</div>
+					<div class="form-group">
+						<label for="BusinessWebsite" class="control-label col-sm-3">Website:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="BusinessWebsite" name="BusinessWebsite" required="NO"></div>
+					</div>
+					<fieldset>
+						<legend><h2>Contact Information</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="ContactName" class="control-label col-sm-3">Name:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="ContactName" name="ContactName" required="NO"></div>
+					</div>
+					<div class="form-group">
+						<label for="ContactPhoneNumber" class="control-label col-sm-3">Phone Number:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="ContactPhoneNumber" name="ContactPhoneNumber" required="NO"></div>
+					</div>
+					<div class="form-group">
+						<label for="ContactEmail" class="control-label col-sm-3">Email Address:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="ContactEmail" name="ContactEmail" required="NO"></div>
+					</div>
+					<fieldset>
+						<legend><h2>Optional Information</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="PaymentTerms" class="control-label col-sm-3">Payment Terms:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="PaymentTerms" id="PaymentTerms" class="form-control" ></textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="DeliveryInfo" class="control-label col-sm-3">Delivery Information:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="DeliveryInfo" id="DeliveryInfo" class="form-control" ></textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="GuaranteeInformation" class="control-label col-sm-3">Guarantee Information:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="GuaranteeInformation" id="GuaranteeInformation" class="form-control" ></textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="AdditionalNotes" class="control-label col-sm-3">Additional Notes:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="AdditionalNotes" id="AdditionalNotes" class="form-control" ></textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="Active" class="control-label col-sm-3">Active:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfselect name="Active" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" Display="OptionName" queryposition="below">
+							<option value="----">Is Caterer Active?</option>
+						</cfselect></div>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Add Catering Facility"><br /><br />
+				</div>
+			</cfform>
 		</div>
-	</cfoutput>
-<cfelseif isDefined("URL.PerformAction")>
-	<cfoutput>
-		<div class="art-block clearfix">
-			<div class="art-blockheader">
-				<h3 class="t">Add New Caterer</h3>
-			</div>
-			<div class="art-blockcontent">
-				<p class="alert-box notice">Please complete the following information to add a new caterer where meals are received for your events.</p>
-				<hr>
-				<uForm:form action="" method="Post" id="AddCaterer" errors="#Session.FormErrors#" errorMessagePlacement="both"
-					commonassetsPath="/plugins/EventRegistration/library/uniForm/" showCancel="yes" cancelValue="<--- Return to Menu" cancelName="cancelButton"
-					cancelAction="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:caterers&compactDisplay=false"
-					submitValue="Add Caterer" loadValidation="true" loadMaskUI="true" loadDateUI="true"
-					loadTimeUI="true">
-				<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
-				<input type="hidden" name="formSubmit" value="true">
-				<input type="hidden" name="ReSubmit" value="true">
-				<uForm:fieldset legend="Required Fields">
-					<uForm:field label="Facility Name" name="FacilityName" isRequired="true" type="text" value="#Session.UserSuppliedInfo.FacilityName#" hint="Official Registered Business Name" />
-					<uForm:field label="Physical Address" name="PhysicalAddress" isRequired="true" type="text" value="#Session.UserSuppliedInfo.PhysicalAddress#" hint="Business Physical Address" />
-					<uForm:field label="Physical Address City" name="PhysicalCity" isRequired="true" type="text" value="#Session.UserSuppliedInfo.PhysicalCity#" hint="City of Physical Address" />
-					<uForm:field label="Physical Address State" name="PhysicalState" isRequired="true" type="select" hint="State of Physical Address"><uForm:states-us defaultState="#Session.UserSuppliedInfo.PhysicalState#" /><uForm:states-can showSelect="false" /></uForm:field>
-					<uForm:field label="Physical Address ZipCode" name="PhysicalZipCode" isRequired="true" type="text" value="#Session.UserSuppliedInfo.PhysicalZipCode#" hint="Zip Code of Physical Address" />
-				</uForm:fieldset><br /><br />
-				<uForm:fieldset legend="Optional Fields">
-					<uForm:field label="Business Phone Number" name="PrimaryVoiceNumber" type="text" maxFieldLength="14" hint="Primary Phone Number of Business" mask="(999) 999-9999" />
-					<uForm:field label="Business Website" name="BusinessWebsite" type="text" maxFieldLength="100" hint="Business Website, if any" />
-					<uForm:field label="Payment Terms" name="PaymentTerms" type="textarea" maxFieldLength="100" hint="Payment Terms, if any" />
-					<uForm:field label="Delivery Info" name="DeliveryInfo" type="textarea" maxFieldLength="100" hint="Delivery Info, if any" />
-					<uForm:field label="Guarantee Info" name="GuaranteeInformation" type="textarea" maxFieldLength="100" hint="Guarantee Info, if any" />
-					<uForm:field label="Additional Notes" name="AdditionalNotes" type="textarea" maxFieldLength="100" hint="Additional Notes, if any" />
-				</uForm:fieldset>
-				<uForm:fieldset legend="Contact Information">
-					<uForm:field label="Contact Person" name="ContactName" type="text" hint="Contact Person for Business" />
-					<uForm:field label="Contact's Phone Number" name="ContactPhoneNumber" type="text" hint="Contact Person's Phone Number" mask="(999) 999-9999" />
-					<uForm:field label="Contact's Email Address" name="ContactEmail" type="text" hint="Contact Person's Email Address" />
-				</uForm:fieldset>
-				<uForm:fieldset legend="Informational Fields">
-					<uForm:field label="Date Created" name="dateCreated" type="text" isDisabled="true" value="#DateFormat(Now(), 'FULL')#" hint="Preferred Vendor Created Date" />
-					<uForm:field label="Date Updated" name="lastUpdated" type="text" isDisabled="true" value="#DateFormat(Now(), 'FULL')#" hint="Preferred Vendor Last Updated" />
-					<uForm:field label="Updated By" name="lastUpdateBy" type="text" isDisabled="true" value="#rc.$.currentUser('userName')#" hint="Preferred Vendor Last Updated By" />
-				</uForm:fieldset>
-			</uForm:form>
+	<cfelseif isDefined("URL.FormRetry")>
+		<div class="panel panel-default">
+			<cfform action="" method="post" id="AddEvent" class="form-horizontal">
+				<cfinput type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
+				<cfinput type="hidden" name="formSubmit" value="true">
+				<cfif isDefined("Session.FormErrors")>
+					<div id="modelWindowDialog" class="modal fade">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button>
+									<h3>Missing Information</h3>
+								</div>
+								<div class="modal-body">
+									<p class="alert alert-danger">#Session.FormErrors[1].Message#</p>
+								</div>
+								<div class="modal-footer">
+									<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script type='text/javascript'>
+						(function() {
+							'use strict';
+							function remoteModal(idModal){
+								var vm = this;
+								vm.modal = $(idModal);
+								if( vm.modal.length == 0 ) { return false; } else { openModal(); }
+								if( window.location.hash == idModal ){ openModal(); }
+								var services = { open: openModal, close: closeModal };
+								return services;
+								function openModal(){
+									vm.modal.modal('show');
+								}
+								function closeModal(){
+									vm.modal.modal('hide');
+								}
+							}
+							Window.prototype.remoteModal = remoteModal;
+						})();
+						$(function(){
+							window.remoteModal('##modelWindowDialog');
+						});
+					</script>
+				</cfif>
+				<div class="panel-body">
+					<fieldset>
+						<legend><h2>Add new Caterer Information</h2></legend>
+					</fieldset>
+					<div class="alert alert-info">Please complete the following information to edit information regarding this Caterering Facility</div>
+					<div class="form-group">
+						<label for="FacilityName" class="control-label col-sm-3">Business Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="FacilityName" name="FacilityName" value="#Session.FormInput.FacilityName#" required="yes"></div>
+					</div>
+					<fieldset>
+						<legend><h2>Physical Location Information</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="PhysicalAddress" class="control-label col-sm-3">Address:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalAddress" name="PhysicalAddress" value="#Session.FormInput.PhysicalAddress#" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PhysicalCity" class="control-label col-sm-3">City:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalCity" name="PhysicalCity" value="#Session.FormInput.PhysicalCity#" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PhysicalState" class="control-label col-sm-3">State:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalState" name="PhysicalState" value="#Session.FormInput.PhysicalState#" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PhysicalZipCode" class="control-label col-sm-3">ZipCode:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PhysicalZipCode" name="PhysicalZipCode" value="#Session.FormInput.PhysicalZipCode#" required="yes"></div>
+					</div>
+					<div class="form-group">
+						<label for="PrimaryVoiceNumber" class="control-label col-sm-3">Voice Number:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="PrimaryVoiceNumber" name="PrimaryVoiceNumber" value="#Session.FormInput.PrimaryVoiceNumber#" required="no"></div>
+					</div>
+					<div class="form-group">
+						<label for="BusinessWebsite" class="control-label col-sm-3">Website:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="BusinessWebsite" name="BusinessWebsite" value="#Session.FormInput.BusinessWebsite#" required="NO"></div>
+					</div>
+					<fieldset>
+						<legend><h2>Contact Information</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="ContactName" class="control-label col-sm-3">Name:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="ContactName" name="ContactName" value="#Session.FormInput.ContactName#" required="NO"></div>
+					</div>
+					<div class="form-group">
+						<label for="ContactPhoneNumber" class="control-label col-sm-3">Phone Number:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="ContactPhoneNumber" name="ContactPhoneNumber" value="#Session.FormInput.ContactPhoneNumber#" required="NO"></div>
+					</div>
+					<div class="form-group">
+						<label for="ContactEmail" class="control-label col-sm-3">Email Address:&nbsp;</label>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="ContactEmail" name="ContactEmail" value="#Session.FormInput.ContactEmail#" required="NO"></div>
+					</div>
+					<fieldset>
+						<legend><h2>Optional Information</h2></legend>
+					</fieldset>
+					<div class="form-group">
+						<label for="PaymentTerms" class="control-label col-sm-3">Payment Terms:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="PaymentTerms" id="PaymentTerms" class="form-control" >#Session.FormInput.PaymentTerms#</textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="DeliveryInfo" class="control-label col-sm-3">Delivery Information:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="DeliveryInfo" id="DeliveryInfo" class="form-control" >#Session.FormInput.DeliveryInfo#</textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="GuaranteeInformation" class="control-label col-sm-3">Guarantee Information:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="GuaranteeInformation" id="GuaranteeInformation" class="form-control" >#Session.FormInput.GuaranteeInformation#</textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="AdditionalNotes" class="control-label col-sm-3">Additional Notes:&nbsp;</label>
+						<div class="col-sm-8"><textarea name="AdditionalNotes" id="AdditionalNotes" class="form-control" >#Session.FormInput.AdditionalNotes#</textarea></div>
+					</div>
+					<div class="form-group">
+						<label for="Active" class="control-label col-sm-3">Active:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+						<div class="col-sm-8"><cfselect name="Active" class="form-control" Required="Yes" Multiple="No" query="YesNoQuery" value="ID" selected="#Session.FormInput.Active#" Display="OptionName" queryposition="below">
+							<option value="----">Is Caterer Active?</option>
+						</cfselect></div>
+					</div>
+				</div>
+				<div class="panel-footer">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Add Catering Facility"><br /><br />
+				</div>
+			</cfform>
 		</div>
-	</div>
+	</cfif>
 </cfoutput>
-</cfif>

@@ -107,7 +107,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										<input type="Hidden" Name="formSubmit" Value="Submit">
 										<input type="Hidden" Name="PerformAction" Value="RegisterParticipantsToEventWithAccounts">
 										<Table Border="0" CellSpacing="0" CellPadding="0" Width="100%">
-											<cfif Session.UserSuppliedInfo.PickedEvent.MealProvided EQ 1>
+											<cfif Session.UserSuppliedInfo.PickedEvent.MealAvailable EQ 1>
 												<tr>
 													<td colspan="2">Is each Participant Staying for Meal that you are registering for from this list?</td>
 													<td><select name="RegisterParticipantStayForMeal"><option value="1" selected>Yes</option><option value="0">No</option></select></td>
@@ -172,13 +172,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">
 									<input type="hidden" name="formSubmit" value="true">
 									<input type="hidden" name="PerformAction" value="RegisterParticipantsToEvent">
-									<input type="hidden" Name="MealProvided" Value="#Session.UserSuppliedInfo.PickedEvent.MealProvided#">
-									<input type="hidden" Name="MealCost" Value="#Session.UserSuppliedInfo.PickedEvent.MealCost_Estimated#">
+									<input type="hidden" Name="MealAvailable" Value="#Session.UserSuppliedInfo.PickedEvent.MealAvailable#">
+									<input type="hidden" Name="MealCost" Value="#Session.UserSuppliedInfo.PickedEvent.MealCost#">
 									<uForm:fieldset legend="First Participant's Information">
 										<uform:field label="First Name" name="Participant1FirstName" maxFieldLength="50" type="text" hint="First Name of Particiapnt" />
 										<uform:field label="Last Name" name="Participant1LastName" maxFieldLength="50" type="text" hint="Last Name of Particiapnt" />
 										<uform:field label="Email Address" name="Participant1EmailAddress" maxFieldLength="50" type="text" hint="Email Address of Particiapnt" />
-										<cfif Session.UserSuppliedInfo.PickedEvent.MealProvided EQ 1>
+										<cfif Session.UserSuppliedInfo.PickedEvent.MealAvailable EQ 1>
 											<uform:field label="Staying for Meal" name="Participant1WantsMeal" type="select" hint="Will you be staying for the Meal?">
 												<uform:option display="Yes" value="1" isSelected="true" />
 												<uform:option display="No" value="0" />
@@ -195,7 +195,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										<uform:field label="First Name" name="Participant2FirstName" maxFieldLength="50" type="text" hint="First Name of Particiapnt" />
 										<uform:field label="Last Name" name="Participant2LastName" maxFieldLength="50" type="text" hint="Last Name of Particiapnt" />
 										<uform:field label="Email Address" name="Participant2EmailAddress" maxFieldLength="50" type="text" hint="Email Address of Particiapnt" />
-										<cfif Session.UserSuppliedInfo.PickedEvent.MealProvided EQ 1>
+										<cfif Session.UserSuppliedInfo.PickedEvent.MealAvailable EQ 1>
 											<uform:field label="Staying for Meal" name="Participant2WantsMeal" type="select" hint="Will you be staying for the Meal?">
 												<uform:option display="Yes" value="1" isSelected="true" />
 												<uform:option display="No" value="0" />
@@ -212,7 +212,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										<uform:field label="First Name" name="Participant3FirstName" maxFieldLength="50" type="text" hint="First Name of Particiapnt" />
 										<uform:field label="Last Name" name="Participant3LastName" maxFieldLength="50" type="text" hint="Last Name of Particiapnt" />
 										<uform:field label="Email Address" name="Participant3EmailAddress" maxFieldLength="50" type="text" hint="Email Address of Particiapnt" />
-										<cfif Session.UserSuppliedInfo.PickedEvent.MealProvided EQ 1>
+										<cfif Session.UserSuppliedInfo.PickedEvent.MealAvailable EQ 1>
 											<uform:field label="Staying for Meal" name="Participant3WantsMeal" type="select" hint="Will you be staying for the Meal?">
 												<uform:option display="Yes" value="1" isSelected="true" />
 												<uform:option display="No" value="0" />
@@ -229,7 +229,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										<uform:field label="First Name" name="Participant4FirstName" maxFieldLength="50" type="text" hint="First Name of Particiapnt" />
 										<uform:field label="Last Name" name="Participant4LastName" maxFieldLength="50" type="text" hint="Last Name of Particiapnt" />
 										<uform:field label="Email Address" name="Participant4EmailAddress" maxFieldLength="50" type="text" hint="Email Address of Particiapnt" />
-										<cfif Session.UserSuppliedInfo.PickedEvent.MealProvided EQ 1>
+										<cfif Session.UserSuppliedInfo.PickedEvent.MealAvailable EQ 1>
 											<uform:field label="Staying for Meal" name="Participant4WantsMeal" type="select" hint="Will you be staying for the Meal?">
 												<uform:option display="Yes" value="1" isSelected="true" />
 												<uform:option display="No" value="0" />
@@ -246,7 +246,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										<uform:field label="First Name" name="Participant5FirstName" maxFieldLength="50" type="text" hint="First Name of Particiapnt" />
 										<uform:field label="Last Name" name="Participant5LastName" maxFieldLength="50" type="text" hint="Last Name of Particiapnt" />
 										<uform:field label="Email Address" name="Participant5EmailAddress" maxFieldLength="50" type="text" hint="Email Address of Particiapnt" />
-										<cfif Session.UserSuppliedInfo.PickedEvent.MealProvided EQ 1>
+										<cfif Session.UserSuppliedInfo.PickedEvent.MealAvailable EQ 1>
 											<uform:field label="Staying for Meal" name="Participant5WantsMeal" type="select" hint="Will you be staying for the Meal?">
 												<uform:option display="Yes" value="1" isSelected="true" />
 												<uform:option display="No" value="0" />
@@ -263,7 +263,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 										<uform:field label="First Name" name="Participant6FirstName" maxFieldLength="50" type="text" hint="First Name of Particiapnt" />
 										<uform:field label="Last Name" name="Participant6LastName" maxFieldLength="50" type="text" hint="Last Name of Particiapnt" />
 										<uform:field label="Email Address" name="Participant6EmailAddress" maxFieldLength="50" type="text" hint="Email Address of Particiapnt" />
-										<cfif Session.UserSuppliedInfo.PickedEvent.MealProvided EQ 1>
+										<cfif Session.UserSuppliedInfo.PickedEvent.MealAvailable EQ 1>
 											<uform:field label="Staying for Meal" name="Participant6WantsMeal" type="select" hint="Will you be staying for the Meal?">
 												<uform:option display="Yes" value="1" isSelected="true" />
 												<uform:option display="No" value="0" />

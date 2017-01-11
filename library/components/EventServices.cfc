@@ -61,33 +61,34 @@
 	</cffunction>
 
 	<cffunction name="iCalUS" returntype="String" output="false" hint="Create iCal Event for Registered Users">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 		<cfargument name="RegistrationRecordID" required="true" type="numeric">
 
-		<cfquery name="getRegistration" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+		<cfquery name="getRegistration" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select RegistrationID, RegistrationDate, User_ID, EventID, RequestsMeal, IVCParticipant, AttendeePrice, RegisterByUserID, OnWaitingList, Comments, WebinarParticipant
-			From eRegistrations
+			From p_EventRegistration_UserRegistrations
 			Where TContent_ID = <cfqueryparam value="#Arguments.RegistrationRecordID#" cfsqltype="cf_sql_integer">
 		</cfquery>
 
-		<cfquery name="getEvent" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
-			Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, LongDescription, Event_StartTime, Event_EndTime, PGPPoints, MealProvided, AllowVideoConference, VideoConferenceInfo, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, LocationType, LocationID, LocationRoomID, Facilitator, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost
-			From eEvents
+		<cfquery name="getEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+			Select ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, LongDescription, Event_StartTime, Event_EndTime, PGPPoints, MealAvailable, MealIncluded, AllowVideoConference, VideoConferenceInfo, EventAgenda, EventTargetAudience, EventStrategies, EventSpecialInstructions, LocationID, LocationRoomID, Facilitator, WebinarAvailable, WebinarConnectInfo, WebinarMemberCost, WebinarNonMemberCost
+			From p_EventRegistration_Events
 			Where TContent_ID = <cfqueryparam value="#getRegistration.EventID#" cfsqltype="cf_sql_integer">
 		</cfquery>
 
-		<cfquery name="getEventLocation" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+		<cfquery name="getEventLocation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select FacilityName, PhysicalAddress, PhysicalCity, PhysicalState, PhysicalZipCode, PrimaryVoiceNumber, GeoCode_Latitude, GeoCode_Longitude
-			From eFacility
-			Where FacilityType = '#getEvent.LocationType#' and TContent_ID = #getEvent.LocationID#
+			From p_EventRegistration_Facility
+			Where TContent_ID = <cfqueryparam value="#getEvent.LocationID#" cfsqltype="cf_sql_integer">
 		</cfquery>
 
-		<cfquery name="getRegisteredUserInfo" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+		<cfquery name="getRegisteredUserInfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select Fname, Lname, Email
 			From tusers
 			Where UserID = <cfqueryparam value="#getRegistration.User_ID#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 
-		<cfquery name="getEventFacilitator" Datasource="#Session.FormData.PluginInfo.Datasource#" username="#Session.FormData.PluginInfo.DBUsername#" password="#Session.FormData.PluginInfo.DBPassword#">
+		<cfquery name="getEventFacilitator" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select Fname, Lname, Email
 			From tusers
 			Where UserID = <cfqueryparam value="#getEvent.Facilitator#" cfsqltype="cf_sql_varchar">
@@ -201,12 +202,12 @@
 		<cfset TodayDate = #DateFormat(Now(), "yyyy-mm-dd")#>
 
 		<cfquery name="getEvent" Datasource="NIESCEventRegistration" username="CFAppsMySQL" password="CFAppsMySQL">
-			Select eEvents.TContent_ID, eEvents.ShortTitle, eEvents.EventDate
-			From eEvents
-			Where eEvents.EventDate > <cfqueryparam value="#Variables.TodayDate#" cfsqltype="cf_sql_date"> and
-				eEvents.EventDate < <cfqueryparam value="#Variables.DateInFuture#" cfsqltype="cf_sql_date"> and
-				eEvents.Site_ID = <cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar"> and
-				eEvents.Active = 1
+			Select TContent_ID, ShortTitle, EventDate
+			From p_EventRegistration_Events
+			Where EventDate > <cfqueryparam value="#Variables.TodayDate#" cfsqltype="cf_sql_date"> and
+				EventDate < <cfqueryparam value="#Variables.DateInFuture#" cfsqltype="cf_sql_date"> and
+				Site_ID = <cfqueryparam value="#Arguments.SiteID#" cfsqltype="cf_sql_varchar"> and
+				Active = 1
 			Order by EventDate ASC
 		</cfquery>
 
@@ -224,6 +225,48 @@
 			</UpComingEvents></cfoutput>
 			</cfsavecontent>
 			<cfreturn RTrim(LTrim(Variables.xmlData))>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="AddParticipantToDatabase" Access="Remote" returntype="Any" output="true" hint="Add Participant To Database">
+		<cfset requestData = getHttpRequestData()>
+		<cfset requestContent = #variables.requestData.content#>
+		<cfset requestContent = #Replace(variables.requestContent, "%7B", "{", "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%22", '"', "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%3A", ":", "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%2C", ",", "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%2F", "/", "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%7D", "}", "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%40", "@", "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%20", " ", "ALL")#>
+		<cfset requestContent = #Replace(variables.requestContent, "%2B", " ", "ALL")#>
+		<cfset Info = #ListLast(variables.requestContent, "&")#>
+		<cfset requestinfo = #DeserializeJSON(Variables.Info)#>
+
+		<cfquery name="CheckAccount" Datasource="#requestinfo.DBINfo.Datasource#" username="#requestinfo.DBINfo.DBUsername#" password="#requestinfo.DBInfo.DBPassword#">
+			Select UserID, Fname, Lname, Email
+			From tusers
+			Where SiteID = <cfqueryparam value="#requestinfo.DBINfo.SiteID#" cfsqltype="cf_sql_varchar"> and
+				UserName = <cfqueryparam value="#requestinfo.UserInfo.Email#" cfsqltype="cf_sql_varchar">
+			Order by Lname, Fname
+		</cfquery>
+
+		<cfif CheckAccount.RecordCount EQ 0>
+			<cfset NewUser = #Application.userManager.readByUsername(requestinfo.UserInfo.Email, requestinfo.DBINfo.SiteID)#>
+			<cfset NewUser.setInActive(1)>
+			<cfset NewUser.setSiteID(requestinfo.DBINfo.SiteID)>
+			<cfset NewUser.setFname(Replace(requestinfo.UserInfo.Fname, "+", " ", "ALL"))>
+			<cfset NewUser.setLname(Replace(requestinfo.UserInfo.Lname, "+", " ", "ALL"))>
+			<cfset NewUser.setUsername(requestinfo.UserInfo.Email)>
+			<cfset NewUser.setEmail(requestinfo.UserInfo.Email)>
+			<cfset AddNewAccount = #Application.userManager.save(NewUser)#>
+			<cfset NewUserAccountID = #Variables.AddNewAccount.GetUserID()#>
+
+			<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(requestinfo.DBINfo.PackageName)#/library/components/EmailServices")>
+			<cfset temp = #SendEmailCFC.SendAccountActivationEmailFromOrganizationPerson(requestinfo, NewUserAccountID)#>
+			<cfreturn SerializeJSON(True)>
+		<cfelse>
+			<cfreturn SerializeJSON(FALSE)>
 		</cfif>
 	</cffunction>
 

@@ -173,9 +173,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<uform:option display="No" value="0" isSelected="true" />
 						</cfif>
 					</uform:field>
-					<uform:field label="Meal Provided" name="MealProvided" type="select" hint="Does this event have a meal available to attendee(s)?">
-						<cfif isDefined("Session.UserSuppliedInfo.MealProvided")>
-							<cfif Session.UserSuppliedInfo.MealProvided EQ 1>
+					<uform:field label="Meal Provided" name="MealAvailable" type="select" hint="Does this event have a meal available to attendee(s)?">
+						<cfif isDefined("Session.UserSuppliedInfo.MealAvailable")>
+							<cfif Session.UserSuppliedInfo.MealAvailable EQ 1>
 								<uform:option display="Yes" value="1" isSelected="true" />
 								<uform:option display="No" value="0" />
 							<cfelse>

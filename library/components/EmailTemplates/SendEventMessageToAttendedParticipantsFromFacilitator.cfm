@@ -1,4 +1,4 @@
-<cfmail To="#Arguments.ParticipantInfo.FName# #Arguments.ParticipantInfo.LName# <#Arguments.ParticipantInfo.Email#>" from="Event Registration System <registrationsystem@niesc.k12.in.us>" subject="Event Registration: Message From Event Facilitator Regarding Attended Event" server="127.0.0.1">
+<cfmail To="#Arguments.ParticipantInfo.FName# #Arguments.ParticipantInfo.LName# <#Arguments.ParticipantInfo.Email#>" from="Event Registration System <registrationsystem@#CGI.Server_Name#>" subject="Event Registration: Message From Event Facilitator Regarding Attended Event" server="127.0.0.1">
 <cfmailpart type="text/plain">
 #Arguments.ParticipantInfo.FName# #Arguments.ParticipantInfo.LName#,
 
@@ -19,7 +19,7 @@ Message Details Below
 </cfif></cfif>
 
 
-Note: This email address is not valid and is not read by a human individual. This email address is strictly for system notifications that are sent from this system.
+Note: Replies to this automated email address are not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# at #rc.$.siteConfig('ContactEmail')# or call #rc.$.siteConfig('ContactPhone')#
 </cfmailpart>
 <cfmailpart type="text/html">
 	<html><body>
@@ -44,7 +44,7 @@ Note: This email address is not valid and is not read by a human individual. Thi
 			</cfif></cfif>
 			</td></tr>
 			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">&nbsp;</td></tr>
-			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">Note: This email address is not valid and is not read by a human individual. This email address is strictly for system notifications that are sent from this system.</td></tr>
+			<tr><td Style="Font-Family: Arial; Font-Size: 12px; Font-Weight: Normal; Color: Black;">Note: Replies to this automated email address are not monitored by staff. If you have questions or issues contact #rc.$.siteConfig('ContactName')# at #rc.$.siteConfig('ContactEmail')# or call #rc.$.siteConfig('ContactPhone')#</td></tr>
 		</table>
 	</body></html>
 </cfmailpart>

@@ -9,13 +9,13 @@
 					<tbody>
 						<tr>
 							<td style="width: 155px;"><span style="font-weight: bold;"><cfif LEN(Session.EventInfo.SelectedEvent.EventDate1) or LEN(Session.EventInfo.SelectedEvent.EventDate2) or LEN(Session.EventInfo.SelectedEvent.EventDate3) or LEN(Session.EventInfo.SelectedEvent.EventDate4)>Event Dates:<cfelse>Event Date:</cfif></span></td>
-							<td colspan="3" rowspan="1">#DateFormat(Session.EventInfo.SelectedEvent.EventDate, "ddd mmm dd, yy")# <cfif LEN(Session.EventInfo.SelectedEvent.EventDate1)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate1, "ddd mmm dd, yy")#</cfif><cfif LEN(Session.EventInfo.SelectedEvent.EventDate2)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate2, "ddd mmm dd, yy")#</cfif><cfif LEN(Session.EventInfo.SelectedEvent.EventDate3)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate3, "ddd mmm dd, yy")#</cfif><cfif LEN(Session.EventInfo.SelectedEvent.EventDate4)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate4, "ddd mmm dd, yy")#</cfif></td>
+							<td colspan="3" rowspan="1">#DateFormat(Session.EventInfo.SelectedEvent.EventDate, "mm/dd/yyyy")# <cfif LEN(Session.EventInfo.SelectedEvent.EventDate1)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate1, "mm/dd/yyyy")#</cfif><cfif LEN(Session.EventInfo.SelectedEvent.EventDate2)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate2, "mm/dd/yyyy")#</cfif><cfif LEN(Session.EventInfo.SelectedEvent.EventDate3)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate3, "mm/dd/yyyy")#</cfif><cfif LEN(Session.EventInfo.SelectedEvent.EventDate4)>, #DateFormat(Session.EventInfo.SelectedEvent.EventDate4, "mm/dd/yyyy")#</cfif></td>
 						</tr>
 						<tr>
 							<td style="width: 155px;"><span style="font-weight: bold;">Event Time:</span></td>
 							<td style="width: 390px;">#TimeFormat(Session.EventInfo.SelectedEvent.Event_StartTime, "hh:mm t")# till #TimeFormat(Session.EventInfo.SelectedEvent.Event_EndTime, "hh:mm t")#</td>
 							<td style="text-align: right; width: 175px;"><span style="font-weight: bold;">Registration Deadline:</span></td>
-							<td style="width: 175px;">#DateFormat(Session.EventInfo.SelectedEvent.Registration_Deadline, "ddd mmm dd, yy")#</td>
+							<td style="width: 175px;">#DateFormat(Session.EventInfo.SelectedEvent.Registration_Deadline, "mm/dd/yyyy")#</td>
 						</tr>
 						<tr>
 							<td style="width: 155px;"><span style="font-weight: bold;">Seats Available:</span></td>
@@ -66,23 +66,23 @@
 							<td colspan="3">#Session.EventInfo.SelectedEvent.EventSpecialInstructions#</td>
 							</tr>
 						</cfif>
-						<cfif Session.EventInfo.SelectedEvent.PGPAvailable GT 0 and Session.EventInfo.SelectedEvent.MealProvided EQ 1>
+						<cfif Session.EventInfo.SelectedEvent.PGPAvailable GT 0 and Session.EventInfo.SelectedEvent.MealAvailable EQ 1>
 							<tr>
 							<td style="width: 155px;"><span style="font-weight: bold;">PGP Points:</span></td>
 							<td style="width: 390px;">#NumberFormat(Session.EventInfo.SelectedEvent.PGPPoints, "999.99")#</td>
 							<td style="width: 175px;"><span style="font-weight: bold;">Meal Provided:</span></td>
-							<td style="width: 175px;"><cfif Session.EventInfo.SelectedEvent.MealProvided EQ 1>Yes<cfelse>No</cfif></td>
+							<td style="width: 175px;"><cfif Session.EventInfo.SelectedEvent.MealAvailable EQ 1>Yes<cfelse>No</cfif></td>
 							</tr>
-						<cfelseif Session.EventInfo.SelectedEvent.PGPAvailable GT 0 and Session.EventInfo.SelectedEvent.MealProvided EQ 0>
+						<cfelseif Session.EventInfo.SelectedEvent.PGPAvailable GT 0 and Session.EventInfo.SelectedEvent.MealAvailable EQ 0>
 							<tr>
 							<td style="width: 155px;"><span style="font-weight: bold;">PGP Points:</span></td>
 							<td colspan="3">&nbsp;&nbsp;#NumberFormat(Session.EventInfo.SelectedEvent.PGPPoints, "999.99")#</td>
 							</tr>
-						<cfelseif Session.EventInfo.SelectedEvent.PGPAvailable EQ 0 and Session.EventInfo.SelectedEvent.MealProvided EQ 1>
+						<cfelseif Session.EventInfo.SelectedEvent.PGPAvailable EQ 0 and Session.EventInfo.SelectedEvent.MealAvailable EQ 1>
 							<tr>
 							<td colspan="2">&nbsp;</td>
 							<td style="width: 175px;"><span style="font-weight: bold;">Meal Provided:</span></td>
-							<td style="width: 175px;"><cfif Session.EventInfo.SelectedEvent.MealProvided EQ 1>Yes<cfelse>No</cfif></td>
+							<td style="width: 175px;"><cfif Session.EventInfo.SelectedEvent.MealAvailable EQ 1>Yes<cfelse>No</cfif></td>
 							</tr>
 						</cfif>
 						<cfif Session.EventInfo.SelectedEvent.WebinarAvailable EQ 1>
@@ -166,7 +166,7 @@
 								</tr>
 								<tr>
 									<td>Registration Deadline:</td>
-									<td colspan="3">#DateFormat(Session.EventInfo.SelectedEvent.EarlyBird_RegistrationDeadline, "ddd mmm dd, yy")#</td>
+									<td colspan="3">#DateFormat(Session.EventInfo.SelectedEvent.EarlyBird_RegistrationDeadline, "mm/dd/yyyy")#</td>
 								</tr>
 								<tr>
 									<td style="width: 155px;">ESC Member Price:</td>
@@ -180,7 +180,7 @@
 								</tr>
 								<tr>
 									<td>Registration Deadline:</td>
-									<td colspan="3">#DateFormat(Session.EventInfo.SelectedEvent.EarlyBird_RegistrationDeadline, "ddd mmm dd, yy")#</td>
+									<td colspan="3">#DateFormat(Session.EventInfo.SelectedEvent.EarlyBird_RegistrationDeadline, "mm/dd/yyyy")#</td>
 								</tr>
 								<tr>
 									<td colspan="4"><big style="color: red;"><big><span style="font-weight: bold;">Early Bird Registration Ends Today</span></big></big></td>

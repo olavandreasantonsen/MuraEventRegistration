@@ -29,15 +29,39 @@
 		<cfargument name="sord" required="no" default="ASC" hint="Sort Order">
 
 		<cfset var arrUsers = ArrayNew(1)>
-		<cfquery name="getUsers" dbtype="Query">
-			Select UserID, LName, FName, UserName, Company, LastLogin, Created, InActive
-			From Session.getUsers
-			<cfif Arguments.sidx NEQ "">
-				Order By #Arguments.sidx# #Arguments.sord#
+
+		<cfif isDefined("URL._search")>
+			<cfif URL._search EQ "false">
+				<cfquery name="getUsers" dbtype="Query">
+					Select UserID, LName, FName, UserName, Company, LastLogin, Created, InActive
+					From Session.getUsers
+					<cfif Arguments.sidx NEQ "">
+						Order By #Arguments.sidx# #Arguments.sord#
+					<cfelse>
+						Order by LName ASC, FName ASC
+					</cfif>
+				</cfquery>
 			<cfelse>
-				Order by LName ASC, FName ASC
+				<cfquery name="getUsers" dbtype="Query">
+					Select UserID, LName, FName, UserName, Company, LastLogin, Created, InActive
+					From Session.getUsers
+					<cfif Arguments.sidx NEQ "">
+						Where #URL.searchField# LIKE '%#URL.searchString#'
+						Order By #Arguments.sidx# #Arguments.sord#
+					</cfif>
+				</cfquery>
 			</cfif>
-		</cfquery>
+		<cfelse>
+			<cfquery name="getUsers" dbtype="Query">
+				Select UserID, LName, FName, UserName, Company, LastLogin, Created, InActive
+				From Session.getUsers
+				<cfif Arguments.sidx NEQ "">
+					Order By #Arguments.sidx# #Arguments.sord#
+				<cfelse>
+					Order by LName ASC, FName ASC
+				</cfif>
+			</cfquery>
+		</cfif>
 
 		<!--- Calculate the Start Position for the loop query. So, if you are on 1st page and want to display 4 rows per page, for first page you start at: (1-1)*4+1 = 1.
 				If you go to page 2, you start at (2-)1*4+1 = 5 --->

@@ -23,6 +23,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 <cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "Yes")#>
 
 <cfoutput>
+	<script src="/requirements/ckeditor/ckeditor.js"></script>
 	<script>
 		$(function() {
 			$("##EventDate").datepicker();
@@ -91,7 +92,24 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</div>
 					<div class="form-group">
 						<label for="LongDescription" class="control-label col-sm-3">Event Description:&nbsp;</label>
-						<div class="col-sm-8"><textarea name="LongDescription" id="LongDescription" class="form-control" ></textarea><span id="LongDescriptionCharacters"></span> Characters</div>
+						<div class="col-sm-8">
+							<textarea name="LongDescription" id="LongDescription" class="form-control" cols="80" rows="10"></textarea>
+							<script>CKEDITOR.replace('LongDescription', {
+								// Define the toolbar groups as it is a more accessible solution.
+								toolbarGroups: [
+									{"name":"basicstyles","groups":["basicstyles"]},
+									{"name":"links","groups":["links"]},
+									{"name":"paragraph","groups":["list","blocks"]},
+									{"name":"document","groups":["mode"]},
+									{"name":"insert","groups":["insert"]},
+									{"name":"styles","groups":["styles"]},
+									{"name":"about","groups":["about"]}
+								],
+								// Remove the redundant buttons from toolbar groups defined above.
+								removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+							} );
+							</script>
+						</div>
 					</div>
 					<fieldset>
 						<legend><h2>Event Specific Feature Information</h2></legend>
@@ -212,7 +230,24 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</div>
 					<div class="form-group">
 						<label for="LongDescription" class="control-label col-sm-3">Event Description:&nbsp;</label>
-						<div class="col-sm-8"><textarea name="LongDescription" id="LongDescription" class="form-control">#Session.UserSuppliedInfo.LongDescription#</textarea><span id="LongDescriptionCharacters"></span> Characters</div>
+						<div class="col-sm-8">
+							<textarea name="LongDescription" id="LongDescription" class="form-control" cols="80" rows="10"></textarea>
+							<script>CKEDITOR.replace('LongDescription', {
+								// Define the toolbar groups as it is a more accessible solution.
+								toolbarGroups: [
+									{"name":"basicstyles","groups":["basicstyles"]},
+									{"name":"links","groups":["links"]},
+									{"name":"paragraph","groups":["list","blocks"]},
+									{"name":"document","groups":["mode"]},
+									{"name":"insert","groups":["insert"]},
+									{"name":"styles","groups":["styles"]},
+									{"name":"about","groups":["about"]}
+								],
+								// Remove the redundant buttons from toolbar groups defined above.
+								removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+							} );
+							</script>
+						</div>
 					</div>
 					<fieldset>
 						<legend><h2>Event Specific Feature Information</h2></legend>

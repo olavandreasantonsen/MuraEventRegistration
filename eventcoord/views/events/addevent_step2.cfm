@@ -17,6 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 <cfset temp = #QuerySetCell(YesNoQuery, "OptionName", "Yes")#>
 </cfsilent>
 <cfoutput>
+	<script src="/requirements/ckeditor/ckeditor.js"></script>
 	<script>
 		$(function() {
 			$("##EventDate1").datepicker();
@@ -129,19 +130,91 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</fieldset>
 					<div class="form-group">
 						<label for="EventAgenda" class="control-label col-sm-3">Event Agenda:&nbsp;</label>
-						<div class="col-sm-8"><textarea name="EventAgenda" id="EventAgenda" class="form-control"></textarea></div>
+						<div class="col-sm-8">
+							<textarea name="EventAgenda" id="EventAgenda" class="form-control" cols="80" rows="10"></textarea>
+							<script>
+								CKEDITOR.replace('EventAgenda', {
+									// Define the toolbar groups as it is a more accessible solution.
+									toolbarGroups: [
+										{"name":"basicstyles","groups":["basicstyles"]},
+										{"name":"links","groups":["links"]},
+										{"name":"paragraph","groups":["list","blocks"]},
+										{"name":"document","groups":["mode"]},
+										{"name":"insert","groups":["insert"]},
+										{"name":"styles","groups":["styles"]},
+										{"name":"about","groups":["about"]}
+									],
+									// Remove the redundant buttons from toolbar groups defined above.
+									removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+								} );
+							</script>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="EventTargetAudience" class="control-label col-sm-3">Event Target Audience:&nbsp;</label>
-						<div class="col-sm-8"><textarea name="EventTargetAudience" id="EventTargetAudience" class="form-control"></textarea></div>
+						<div class="col-sm-8">
+							<textarea name="EventTargetAudience" id="EventTargetAudience" class="form-control" cols="80" rows="10"></textarea>
+							<script>
+								CKEDITOR.replace('EventTargetAudience', {
+									// Define the toolbar groups as it is a more accessible solution.
+									toolbarGroups: [
+										{"name":"basicstyles","groups":["basicstyles"]},
+										{"name":"links","groups":["links"]},
+										{"name":"paragraph","groups":["list","blocks"]},
+										{"name":"document","groups":["mode"]},
+										{"name":"insert","groups":["insert"]},
+										{"name":"styles","groups":["styles"]},
+										{"name":"about","groups":["about"]}
+									],
+									// Remove the redundant buttons from toolbar groups defined above.
+									removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+								} );
+							</script>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="EventStrategies" class="control-label col-sm-3">Event Strategies:&nbsp;</label>
-						<div class="col-sm-8"><textarea name="EventStrategies" id="EventStrategies" class="form-control"></textarea></div>
+						<div class="col-sm-8">
+							<textarea name="EventStrategies" id="EventStrategies" class="form-control" cols="80" rows="10"></textarea>
+							<script>
+								CKEDITOR.replace('EventStrategies', {
+									// Define the toolbar groups as it is a more accessible solution.
+									toolbarGroups: [
+										{"name":"basicstyles","groups":["basicstyles"]},
+										{"name":"links","groups":["links"]},
+										{"name":"paragraph","groups":["list","blocks"]},
+										{"name":"document","groups":["mode"]},
+										{"name":"insert","groups":["insert"]},
+										{"name":"styles","groups":["styles"]},
+										{"name":"about","groups":["about"]}
+									],
+									// Remove the redundant buttons from toolbar groups defined above.
+									removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+								} );
+							</script>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="EventSpecialInstructions" class="control-label col-sm-3">Event Special Instructions:&nbsp;</label>
-						<div class="col-sm-8"><textarea name="EventSpecialInstructions" id="EventSpecialInstructions" class="form-control"></textarea></div>
+						<div class="col-sm-8">
+							<textarea name="EventSpecialInstructions" id="EventSpecialInstructions" class="form-control" cols="80" rows="10"></textarea>
+							<script>
+								CKEDITOR.replace('EventSpecialInstructions', {
+									// Define the toolbar groups as it is a more accessible solution.
+									toolbarGroups: [
+										{"name":"basicstyles","groups":["basicstyles"]},
+										{"name":"links","groups":["links"]},
+										{"name":"paragraph","groups":["list","blocks"]},
+										{"name":"document","groups":["mode"]},
+										{"name":"insert","groups":["insert"]},
+										{"name":"styles","groups":["styles"]},
+										{"name":"about","groups":["about"]}
+									],
+									// Remove the redundant buttons from toolbar groups defined above.
+									removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+								} );
+							</script>
+						</div>
 					</div>
 					<cfif Session.UserSuppliedInfo.FirstStep.WebinarEvent EQ 0>
 						<fieldset>
@@ -196,7 +269,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</fieldset>
 						<div class="form-group">
 							<label for="GroupPriceRequirements" class="control-label col-sm-3">Requirements to Meet Group Pricing:&nbsp;</label>
-							<div class="col-sm-8"><textarea name="GroupPriceRequirements" id="GroupPriceRequirements" class="form-control"></textarea></div>
+							<div class="col-sm-8">
+								<textarea name="GroupPriceRequirements" id="GroupPriceRequirements" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('GroupPriceRequirements', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
 						</div>
 						<div class="form-group">
 							<label for="GroupMemberCost" class="control-label col-sm-3">Group Member Pricing:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
@@ -242,7 +333,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</div>
 						<div class="form-group">
 							<label for="MealInformation" class="control-label col-sm-3">Meal Information:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
-							<div class="col-sm-8"><textarea name="MealInformation" id="MealInformation" class="form-control"></textarea></div>
+							<div class="col-sm-8">
+								<textarea name="MealInformation" id="MealInformation" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('MealInformation', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
 						</div>
 					</cfif>
 					<cfif Session.UserSuppliedInfo.FirstStep.AllowVideoConference EQ 1 and Session.UserSuppliedInfo.FirstStep.WebinarEvent EQ 0>
@@ -251,7 +360,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</fieldset>
 						<div class="form-group">
 							<label for="VideoConferenceInfo" class="control-label col-sm-3">Connection Information:&nbsp;</label>
-							<div class="col-sm-8"><textarea name="VideoConferenceInfo" id="VideoConferenceInfo" class="form-control"></textarea></div>
+							<div class="col-sm-8">
+								<textarea name="VideoConferenceInfo" id="VideoConferenceInfo" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('VideoConferenceInfo', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
 						</div>
 						<div class="form-group">
 							<label for="VideoConferenceCost" class="control-label col-sm-3">Cost to Attend via this:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
@@ -264,7 +391,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</fieldset>
 						<div class="form-group">
 							<label for="WebinarConnectWebInfo" class="control-label col-sm-3">Connection Information:&nbsp;</label>
-							<div class="col-sm-8"><textarea name="WebinarConnectWebInfo" id="WebinarConnectWebInfo" class="form-control"></textarea></div>
+							<div class="col-sm-8">
+								<textarea name="WebinarConnectWebInfo" id="WebinarConnectWebInfo" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('WebinarConnectWebInfo', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
 						</div>
 						<div class="form-group">
 							<label for="WebinarMemberCost" class="control-label col-sm-3">Member Cost to Attend via this:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
@@ -361,9 +506,41 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<label for="EventAgenda" class="control-label col-sm-3">Event Agenda:&nbsp;</label>
 						<div class="col-sm-8">
 							<cfif isDefined("Session.UserSuppliedInfo.SecondStep.EventAgenda")>
-								<textarea name="EventAgenda" id="EventAgenda" class="form-control">#Session.UserSuppliedInfo.SecondStep.EventAgenda#</textarea>
+								<textarea name="EventAgenda" id="EventAgenda" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.EventAgenda#</textarea>
+								<script>
+									CKEDITOR.replace('EventAgenda', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							<cfelse>
-								<textarea name="EventAgenda" id="EventAgenda" class="form-control"></textarea>
+								<textarea name="EventAgenda" id="EventAgenda" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('EventAgenda', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							</cfif>
 						</div>
 					</div>
@@ -371,9 +548,41 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<label for="EventTargetAudience" class="control-label col-sm-3">Event Target Audience:&nbsp;</label>
 						<div class="col-sm-8">
 							<cfif isDefined("Session.UserSuppliedInfo.SecondStep.EventAgenda")>
-								<textarea name="EventTargetAudience" id="EventTargetAudience" class="form-control">#Session.UserSuppliedInfo.SecondStep.EventTargetAudience#</textarea>
+								<textarea name="EventTargetAudience" id="EventTargetAudience" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.EventTargetAudience#</textarea>
+								<script>
+									CKEDITOR.replace('EventTargetAudience', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							<cfelse>
-								<textarea name="EventTargetAudience" id="EventTargetAudience" class="form-control"></textarea>
+								<textarea name="EventTargetAudience" id="EventTargetAudience" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('EventTargetAudience', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							</cfif>
 						</div>
 					</div>
@@ -381,9 +590,41 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<label for="EventStrategies" class="control-label col-sm-3">Event Strategies:&nbsp;</label>
 						<div class="col-sm-8">
 							<cfif isDefined("Session.UserSuppliedInfo.SecondStep.EventStrategies")>
-								<textarea name="EventStrategies" id="EventStrategies" class="form-control">#Session.UserSuppliedInfo.SecondStep.EventStrategies#</textarea>
+								<textarea name="EventStrategies" id="EventStrategies" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.EventStrategies#</textarea>
+								<script>
+									CKEDITOR.replace('EventStrategies', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							<cfelse>
-								<textarea name="EventStrategies" id="EventStrategies" class="form-control"></textarea>
+								<textarea name="EventStrategies" id="EventStrategies" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('EventStrategies', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							</cfif>
 						</div>
 					</div>
@@ -391,9 +632,41 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<label for="EventSpecialInstructions" class="control-label col-sm-3">Event Special Instructions:&nbsp;</label>
 						<div class="col-sm-8">
 							<cfif isDefined("Session.UserSuppliedInfo.SecondStep.EventSpecialInstructions")>
-								<textarea name="EventSpecialInstructions" id="EventSpecialInstructions" class="form-control">#Session.UserSuppliedInfo.SecondStep.EventSpecialInstructions#</textarea>
+								<textarea name="EventSpecialInstructions" id="EventSpecialInstructions" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.EventSpecialInstructions#</textarea>
+								<script>
+									CKEDITOR.replace('EventSpecialInstructions', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							<cfelse>
-								<textarea name="EventSpecialInstructions" id="EventSpecialInstructions" class="form-control"></textarea>
+								<textarea name="EventSpecialInstructions" id="EventSpecialInstructions" class="form-control" cols="80" rows="10"></textarea>
+								<script>
+									CKEDITOR.replace('EventSpecialInstructions', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
 							</cfif>
 						</div>
 					</div>
@@ -462,7 +735,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</fieldset>
 						<div class="form-group">
 							<label for="GroupPriceRequirements" class="control-label col-sm-3">Requirements to Meet Group Pricing:&nbsp;</label>
-							<div class="col-sm-8"><textarea name="GroupPriceRequirements" id="GroupPriceRequirements" class="form-control">#Session.UserSuppliedInfo.SecondStep.GroupPriceRequirements#</textarea></div>
+							<div class="col-sm-8">
+								<textarea name="GroupPriceRequirements" id="GroupPriceRequirements" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.GroupPriceRequirements#</textarea>
+								<script>
+									CKEDITOR.replace('GroupPriceRequirements', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
 						</div>
 						<div class="form-group">
 							<label for="GroupMemberCost" class="control-label col-sm-3">Group Member Pricing:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
@@ -512,6 +803,28 @@ http://www.apache.org/licenses/LICENSE-2.0
 							<label for="MealCost" class="control-label col-sm-3">Meal Cost:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
 							<div class="col-sm-8"><cfinput type="text" class="form-control" id="MealCost" name="MealCost" value="#Session.UserSuppliedInfo.SecondStep.MealCost#" required="yes"></div>
 						</div>
+						<div class="form-group">
+							<label for="MealInformation" class="control-label col-sm-3">Meal Information:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
+							<div class="col-sm-8">
+								<textarea name="MealInformation" id="MealInformation" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.MealInformation#</textarea>
+								<script>
+									CKEDITOR.replace('MealInformation', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
+						</div>
 					</cfif>
 					<cfif Session.UserSuppliedInfo.FirstStep.AllowVideoConference EQ 1 and Session.UserSuppliedInfo.FirstStep.WebinarEvent EQ 0>
 						<fieldset>
@@ -519,7 +832,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</fieldset>
 						<div class="form-group">
 							<label for="VideoConferenceInfo" class="control-label col-sm-3">Connection Information:&nbsp;</label>
-							<div class="col-sm-8"><textarea name="VideoConferenceInfo" id="VideoConferenceInfo" class="form-control">#Session.UserSuppliedInfo.SecondStep.VideoConferenceInfo#</textarea></div>
+							<div class="col-sm-8">
+								<textarea name="VideoConferenceInfo" id="VideoConferenceInfo" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.VideoConferenceInfo#</textarea>
+								<script>
+									CKEDITOR.replace('VideoConferenceInfo', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
 						</div>
 						<div class="form-group">
 							<label for="VideoConferenceCost" class="control-label col-sm-3">Cost to Attend via this:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
@@ -532,7 +863,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 						</fieldset>
 						<div class="form-group">
 							<label for="WebinarConnectWebInfo" class="control-label col-sm-3">Connection Information:&nbsp;</label>
-							<div class="col-sm-8"><textarea name="WebinarConnectWebInfo" id="WebinarConnectWebInfo" class="form-control">#Session.UserSuppliedInfo.SecondStep.WebinarConnectWebInfo#</textarea></div>
+							<div class="col-sm-8">
+								<textarea name="WebinarConnectWebInfo" id="WebinarConnectWebInfo" class="form-control" cols="80" rows="10">#Session.UserSuppliedInfo.SecondStep.WebinarConnectWebInfo#</textarea>
+								<script>
+									CKEDITOR.replace('WebinarConnectWebInfo', {
+										// Define the toolbar groups as it is a more accessible solution.
+										toolbarGroups: [
+											{"name":"basicstyles","groups":["basicstyles"]},
+											{"name":"links","groups":["links"]},
+											{"name":"paragraph","groups":["list","blocks"]},
+											{"name":"document","groups":["mode"]},
+											{"name":"insert","groups":["insert"]},
+											{"name":"styles","groups":["styles"]},
+											{"name":"about","groups":["about"]}
+										],
+										// Remove the redundant buttons from toolbar groups defined above.
+										removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+									} );
+								</script>
+							</div>
 						</div>
 						<div class="form-group">
 							<label for="WebinarMemberCost" class="control-label col-sm-3">Member Cost to Attend via this:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>

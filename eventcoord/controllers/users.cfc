@@ -164,7 +164,7 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.edituser&FormRetry=True&UserID=#FORM.UserID#" addtoken="false">
 			</cfif>
 
-			<cfif not isEmail(FORM.UserName)>
+			<cfif not isValid("email", FORM.UserName)>
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please enter a valid email address for this user account."};
 					arrayAppend(Session.FormErrors, errormsg);
@@ -336,6 +336,13 @@
 			<cfif FORM.Password NEQ FORM.VerifyPassword>
 				<cfscript>
 					errormsg = {property="EmailMsg",message="The Password Field and the Verify Password Field did not match. Please check these fields and try to submit this request again."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">
+			</cfif>
+			<cfif not isValid("email", FORM.UserName)>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter a valid email address for this user account."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">

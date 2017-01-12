@@ -13,10 +13,11 @@
 		<cfset UserMembershipQuery = #$.currentUser().getMembershipsQuery()#>
 		<cfloop query="#Variables.UserMembershipQuery#">
 			<cfif UserMembershipQuery.GroupName EQ "Event Facilitator"><cfset Session.Mura.EventCoordinatorRole = true></cfif>
-			<cfif UserMembershipQuery.GroupName EQ "Event Presentator"><cfset Session.Mura.EventPresenterRole = true></cfif>
+			<cfif UserMembershipQuery.GroupName EQ "Event Presenter"><cfset Session.Mura.EventPresenterRole = true></cfif>
 		</cfloop>
 		<cfif Session.Mura.Username EQ "admin"><cfset Session.Mura.SuperAdminRole = true></cfif>
 		<cfif Session.Mura.EventCoordinatorRole EQ "True"><cfoutput>#Variables.this.redirect("eventcoord:main.default")#</cfoutput></cfif>
+		<cfif Session.Mura.EventPresenterRole EQ "True"><cfoutput>#Variables.this.redirect("eventpresenter:main.default")#</cfoutput></cfif>
 		<cfif Session.Mura.SuperAdminRole EQ "true"><cfoutput>#Variables.this.redirect("siteadmin:main.default")#</cfoutput></cfif>
 
 		<cfif isDefined("Session.UserRegistrationInfo")>

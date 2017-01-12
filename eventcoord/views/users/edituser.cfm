@@ -74,15 +74,15 @@
 					<div class="alert alert-info">Please complete the following information to edit information regarding this Account Holder</div>
 					<div class="form-group">
 						<label for="FirstName" class="control-label col-sm-3">First Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
-						<div class="col-sm-8"><cfinput type="text" class="form-control" id="FName" name="FName" value="#Session.getSelectedUser.FName#" required="yes"></div>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="FName" name="FName" value="#Session.getSelectedUser.FName#" required="no"></div>
 					</div>
 					<div class="form-group">
 						<label for="LastName" class="control-label col-sm-3">Last Name:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
-						<div class="col-sm-8"><cfinput type="text" class="form-control" id="LName" name="LName" value="#Session.getSelectedUser.LName#" required="yes"></div>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="LName" name="LName" value="#Session.getSelectedUser.LName#" required="no"></div>
 					</div>
 					<div class="form-group">
 						<label for="Email" class="control-label col-sm-3">Email Address:&nbsp;<span style="Color: Red;" class="glyphicon glyphicon-star"></label>
-						<div class="col-sm-8"><cfinput type="text" class="form-control" id="Email" name="Email" value="#Session.getSelectedUser.Email#" required="yes"></div>
+						<div class="col-sm-8"><cfinput type="text" class="form-control" id="Email" name="Email" value="#Session.getSelectedUser.Email#" required="no"></div>
 					</div>
 					<div class="form-group">
 						<label for="Username" class="control-label col-sm-3">Username:&nbsp;</label>

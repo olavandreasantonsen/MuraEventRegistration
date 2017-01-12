@@ -7,7 +7,7 @@
 				<cfquery name="Session.getUsers" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Select UserID, FName, LName, UserName, Company, LastLogin, LastUpdate, InActive, Created
 					From tusers
-					Where SiteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#"> and GroupName is null and Username <> "admin"
+					Where SiteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#"> and GroupName is null and Username is not null
 					Order by LName ASC, FName ASC
 				</cfquery>
 			</cfcase>
@@ -143,6 +143,30 @@
 			<cfif FORM.InActive EQ "----">
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please Select if this Account Holder's Account is InActive or Not."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.edituser&FormRetry=True&UserID=#FORM.UserID#" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.FName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the First Name of this new user account."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.edituser&FormRetry=True&UserID=#FORM.UserID#" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.LName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the Last Name of this new user account."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.edituser&FormRetry=True&UserID=#FORM.UserID#" addtoken="false">
+			</cfif>
+
+			<cfif not isValid("email", FORM.UserName)>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter a valid email address for this user account."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.edituser&FormRetry=True&UserID=#FORM.UserID#" addtoken="false">
@@ -312,6 +336,13 @@
 			<cfif FORM.Password NEQ FORM.VerifyPassword>
 				<cfscript>
 					errormsg = {property="EmailMsg",message="The Password Field and the Verify Password Field did not match. Please check these fields and try to submit this request again."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">
+			</cfif>
+			<cfif not isValid("email", FORM.UserName)>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter a valid email address for this user account."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">

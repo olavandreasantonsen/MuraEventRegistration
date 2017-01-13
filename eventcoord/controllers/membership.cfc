@@ -115,6 +115,30 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.default" addtoken="false">
 			</cfif>
 
+			<cfif LEN(FORM.OrganizationName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please Select which ESC/ESA Membership Affiliation this organization is with."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.OrganizationDomainName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please Select which ESC/ESA Membership Affiliation this organization is with."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.PhysicalAddress) EQ 0 or LEN(FORM.PhysicalCity) EQ 0 OR LEN(FORM.PhysicalState) EQ 0 OR LEN(FORM.PhysicalZipCode) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the physical address of this organization."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
+			</cfif>
+
 			<cfif FORM.Active EQ "----">
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please Select if this Organization has active membership with your organization or not."};
@@ -240,12 +264,44 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.default" addtoken="false">
 			</cfif>
 
+			<cfif LEN(FORM.OrganizationName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please Select which ESC/ESA Membership Affiliation this organization is with."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.OrganizationDomainName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please Select which ESC/ESA Membership Affiliation this organization is with."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.PhysicalAddress) EQ 0 or LEN(FORM.PhysicalCity) EQ 0 OR LEN(FORM.PhysicalState) EQ 0 OR LEN(FORM.PhysicalZipCode) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the physical address of this organization."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
+			</cfif>
+
+			<cfif FORM.StateESCMembership EQ "----">
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please Select which ESC/ESA Membership Affiliation this organization is with."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
+			</cfif>
+
 			<cfif FORM.Active EQ "----">
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please Select if this Organization has active membership with your organization or not."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
 			</cfif>
 
 			<cfif FORM.ReceiveInvoicesByEmail EQ "----">
@@ -253,7 +309,7 @@
 					errormsg = {property="EmailMsg",message="Please Select if this Organization will receive invoices electronically or not."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
 			</cfif>
 
 			<cfset GeoCodeCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/GoogleGeoCoder")>
@@ -268,7 +324,7 @@
 							arrayAppend(Session.FormErrors, address);
 						</cfscript>
 					</cflock>
-					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
 				<cfelse>
 					<cfset CombinedPhysicalAddress = #MailingAddressGeoCoded[1].AddressStreetNumber# & " " & #MailingAddressGeoCoded[1].AddressStreetNameShort#>
 					<cfquery name="updateMembershipInformation" result="InsertNewRecord" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -329,7 +385,7 @@
 							arrayAppend(Session.FormErrors, address);
 						</cfscript>
 					</cflock>
-					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
+					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
 				<cfelse>
 					<cfset CombinedPhysicalAddress = #PhysicalAddressGeoCoded[1].AddressStreetNumber# & " " & #PhysicalAddressGeoCoded[1].AddressStreetNameShort#>
 					<cfswitch expression="#application.configbean.getDBType()#">
@@ -459,8 +515,34 @@
 				<cfset temp = StructDelete(Session, "getSelectedCaterer")>
 				<cfset temp = StructDelete(Session, "FormErrors")>
 				<cfif isDefined("Session.FormInput")><cfset temp = StructDelete(Session, "FormInput")></cfif>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.default" addtoken="false">
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.listescesa" addtoken="false">
 			</cfif>
+
+			<cfif LEN(FORM.OrganizationName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter Organization Name"};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addstateesc&FormRetry=True" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.OrganizationDomainName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the organizations domain name for this organization"};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addstateesc&FormRetry=True" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.PhysicalAddress) EQ 0 or LEN(FORM.PhysicalCity) EQ 0 OR LEN(FORM.PhysicalState) EQ 0 OR LEN(FORM.PhysicalZipCode) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the physical address of this organization."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addstateesc&FormRetry=True" addtoken="false">
+			</cfif>
+
+
 			<cfset GeoCodeCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/GoogleGeoCoder")>
 
 			<cfif LEN(FORM.MailingAddress) and LEN(FORM.MailingCity) and LEN(FORM.MailingState) and LEN(FORM.MailingZipCode)>

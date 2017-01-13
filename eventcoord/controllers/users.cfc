@@ -309,7 +309,7 @@
 				<cfset temp = StructDelete(Session, "getSelectedCaterer")>
 				<cfset temp = StructDelete(Session, "FormErrors")>
 				<cfif isDefined("Session.FormInput")><cfset temp = StructDelete(Session, "FormInput")></cfif>
-				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.default" addtoken="false">
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.default" addtoken="false">
 			</cfif>
 
 			<cfif FORM.InActive EQ "----">
@@ -343,6 +343,20 @@
 			<cfif not isValid("email", FORM.UserName)>
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please enter a valid email address for this user account."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">
+			</cfif>
+			<cfif LEN(FORM.FName) LT 3>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the users first name for their account. This will be used on all emails, certificates, signin sheets."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">
+			</cfif>
+			<cfif LEN(FORM.LName) LT 2>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the users last name for their account. This will be used on all emails, certificates, signin sheets."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">

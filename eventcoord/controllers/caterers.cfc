@@ -50,9 +50,6 @@
 			</cfquery>
 		</cfif>
 
-
-
-
 		<!--- Calculate the Start Position for the loop query. So, if you are on 1st page and want to display 4 rows per page, for first page you start at: (1-1)*4+1 = 1.
 				If you go to page 2, you start at (2-)1*4+1 = 5 --->
 		<cfset start = ((arguments.page-1)*arguments.rows)+1>
@@ -202,6 +199,22 @@
 				<cfset temp = StructDelete(Session, "FormInput")>
 				<cfif isDefined("Session.FormInput")><cfset temp = StructDelete(Session, "FormInput")></cfif>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:caterers.default" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.FacilityName) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the name of this new caterer"};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:caterers.addcaterer&FormRetry=True" addtoken="false">
+			</cfif>
+
+			<cfif LEN(FORM.PhysicalAddress) EQ 0 or LEN(FORM.PhysicalCity) EQ 0 OR LEN(FORM.PhysicalState) EQ 0 OR LEN(FORM.PhysicalZipCode) EQ 0>
+				<cfscript>
+					errormsg = {property="EmailMsg",message="Please enter the physical address of this organization."};
+					arrayAppend(Session.FormErrors, errormsg);
+				</cfscript>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:caterers.addcaterer&FormRetry=True" addtoken="false">
 			</cfif>
 
 			<cfif FORM.Active EQ "----">

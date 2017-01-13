@@ -231,7 +231,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					buttonicon: "glyphicon-pencil",
 					onClickButton: function(id) {
 						if (selectedRow == 0) {
-							alert("Please Select a Row to edit a Member Organization in the database");
+							alert("Please Select a Row first then the Edit Icon to make changes to a Users Account");
 						} else {
 							var grid = $('##jqGrid');
 							var RowIDValue = grid.getCell(selectedRow, 'UserID');

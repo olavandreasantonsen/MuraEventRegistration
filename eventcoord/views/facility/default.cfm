@@ -17,7 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<fieldset>
-				<legend><h2>Available Facilities</h2></legend>
+				<legend><h2>Available Facilities to hold events</h2></legend>
 			</fieldset>
 			<cfif isDefined("URL.UserAction")>
 				<cfswitch expression="#URL.UserAction#">

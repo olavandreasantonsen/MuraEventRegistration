@@ -114,13 +114,43 @@ http://www.apache.org/licenses/LICENSE-2.0
 									<cfcase value="1">
 										<cfswitch expression="#Variables.CurrentModRow#">
 											<cfcase value="1">
-												<tr><td width="25%"><cfif CheckUserAlreadyRegisteredDay1.AttendedEventDate1 EQ 1><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked disabled>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#<cfelse><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1">&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#</cfif></td>
+												<tr><td width="25%">
+													<cfif CheckUserAlreadyRegisteredDay1.AttendedEventDate1 EQ 1>
+														<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked disabled>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+													<cfelse>
+														<cfif isDefined("URL.Action")>
+															<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+														<cfelse>
+															<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1">&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+														</cfif>
+													</cfif>
+												</td>
 											</cfcase>
 											<cfcase value="0">
-												<td width="25%"><cfif CheckUserAlreadyRegisteredDay1.AttendedEventDate1><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked disabled>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#<cfelse><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1">&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#</cfif></td>
+												<td width="25%">
+													<cfif CheckUserAlreadyRegisteredDay1.AttendedEventDate1>
+														<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked disabled>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+													<cfelse>
+														<cfif isDefined("URL.Action")>
+															<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+														<cfelse>
+															<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1">&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+														</cfif>
+													</cfif>
+												</td>
 											</cfcase>
 											<cfdefaultcase>
-												<td width="25%"><cfif CheckUserAlreadyRegisteredDay1.AttendedEventDate1><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked disabled>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#<cfelse><cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1">&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#</cfif></td>
+												<td width="25%">
+													<cfif CheckUserAlreadyRegisteredDay1.AttendedEventDate1>
+														<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked disabled>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+													<cfelse>
+														<cfif isDefined("URL.Action")>
+															<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1" checked>&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+														<cfelse>
+															<cfinput type="CheckBox" Name="ParticipantEmployee" Value="#Session.getRegisteredParticipants.User_ID#_1">&nbsp;&nbsp;#CheckUserAlreadyRegisteredDay1.LName#, #CheckUserAlreadyRegisteredDay1.FName#
+														</cfif>
+													</cfif>
+												</td>
 											</cfdefaultcase>
 										</cfswitch>
 									</cfcase>
@@ -342,7 +372,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfif>
 				</div>
 				<div class="panel-footer">
-					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Event Listing">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="Back to Event Listing">&nbsp; | &nbsp;
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="SignIn All Participants">
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="SignIn Participants"><br /><br />
 				</div>
 			</cfform>

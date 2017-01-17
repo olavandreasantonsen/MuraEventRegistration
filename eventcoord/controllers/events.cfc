@@ -3020,68 +3020,71 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default" addtoken="false">
 			</cfif>
 
-			<cfloop list="#FORM.ParticipantEmployee#" delimiters="," index="i">
-				<cfset ParticipantUserID = ListFirst(i, "_")>
-				<cfset DayNumber = ListLast(i, "_")>
-				<cfswitch expression="#Variables.DayNumber#">
-					<cfcase value="1">
-						<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Update p_EventRegistration_UserRegistrations
-							Set AttendedEventDate1 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-							Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
-								User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
-								Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-						</cfquery>
-					</cfcase>
-					<cfcase value="2">
-						<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Update p_EventRegistration_UserRegistrations
-							Set AttendedEventDate2 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-							Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
-								User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
-								Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-						</cfquery>
-					</cfcase>
-					<cfcase value="3">
-						<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Update p_EventRegistration_UserRegistrations
-							Set AttendedEventDate3 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-							Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
-								User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
-								Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-						</cfquery>
-					</cfcase>
-					<cfcase value="4">
-						<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Update p_EventRegistration_UserRegistrations
-							Set AttendedEventDate4 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-							Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
-								User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
-								Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-						</cfquery>
-					</cfcase>
-					<cfcase value="5">
-						<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Update p_EventRegistration_UserRegistrations
-							Set AttendedEventDate5 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-							Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
-								User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
-								Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-						</cfquery>
-					</cfcase>
-					<cfcase value="6">
-						<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-							Update p_EventRegistration_UserRegistrations
-							Set AttendedEventDate6 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
-							Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
-								User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
-								Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-						</cfquery>
-					</cfcase>
-
-				</cfswitch>
-			</cfloop>
-			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.signinparticipant&UserAction=ParticipantsChecked&Successful=True&EventID=#FORM.EventID#" addtoken="false">
+			<cfif FORM.UserAction EQ "SignIn ALL Participants">
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.signinparticipant&EventID=#URL.EventID#&Action=CheckAll" addtoken="false">
+			<cfelse>
+				<cfloop list="#FORM.ParticipantEmployee#" delimiters="," index="i">
+					<cfset ParticipantUserID = ListFirst(i, "_")>
+					<cfset DayNumber = ListLast(i, "_")>
+					<cfswitch expression="#Variables.DayNumber#">
+						<cfcase value="1">
+							<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set AttendedEventDate1 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+								Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
+									User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
+									Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfcase>
+						<cfcase value="2">
+							<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set AttendedEventDate2 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+								Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
+									User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
+									Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfcase>
+						<cfcase value="3">
+							<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set AttendedEventDate3 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+								Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
+									User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
+									Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfcase>
+						<cfcase value="4">
+							<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set AttendedEventDate4 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+								Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
+									User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
+									Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfcase>
+						<cfcase value="5">
+							<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set AttendedEventDate5 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+								Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
+									User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
+									Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfcase>
+						<cfcase value="6">
+							<cfquery name="SignInParticipant" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+								Update p_EventRegistration_UserRegistrations
+								Set AttendedEventDate6 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">
+								Where EventID = <cfqueryparam value="#FORM.EventID#" cfsqltype="cf_sql_integer"> and
+									User_ID = <cfqueryparam value="#Variables.ParticipantUserID#" cfsqltype="cf_sql_varchar"> and
+									Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
+							</cfquery>
+						</cfcase>
+					</cfswitch>
+				</cfloop>
+				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.signinparticipant&UserAction=ParticipantsChecked&Successful=True&EventID=#FORM.EventID#" addtoken="false">
+			</cfif>
 		</cfif>
 	</cffunction>
 

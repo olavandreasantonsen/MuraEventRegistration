@@ -6,6 +6,14 @@
 		Licensed under the Apache License, Version v2.0
 		http://www.apache.org/licenses/LICENSE-2.0
 	--->
+	<cfif isDefined("URL.PerformAction")>
+		<cfif URL.PerformAction EQ "LogoutUser">
+			<cfset Session.Mura = #StructCopy(Session.MuraPreviousUser)#>
+			<cfset temp = #StructDelete(Session, "MuraPreviousUser")#>
+			<cflocation url="/index.cfm" addtoken="true">
+		</cfif>
+	</cfif>
+
 	<cfif Session.Mura.IsLoggedIn EQ True>
 		<cfparam name="Session.Mura.EventCoordinatorRole" default="0" type="boolean">
 		<cfparam name="Session.Mura.EventPresenterRole" default="0" type="boolean">

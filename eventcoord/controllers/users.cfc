@@ -139,6 +139,17 @@
 				</cfquery>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.default&UserAction=ActivatedAccount&Successful=True" addtoken="false">
 			</cfif>
+			<cfif FORM.UserAction EQ "Login As User">
+				<cflock timeout="60" scope="Session" type="Exclusive">
+					<cfset Session.MuraPreviousUser = #StructNew()#>
+					<cfset Session.MuraPreviousUser = #StructCopy(Session.Mura)#>
+					<cfset userLogin = application.serviceFactory.getBean("userUtility").loginByUserID("#URL.UserID#", "#rc.$.siteConfig('siteID')#")>
+
+					<cfif userLogin EQ true>
+						<cflocation addtoken="true" url="/index.cfm">
+					</cfif>
+				</cflock>
+			</cfif>
 
 			<cfif FORM.InActive EQ "----">
 				<cfscript>

@@ -144,6 +144,7 @@
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">&nbsp;
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="Change Password">
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="Activate Account">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="Login As User">
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Edit Account Information"><br /><br />
 				</div>
 			</cfform>
@@ -272,6 +273,7 @@
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">&nbsp;
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="Change Password">
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="Activate Account">
+					<cfinput type="Submit" name="UserAction" class="btn btn-primary" value="Login As User">
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Edit Account Information"><br /><br />
 				</div>
 			</cfform>

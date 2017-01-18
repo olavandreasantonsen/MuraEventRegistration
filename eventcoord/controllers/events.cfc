@@ -218,10 +218,7 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_step3&FormRetry=True" addtoken="false">
 			</cfif>
 			<cfset Session.FormErrors = #ArrayNew()#>
-
-			<cfif not isDefined("FORM.AcceptRegistrations")>
-				<cfset FORM.AcceptRegistrations = 0>
-			</cfif>
+			<cfparam default="0" name="FORM.AcceptRegistrations" type="boolean">
 
 			<cfset Session.UserSuppliedInfo.FourthStep = #StructCopy(FORM)#>
 
@@ -855,11 +852,12 @@
 						</cfif>
 
 						<cfif FORM.AllowVideoConference EQ 1>
+							<cfset FORM.VideoConferenceCost = #Right(FORM.VideoConferenceCost, LEN(FORM.VideoConferenceCost) - 1)#>
 							<cfquery name="updateNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 								Update p_EventRegistration_Events
 								Set AllowVideoConference = <cfqueryparam value="#FORM.AllowVideoConference#" cfsqltype="cf_sql_bit">,
 									VideoConferenceInfo = <cfqueryparam value="#FORM.VideoConferenceInfo#" cfsqltype="CF_SQL_VARCHAR">,
-									VideoConferenceCost = <cfqueryparam value="#FORM.VideoConferenceCost#" cfsqltype="CF_SQL_MONEY">,
+									VideoConferenceCost = <cfqueryparam value="#NumberFormat(FORM.VideoConferenceCost,'___.__')#" cfsqltype="CF_SQL_MONEY">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">

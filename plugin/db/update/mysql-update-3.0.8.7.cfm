@@ -1,5 +1,5 @@
 <cfquery name="ShowEventEmailLogTable" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-	Show Tables LIKE 'p_EventRegistration_EventEmailLog
+	Show Tables LIKE 'p_EventRegistration_EventEmailLog'
 </cfquery>
 
 <cfif ShowEventEmailLogTable.RecordCount EQ 0>

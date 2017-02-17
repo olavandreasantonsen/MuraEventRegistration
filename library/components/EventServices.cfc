@@ -241,6 +241,9 @@
 		<cfset requestContent = #Replace(variables.requestContent, "%20", " ", "ALL")#>
 		<cfset requestContent = #Replace(variables.requestContent, "%2B", " ", "ALL")#>
 		<cfset Info = #ListLast(variables.requestContent, "&")#>
+			<cfdump var="#Variables.requestData#">
+				<cfdump var="#Variables.Info#">
+					<cfabort>
 		<cfset requestinfo = #DeserializeJSON(Variables.Info)#>
 
 		<cfquery name="CheckAccount" Datasource="#requestinfo.DBINfo.Datasource#" username="#requestinfo.DBINfo.DBUsername#" password="#requestinfo.DBInfo.DBPassword#">

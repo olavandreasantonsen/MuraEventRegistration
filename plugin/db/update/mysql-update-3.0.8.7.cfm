@@ -18,6 +18,6 @@
 
 <cfif CheckColumnNameCreated.RecordCount EQ 0>
 	<cfquery name="AlterUserMatrixAddColumn" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-		ALTER TABLE `p_EventRegistration_EventEmailLog` Add COLUMN `EmailSentToParticipants` bit(1) NOT NULL DEFAULT b'0' after `DocsToInclude`
+		ALTER TABLE `p_EventRegistration_EventEmailLog` Add COLUMN `EmailSentToParticipants` longtext after `DocsToInclude`
 	</cfquery>
 </cfif>

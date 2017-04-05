@@ -6,11 +6,9 @@
 <title>Plupload - Events example</title>
 
 <!-- production -->
-<script type="text/javascript" src="../js/plupload.full.min.js"></script>
+<script type="text/javascript" src="../js/plupload.min.js"></script>
 
-
-<!-- debug 
-<script type="text/javascript" src="../js/moxie.js"></script>
+<!-- debug
 <script type="text/javascript" src="../js/plupload.dev.js"></script>
 -->
 
@@ -30,10 +28,9 @@
 <script type="text/javascript">
 	var uploader = new plupload.Uploader({
         // General settings
-        runtimes : 'html5,flash,silverlight,html4',
+        runtimes : 'silverlight,html4',
 		browse_button : 'pickfiles', // you can pass in id...
-		container: document.getElementById('container'),
-        url : '/index.cfm/auction-site/?MuraAuctionsaction=selleradmin:auctions.uploadpictures&AuctionID=5',
+        url : 'upload.php',
         chunk_size : '1mb',
         unique_names : true,
  
@@ -50,8 +47,8 @@
             ]
         },
  
-		flash_swf_url : '/plugins/MuraAuctions/includes/assets/js/plupload/js/Moxie.swf',
-		silverlight_xap_url : '/plugins/MuraAuctions/includes/assets/js/plupload/js/Moxie.xap',
+		flash_swf_url : '../js/Moxie.swf',
+		silverlight_xap_url : '../js/Moxie.xap',
          
         // PreInit events, bound before the internal events
         preinit : {

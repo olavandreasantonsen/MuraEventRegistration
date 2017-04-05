@@ -4819,14 +4819,12 @@
 				<cffile action="upload" fileField="FORM.file" result="EventDocs" destination="#GetTempDirectory()#" nameconflict="MakeUnique">
 				<cfset NewEventDocument = #Replace(Variables.EventDocs.ServerFile, " ", "_", "ALL")#>
 				<cfset NewEventDocument = #Replace(Variables.NewEventDocument, "'", "_", "ALL")#>
-				<cffile action="rename" source="#GetTempDirectory()#/#Variables.EventDocs.ServerFile#" Destination="#Variables.uploadDir#/#Variables.NewEventDocument#">
-
+				<cffile action="rename" source="#GetTempDirectory()#/#Variables.EventDocs.ServerFile#" Destination="#Variables.uploadDir#/#Variables.NewEventDocument#" result="FileInfo">
 				<cfset File = #variables.uploadDir# & "/" & #Variables.NewEventDocument#>
 				<cfscript>
 					FileMimeType = fileGetMimeType(variables.file);
 					FileInformation = getFileInfo(variables.file);
 				</cfscript>
-
 				<cfquery name="insertEventDocument" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Insert into p_EventRegistration_EventResources(Site_ID, Event_ID, ResourceType, dateCreated, lastUpdated, lastUpdateBy, ResourceDocument, ResourceDocumentType, ResourceDocumentSize)
 					Values(

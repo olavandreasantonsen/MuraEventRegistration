@@ -4,11 +4,10 @@
 
 		<cfset PriorDate = #DateAdd("m", -8, Now())#>
 		<cfquery name="Session.getAvailableEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-			Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, PGPAvailable, MemberCost, NonMemberCost, Presenters, Active, AcceptRegistrations, Registration_Deadline, MaxParticipants, EventInvoicesGenerated
+			Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, PGPAvailable, MemberCost, NonMemberCost, Presenters, Active, EventCancelled, AcceptRegistrations, Registration_Deadline, MaxParticipants, EventInvoicesGenerated
 			From p_EventRegistration_Events
 			Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
-				EventDate >= <cfqueryparam value="#Variables.PriorDate#" cfsqltype="cf_sql_date"> and
-				EventCancelled = <cfqueryparam value="0" cfsqltype="cf_sql_bit">
+				EventDate >= <cfqueryparam value="#Variables.PriorDate#" cfsqltype="cf_sql_date">
 			Order by EventDate DESC
 		</cfquery>
 		<cfif isDefined("Session.getFacilityInformation")><cfset temp = StructDelete(Session, "getFacilityInformation")></cfif>
@@ -1282,7 +1281,10 @@
 			<cfelseif FORM.CopyEvent EQ 1>
 				<cftry>
 					<cfquery name="insertNewEvent" result="insertNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						Insert into p_EventRegistration_Events(Site_ID, ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime, EventFeatured, EarlyBird_RegistrationAvailable, ViewGroupPricing, PGPAvailable, MealAvailable, MealIncluded, AllowVideoConference, AcceptRegistrations, Facilitator, dateCreated, MaxParticipants, Active, lastUpdated, lastUpdateBy, EventCancelled, WebinarAvailable, PostedTo_Facebook, PostedTo_Twitter)
+						Insert into p_EventRegistration_Events(Site_ID,
+						 ShortTitle, EventDate, LongDescription, Event_StartTime, Event_EndTime, Registration_Deadline, Registration_BeginTime, Registration_EndTime,
+						  EventFeatured, EarlyBird_RegistrationAvailable, ViewGroupPricing, PGPAvailable, MealAvailable, MealIncluded, AllowVideoConference, AcceptRegistrations,
+							 Facilitator, dateCreated, MaxParticipants, Active, lastUpdated, lastUpdateBy, EventCancelled, WebinarAvailable, PostedTo_Facebook, PostedTo_Twitter)
 						Values (
 							<cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">,
 							<cfqueryparam value="Copy of #Session.getSelectedEvent.ShortTitle#" cfsqltype="cf_sql_varchar">,
@@ -1297,6 +1299,7 @@
 							<cfqueryparam value="#Session.getSelectedEvent.EarlyBird_RegistrationAvailable#" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Session.getSelectedEvent.ViewGroupPricing#" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Session.getSelectedEvent.PGPAvailable#" cfsqltype="cf_sql_bit">,
+							<cfqueryparam value="#Session.getSelectedEvent.MealAvailable#" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Session.getSelectedEvent.MealAvailable#" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="#Session.getSelectedEvent.AllowVideoConference#" cfsqltype="cf_sql_bit">,
 							<cfqueryparam value="0" cfsqltype="cf_sql_bit">,
@@ -4819,14 +4822,12 @@
 				<cffile action="upload" fileField="FORM.file" result="EventDocs" destination="#GetTempDirectory()#" nameconflict="MakeUnique">
 				<cfset NewEventDocument = #Replace(Variables.EventDocs.ServerFile, " ", "_", "ALL")#>
 				<cfset NewEventDocument = #Replace(Variables.NewEventDocument, "'", "_", "ALL")#>
-				<cffile action="rename" source="#GetTempDirectory()#/#Variables.EventDocs.ServerFile#" Destination="#Variables.uploadDir#/#Variables.NewEventDocument#">
-
+				<cffile action="rename" source="#GetTempDirectory()#/#Variables.EventDocs.ServerFile#" Destination="#Variables.uploadDir#/#Variables.NewEventDocument#" result="FileInfo">
 				<cfset File = #variables.uploadDir# & "/" & #Variables.NewEventDocument#>
 				<cfscript>
 					FileMimeType = fileGetMimeType(variables.file);
 					FileInformation = getFileInfo(variables.file);
 				</cfscript>
-
 				<cfquery name="insertEventDocument" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Insert into p_EventRegistration_EventResources(Site_ID, Event_ID, ResourceType, dateCreated, lastUpdated, lastUpdateBy, ResourceDocument, ResourceDocumentType, ResourceDocumentSize)
 					Values(

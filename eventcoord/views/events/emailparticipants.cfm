@@ -23,7 +23,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<cfinput type="hidden" name="EmailType" value="#URL.EmailType#">
 			<cfinput type="hidden" name="formSubmit" value="true">
 			<cfif not isDefined("URL.FormRetry")>
-				<cfdump var="#Session#"><cfabort>
 				<div class="panel-heading">
 					<h2>Send <cfif URL.EmailType EQ "EmailRegistered">Registered<cfelseif URL.EmailType EQ "EmailAttended">Attended</cfif> Participants Email: #Session.getSelectedEvent.ShortTitle#</h2><br><p>Number of Registered Participants: #Session.EventNumberRegistrations#</p></h2>
 				</div>

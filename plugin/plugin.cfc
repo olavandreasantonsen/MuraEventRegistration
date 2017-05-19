@@ -194,5 +194,32 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 			writedump(dbDropTableResults.getResult());
 			abort;
 		}
+
+		var dbDropTable = new query();
+		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_StateESCOrganizations");
+		var dbDropTableResults = dbDropTable.execute();
+		if (len(dbDropTableResults.getResult()) neq 0) {
+			writedump(dbDropTableResults.getResult());
+			abort;
+		}
+
+		var dbDropTable = new query();
+		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventEmailLog");
+		var dbDropTableResults = dbDropTable.execute();
+		if (len(dbDropTableResults.getResult()) neq 0) {
+			writedump(dbDropTableResults.getResult());
+			abort;
+		}
+
+		var dbDropTable = new query();
+		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
+		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventResources");
+		var dbDropTableResults = dbDropTable.execute();
+		if (len(dbDropTableResults.getResult()) neq 0) {
+			writedump(dbDropTableResults.getResult());
+			abort;
+		}
 	}
 }

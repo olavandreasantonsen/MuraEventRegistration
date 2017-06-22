@@ -2,7 +2,10 @@
 	<cffunction name="default" returntype="any" output="false">
 		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
 
-		<cfset PriorDate = #DateAdd("m", -8, Now())#>
+		<cfset PriorYear = #Year(DateAdd('yyyy', -1, Now()))#>
+		<cfset PriorDate = #Createdate(Variables.PriorYear, 7, 1)#>
+		
+		<!--- <cfset PriorDate = #DateAdd("m", -8, Now())#> --->
 		<cfquery name="Session.getAvailableEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, PGPAvailable, MemberCost, NonMemberCost, Presenters, Active, EventCancelled, AcceptRegistrations, Registration_Deadline, MaxParticipants, EventInvoicesGenerated
 			From p_EventRegistration_Events

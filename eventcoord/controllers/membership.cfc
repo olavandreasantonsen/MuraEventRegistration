@@ -5,7 +5,6 @@
 		<cfquery name="Session.getMemberships" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Active, Physical_Address, Physical_City, Physical_State, Physical_ZipCode, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode, Primary_PhoneNumber, Primary_FaxNumber, AccountsPayable_EmailAddress, AccountsPayable_ContactName
 			From p_EventRegistration_Membership
-			Where Site_ID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">
 			Order by OrganizationName ASC
 		</cfquery>
 	</cffunction>
@@ -140,14 +139,12 @@
 			<cfquery name="Session.getSelectedMembership" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, StateDOE_ESCESAMembership, Active, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode, Mailing_ZipPlus4, Mailing_DeliveryPointBarcode, Primary_PhoneNumber, Primary_FaxNumber, Physical_Address, Physical_City, Physical_State, Physical_ZipCode, Physical_ZipPlus4, Physical_DeliveryPointBarcode, Physical_Latitude, Physical_Longitude, Physical_TimeZone, Physical_DST, Physical_UTCOffset, Physical_CountyName, Physical_CongressionalDistrict, Physical_CarrierRoute, AccountsPayable_EmailAddress, AccountsPayable_ContactName, ReceiveInvoicesByEmail
 				From p_EventRegistration_Membership
-				Where Site_ID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">  and
-					TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.MembershipID#">
+				Where TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.MembershipID#">
 				Order by OrganizationName ASC
 			</cfquery>
 			<cfquery name="Session.getESCESAAgencies" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select TContent_ID, OrganizationName, OrganizationDomainName, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode, Primary_PhoneNumber, Primary_FaxNumber, Physical_Address, Physical_City, Physical_State, Physical_ZipCode
 				From p_EventRegistration_StateESCOrganizations
-				Where Site_ID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">
 				Order by Physical_State ASC, OrganizationName ASC
 			</cfquery>
 		<cfelseif isDefined("FORM.formSubmit")>
@@ -339,7 +336,6 @@
 			<cfquery name="Session.getESCESAAgencies" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select TContent_ID, OrganizationName, OrganizationDomainName, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode, Primary_PhoneNumber, Primary_FaxNumber, Physical_Address, Physical_City, Physical_State, Physical_ZipCode
 				From p_EventRegistration_StateESCOrganizations
-				Where Site_ID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">
 				Order by Physical_State ASC, OrganizationName ASC
 			</cfquery>
 		<cfelseif isDefined("FORM.formSubmit")>
@@ -528,7 +524,6 @@
 		<cfquery name="Session.getStateESCESAs" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Mailing_Address, Mailing_City, Mailing_State, Physical_City, Physical_State, Mailing_ZipCode, Primary_PhoneNumber, Primary_FaxNumber
 			From p_EventRegistration_StateESCOrganizations
-			Where Site_ID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">
 			Order by OrganizationName ASC
 		</cfquery>
 	</cffunction>
@@ -823,8 +818,7 @@
 			<cfquery name="Session.getSelectedESC" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode, Mailing_ZipPlus4, Primary_PhoneNumber, Primary_FaxNumber, Physical_Address, Physical_City, Physical_State, Physical_ZipCode, Physical_ZipPlus4, Physical_DeliveryPointBarcode, Physical_Latitude, Physical_Longitude, Physical_TimeZone, Physical_DST, Physical_UTCOffset, Physical_CountyName, Physical_CarrierRoute, Physical_CongressionalDistrict
 				From p_EventRegistration_StateESCOrganizations
-				Where Site_ID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">  and
-					TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.MembershipID#">
+				Where TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.MembershipID#">
 				Order by Physical_State ASC, OrganizationName ASC
 			</cfquery>
 		<cfelseif isDefined("FORM.formSubmit")>

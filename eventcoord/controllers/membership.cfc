@@ -205,8 +205,8 @@
 			<cfif LEN(FORM.MailingAddress) and LEN(FORM.MailingCity) and LEN(FORM.MailingState) and LEN(FORM.MailingZipCode)>
 				<cfscript>
 					PassedAddress = {
-						street = #URLEncodedFormat(FORM.MailingAddress)#,
-						city = #URLEncodedFormat(FORM.MailingCity)#,
+						street = #TRIM(FORM.MailingAddress)#,
+						city = #TRIM(FORM.MailingCity)#,
 						state = #FORM.MailingState#,
 						zipcode = #FORM.MailingZipCode#
 					};
@@ -693,8 +693,8 @@
 			<cfif LEN(FORM.MailingAddress) and LEN(FORM.MailingCity) and LEN(FORM.MailingState) and LEN(FORM.MailingZipCode)>
 				<cfscript>
 					PassedAddress = {
-						street = #URLEncodedFormat(FORM.MailingAddress)#,
-						city = #URLEncodedFormat(FORM.MailingCity)#,
+						street = #TRIM(FORM.MailingAddress)#,
+						city = #TRIM(FORM.MailingCity)#,
 						state = #FORM.MailingState#,
 						zipcode = #FORM.MailingZipCode#
 					};
@@ -838,8 +838,8 @@
 			<cfif LEN(FORM.MailingAddress) and LEN(FORM.MailingCity) and LEN(FORM.MailingState) and LEN(FORM.MailingZipCode)>
 				<cfscript>
 					PassedAddress = {
-						street = #URLEncodedFormat(FORM.MailingAddress)#,
-						city = #URLEncodedFormat(FORM.MailingCity)#,
+						street = #Trim(FORM.MailingAddress)#,
+						city = #Trim(FORM.MailingCity)#,
 						state = #FORM.MailingState#,
 						zipcode = #FORM.MailingZipCode#
 					};

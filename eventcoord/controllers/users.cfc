@@ -395,7 +395,7 @@
 				</cfscript>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:users.adduser&FormRetry=True" addtoken="false">
 			</cfif>
-			<cfif not isValid("email", FORM.UserName)>
+			<cfif not isValid("email", FORM.Email)>
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please enter a valid email address for this user account."};
 					arrayAppend(Session.FormErrors, errormsg);

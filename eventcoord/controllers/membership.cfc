@@ -210,6 +210,16 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.editmembership&FormRetry=True&MembershipID=#URL.MembershipID#" addtoken="false">
 			</cfif>
 
+			<cfquery name="InsertMembershipInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				update p_EventRegistration_Membership
+				Set OrganizationName = <cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.OrganizationName#">,
+					OrganizationDomainName = <cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.OrganizationDomainName#">,
+					Active = <cfqueryparam cfsqltype="cf_sql_bit" value="#FORM.Active#">,
+					lastUpdated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
+					lastUpdateBy = <cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.UserID#">
+				Where TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#FORM.MembershipID#">
+			</cfquery>
+
 			<cfif Session.getSiteConfig.SmartyStreets_Enabled EQ true>
 				<cfset GeoCodeCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/SmartyStreets").init(apitoken="#Session.getSiteConfig.SmartyStreets_APIToken#", apiid="#Session.getSiteConfig.SmartyStreets_APIID#", verbose=true)>
 

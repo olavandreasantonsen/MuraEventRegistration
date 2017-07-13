@@ -233,7 +233,7 @@
 					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:caterers.addcaterer&FormRetry=True" addtoken="false">
 				<cfelseif ArrayLen(Variables.PhysicalAddressGeoCoded.Data) GT 0>
 					<cfquery name="updateCatererInformation" result="InsertNewRecord" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						insert into p_EventRegistration_Caterers(Site_ID, FacilityName, PhysicalAddress, PhysicalCity, PhysicalState, PhysicalZipCode, PhysicalZip4, PrimaryVoiceNumber, BusinessWebsite, ContactName, ContactPhoneNumber, ContactEmail, PaymentTerms, DeliveryInfo, GuaranteeInformation, AdditionalNotes, dateCreated, Active, lastUpdateBy, GeoCode_Latitude, GeoCode_Longitude)
+						insert into p_EventRegistration_Caterers(Site_ID, FacilityName, PhysicalAddress, PhysicalCity, PhysicalState, PhysicalZipCode, PhysicalZip4, PrimaryVoiceNumber, BusinessWebsite, ContactName, ContactPhoneNumber, ContactEmail, PaymentTerms, DeliveryInfo, GuaranteeInformation, AdditionalNotes, dateCreated, Active, lastUpdated, lastUpdateBy, GeoCode_Latitude, GeoCode_Longitude)
 						Values(
 							<cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">,
 							<cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.FacilityName#">,
@@ -253,6 +253,7 @@
 							<cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.AdditionalNotes#">,
 							<cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
 							<cfqueryparam cfsqltype="cf_sql_bit" value="#FORM.Active#">,
+							<cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
 							<cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.UserID#">,
 							<cfqueryparam cfsqltype="cf_sql_decimal" value="#Trim(Variables.PhysicalAddressGeoCoded.Data[1]['metadata'].latitude)#">,
 							<cfqueryparam cfsqltype="cf_sql_decimal" value="#Trim(Variables.PhysicalAddressGeoCoded.Data[1]['metadata'].longitude)#">

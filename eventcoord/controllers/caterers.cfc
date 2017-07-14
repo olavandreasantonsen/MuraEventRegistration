@@ -91,7 +91,7 @@
 					</cfif>
 				</cfquery>
 			</cfif>
-		<cfelse><cfelse>
+		<cfelse>
 			<cfquery name="getCaterers" dbtype="Query">
 				Select TContent_ID, FacilityName, PhysicalCity, PhysicalState, PrimaryVoiceNumber, Active
 				From Session.getCaterers

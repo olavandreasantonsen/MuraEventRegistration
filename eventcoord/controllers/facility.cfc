@@ -165,7 +165,7 @@
 								arrayAppend(Session.FormErrors, address);
 							</cfscript>
 						</cflock>
-						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:facility.editfacility&FormRetry=True" addtoken="false">
 					<cfelseif ArrayLen(Variables.PhysicalAddressGeoCoded.Data) GT 0>
 						<cfquery name="updateMembershipInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 							update p_EventRegistration_Facility
@@ -184,10 +184,10 @@
 					<cfelse>
 						<cfquery name="updateMembershipInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 							update p_EventRegistration_Facility
-							Set Physical_Address = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalAddress)#">,
-								Physical_City = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalCity)#">,
-								Physical_State = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalState)#">,
-								Physical_ZipCode = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalZipCode)#">,
+							Set PhysicalAddress = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalAddress)#">,
+								PhysicalCity = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalCity)#">,
+								PhysicalState = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalState)#">,
+								PhysicalZipCode = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalZipCode)#">,
 								lastUpdated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
 								lastUpdateBy = <cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.UserID#">
 							Where TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.FacilityID#">
@@ -197,11 +197,11 @@
 			<cfelse>
 				<cfif LEN(FORM.PhysicalAddress) and LEN(FORM.PhysicalCity) and LEN(FORM.PhysicalState) and LEN(FORM.PhysicalZipCode)>
 					<cfquery name="updateMembershipInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-						update p_EventRegistration_Membership
-						Set Physical_Address = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalAddress)#">,
-							Physical_City = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalCity)#">,
-							Physical_State = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalState)#">,
-							Physical_ZipCode = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalZipCode)#">,
+						update p_EventRegistration_Facility
+						Set PhysicalAddress = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalAddress)#">,
+							PhysicalCity = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalCity)#">,
+							PhysicalState = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalState)#">,
+							PhysicalZipCode = <cfqueryparam cfsqltype="cf_sql_varchar" value="#TRIM(FORM.PhysicalZipCode)#">,
 							lastUpdated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
 							lastUpdateBy = <cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.UserID#">
 						Where TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.FacilityID#">
@@ -385,7 +385,7 @@
 								arrayAppend(Session.FormErrors, address);
 							</cfscript>
 						</cflock>
-						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:membership.addmembership&FormRetry=True" addtoken="false">
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:facility.addfacility&FormRetry=True" addtoken="false">
 					<cfelseif ArrayLen(Variables.PhysicalAddressGeoCoded.Data) GT 0>
 						<cfquery name="updateMembershipInformation" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 							update p_EventRegistration_Facility
@@ -489,7 +489,6 @@
 					</cfquery>
 				</cfif>
 			</cfif>
-
 
 			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:facility.default&UserAction=InformationAdded&Successful=True" addtoken="false">
 		</cfif>

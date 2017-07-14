@@ -258,10 +258,10 @@
 				update p_EventRegistration_FacilityRooms
 				Set RoomName = <cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.RoomName#">,
 					Capacity = <cfqueryparam cfsqltype="cf_sql_integer" value="#FORM.RoomCapacity#">,
-					RoomFees = <cfqueryparam cfsqltype="cf_sql_double" value="#FORM.RoomFees#">,
+					RoomFees = <cfqueryparam value="#NumberFormat(Replace(FORM.RoomFees, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 					Active = <cfqueryparam cfsqltype="cf_sql_bit" value="#FORM.Active#">,
 					lastUpdated = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
-					lastUpdateBy = <cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.Fname# #Session.Mura.Lname#">
+					lastUpdateBy = <cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.UserID#">
 				Where TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.FacilityRoomID#">
 			</cfquery>
 			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:facility.editfacility&UserAction=RoomUpdated&Successful=True&FacilityID=#URL.FacilityID#" addtoken="false">
@@ -293,7 +293,6 @@
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:facility.editfacility&FacilityID=#URL.FacilityID#" addtoken="false">
 			</cfif>
 
-
 			<cfif FORM.Active EQ "----">
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please Select if this Meeting Room is active or not in the database."};
@@ -308,11 +307,11 @@
 				<cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.$.siteConfig('siteID')#">,
 				<cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.RoomName#">,
 				<cfqueryparam cfsqltype="cf_sql_integer" value="#FORM.RoomCapacity#">,
-				<cfqueryparam cfsqltype="cf_sql_double" value="#FORM.RoomFees#">,
+				<cfqueryparam value="#NumberFormat(Replace(FORM.RoomFees, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 				<cfqueryparam cfsqltype="cf_sql_bit" value="#FORM.Active#">,
 				<cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
 				<cfqueryparam cfsqltype="cf_sql_timestamp" value="#Now()#">,
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.Fname# #Session.Mura.Lname#">,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#Session.Mura.UserID#">,
 				<cfqueryparam cfsqltype="cf_sql_integer" value="#URL.FacilityID#">
 				)
 			</cfquery>

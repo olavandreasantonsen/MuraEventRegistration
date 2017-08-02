@@ -223,7 +223,7 @@ Line 42: Change to the Plugin Name for the cfimport line
 					<cfset ReportExportLoc = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/")# & #URL.EventID# & "EventSignInSheet.pdf" >
 					<cfswitch expression="#rc.$.siteConfig('siteID')#">
 						<cfcase value="NIESCEvents">
-							<jr:jasperreport jrxml="#ReportDirectory#/EventSignInSheet.jrxml" query="#getParticipants#" exportfile="#ReportExportLoc#" exportType="pdf" />
+							<jr:jasperreport jrxml="#ReportDirectory#/NIESCEventSignInSheet.jrxml" query="#getParticipants#" exportfile="#ReportExportLoc#" exportType="pdf" />
 						</cfcase>
 						<cfcase value="NWIESCEvents">
 							<jr:jasperreport jrxml="#ReportDirectory#/NWIESCEventSignInSheet.jrxml" query="#getParticipants#" exportfile="#ReportExportLoc#" exportType="pdf" />

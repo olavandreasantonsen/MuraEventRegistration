@@ -3224,118 +3224,212 @@
 					TContent_ID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 
+			<cfquery name="Session.GetSelectedEventFacilitator" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select Fname, Lname, Email
+				From tusers
+				Where UserID = <cfqueryparam value="#Session.getSelectedEvent.Facilitator#" cfsqltype="cf_sql_varchar">
+			</cfquery>
+
 			<cfquery name="GetSelectedEventRegistrations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				SELECT p_EventRegistration_UserRegistrations.User_ID, tusers.Fname, tusers.Lname, p_EventRegistration_Events.ShortTitle, Date_FORMAT(p_EventRegistration_Events.EventDate, "%a, %M %d, %Y") as EventDateFormat, p_EventRegistration_UserRegistrations.RegisterForEventDate1, p_EventRegistration_UserRegistrations.RegisterForEventDate2, p_EventRegistration_UserRegistrations.RegisterForEventDate3, p_EventRegistration_UserRegistrations.RegisterForEventDate4,
+				SELECT p_EventRegistration_UserRegistrations.User_ID, p_EventRegistration_UserRegistrations.EventID, tusers.Fname, tusers.Lname, tusers.Email, SUBSTRING_INDEX(tusers.Email,"@",-1) AS Domain, p_EventRegistration_Events.ShortTitle, Date_FORMAT(p_EventRegistration_Events.EventDate, "%a, %M %d, %Y") as EventDateFormat, p_EventRegistration_UserRegistrations.RegisterForEventDate1, p_EventRegistration_UserRegistrations.RegisterForEventDate2, p_EventRegistration_UserRegistrations.RegisterForEventDate3, p_EventRegistration_UserRegistrations.RegisterForEventDate4,
 					p_EventRegistration_UserRegistrations.RegisterForEventDate5, p_EventRegistration_UserRegistrations.RegisterForEventDate6, p_EventRegistration_UserRegistrations.RegisterForEventSessionAM, p_EventRegistration_UserRegistrations.RegisterForEventSessionPM, p_EventRegistration_UserRegistrations.AttendedEventDate1, p_EventRegistration_UserRegistrations.AttendedEventDate2, p_EventRegistration_UserRegistrations.AttendedEventDate3, p_EventRegistration_UserRegistrations.AttendedEventDate4, p_EventRegistration_UserRegistrations.AttendedEventDate5, p_EventRegistration_UserRegistrations.AttendedEventDate6,
 					p_EventRegistration_UserRegistrations.AttendedEventSessionAM, p_EventRegistration_UserRegistrations.AttendedEventSessionPM
 				FROM p_EventRegistration_UserRegistrations INNER JOIN tusers ON tusers.UserID = p_EventRegistration_UserRegistrations.User_ID INNER JOIN p_EventRegistration_Events ON p_EventRegistration_Events.TContent_ID = p_EventRegistration_UserRegistrations.EventID
-				WHERE (p_EventRegistration_UserRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
-					p_EventRegistration_UserRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">) and
-					(
-					(p_EventRegistration_UserRegistrations.AttendedEventDate1 = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and p_EventRegistration_UserRegistrations.RegisterForEventDate1 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">) OR
-					(p_EventRegistration_UserRegistrations.AttendedEventDate2 = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and p_EventRegistration_UserRegistrations.RegisterForEventDate2 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">) OR
-					(p_EventRegistration_UserRegistrations.AttendedEventDate3 = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and p_EventRegistration_UserRegistrations.RegisterForEventDate3 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">) OR
-					(p_EventRegistration_UserRegistrations.AttendedEventDate4 = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and p_EventRegistration_UserRegistrations.RegisterForEventDate4 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">) OR
-					(p_EventRegistration_UserRegistrations.AttendedEventDate5 = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and p_EventRegistration_UserRegistrations.RegisterForEventDate5 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">) OR
-					(p_EventRegistration_UserRegistrations.AttendedEventDate6 = <cfqueryparam value="1" cfsqltype="cf_sql_bit"> and p_EventRegistration_UserRegistrations.RegisterForEventDate6 = <cfqueryparam value="1" cfsqltype="cf_sql_bit">)
-					)
+				WHERE p_EventRegistration_UserRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
+					p_EventRegistration_UserRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
 				ORDER BY tusers.Lname ASC, tusers.Fname ASC
 			</cfquery>
-			<cfif GetSelectedEventRegistrations.RecordCount>
-				<cfset Session.EventNumberRegistrations = #StructCopy(GetSelectedEventRegistrations)#>
-			<cfelse>
-				<cfset Session.EventNumberRegistrations = #StructCopy(GetSelectedEventRegistrations)#>
-			</cfif>
+			<cfset Session.EventNumberRegistrations = #StructCopy(GetSelectedEventRegistrations)#>
+			<cfset temp = #QueryAddColumn(Session.EventNumberRegistrations, "EventDateDisplay")#>
+			<cfset temp = #QueryAddColumn(Session.EventNumberRegistrations, "EventNumberOfDays")#>
+			<cfset temp = #QueryAddColumn(Session.EventNumberRegistrations, "PGPPoints")#>
+			<cfset temp = QueryAddColumn(Session.EventNumberRegistrations,"OrganizationName")>
+			<cfset temp = QueryAddColumn(Session.EventNumberRegistrations,"Mailing_Address")>
+			<cfset temp = QueryAddColumn(Session.EventNumberRegistrations,"Mailing_City")>
+			<cfset temp = QueryAddColumn(Session.EventNumberRegistrations,"Mailing_State")>
+			<cfset temp = QueryAddColumn(Session.EventNumberRegistrations,"Mailing_ZipCode")>
+			<cfset temp = QueryAddColumn(Session.EventNumberRegistrations,"ParticipantDaysAttended")>
+			
 			<cfset EventDateQuery = #QueryNew("EventDate")#>
 			<cfif LEN(Session.getSelectedEvent.EventDate) and LEN(Session.getSelectedEvent.EventDate1) EQ 0 and LEN(Session.getSelectedEvent.EventDate2) EQ 0 and LEN(Session.getSelectedEvent.EventDate3) EQ 0 and LEN(Session.getSelectedEvent.EventDate4) EQ 0>
 				<cfset temp = #QueryAddRow(EventDateQuery, 1)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate, "mm/dd/yy"))#>
 			<cfelseif LEN(Session.getSelectedEvent.EventDate) and LEN(Session.getSelectedEvent.EventDate1) and LEN(Session.getSelectedEvent.EventDate2) EQ 0 and LEN(Session.getSelectedEvent.EventDate3) EQ 0 and LEN(Session.getSelectedEvent.EventDate4) EQ 0>
 				<cfset temp = #QueryAddRow(EventDateQuery, 2)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate, 1)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate1, 2)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate, "mm/dd/yy"), 1)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate1, "mm/dd/yy"), 2)#>
 			<cfelseif LEN(Session.getSelectedEvent.EventDate) and LEN(Session.getSelectedEvent.EventDate1) and LEN(Session.getSelectedEvent.EventDate2) and LEN(Session.getSelectedEvent.EventDate3) EQ 0 and LEN(Session.getSelectedEvent.EventDate4) EQ 0>
 				<cfset temp = #QueryAddRow(EventDateQuery, 3)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate, 1)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate1, 2)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate2, 3)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate, "mm/dd/yy"), 1)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate1, "mm/dd/yy"), 2)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate2, "mm/dd/yy"), 3)#>
 			<cfelseif LEN(Session.getSelectedEvent.EventDate) and LEN(Session.getSelectedEvent.EventDate1) and LEN(Session.getSelectedEvent.EventDate2) and LEN(Session.getSelectedEvent.EventDate3) and LEN(Session.getSelectedEvent.EventDate4) EQ 0>
 				<cfset temp = #QueryAddRow(EventDateQuery, 4)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate, 1)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate1, 2)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate2, 3)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate3, 4)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate, "mm/dd/yy"), 1)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate1, "mm/dd/yy"), 2)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate2, "mm/dd/yy"), 3)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate3, "mm/dd/yy"), 4)#>
 			<cfelseif LEN(Session.getSelectedEvent.EventDate) and LEN(Session.getSelectedEvent.EventDate1) and LEN(Session.getSelectedEvent.EventDate2) and LEN(Session.getSelectedEvent.EventDate3) and LEN(Session.getSelectedEvent.EventDate4)>
 				<cfset temp = #QueryAddRow(EventDateQuery, 5)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate, 1)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate1, 2)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate2, 3)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate3, 4)#>
-				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", Session.getSelectedEvent.EventDate4, 5)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate, "mm/dd/yy"), 1)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate1, "mm/dd/yy"), 2)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate2, "mm/dd/yy"), 3)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate3, "mm/dd/yy"), 4)#>
+				<cfset temp = #QuerySetCell(EventDateQuery, "EventDate", DateFormat(Session.getSelectedEvent.EventDate4, "mm/dd/yy"), 5)#>
 			</cfif>
 			<cfset Session.SignInSheet = #StructNew()#>
 			<cfset Session.SignInSheet.EventDates = ValueList(EventDateQuery.EventDate, ",")>
-		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.EventID")>
+			<cfset Session.SignInSheet.NumberOfDays = ListLen(Session.SignInSheet.EventDates, ",")>
+		<cfelseif isDefined("FORM.formSubmit") and isDefined("URL.EventID")>
 			<cfif FORM.UserAction EQ "Back to Main Menu">
 				<cfset temp = StructDelete(Session, "getSelectedEvent")>
 				<cfset temp = StructDelete(Session, "FormErrors")>
 				<cfif isDefined("Session.FormInput")><cfset temp = StructDelete(Session, "FormInput")></cfif>
 				<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default" addtoken="false">
 			</cfif>
-
 			<cfif LEN(FORM.EmailMsg) EQ 0>
 				<cfscript>
 					errormsg = {property="EmailMsg",message="Please Enter some text that you would like to relay to those participants who are receiving the PGP Certificate."};
 					arrayAppend(Session.FormErrors, errormsg);
 				</cfscript>
-				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.sendpgpcertificates&SiteID=#rc.$.siteConfig('siteID')#&EventID=#Session.UserSuppliedInfo.PickedEvent.RecNo#" addtoken="false">
+				<cflocation url="?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.sendpgpcertificates&SiteID=#rc.$.siteConfig('siteID')#&EventID=#URL.EventID#" addtoken="false">
 			</cfif>
 			<cfset SendEmailCFC = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EmailServices")>
-			
 			<cfset NumberOfEventDays = #ListLen(Session.SignInSheet.EventDates, ",")#>
 			<cfset CertificateTemplateDir = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/reports/")#>
 			<cfset CertificateExportTemplateDir = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/")#>
-			<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NIESCRisePGPCertificateTemplate.pdf">
-
-			<cfloop query="Session.EventRegistrations">
+			
+			<cfloop query="Session.EventNumberRegistrations">
 				<cfset ParticipantNumberOfPGPCertificatePoints = 0>
+				<cfset ParticipantNumberOfDaysAttended = 0>
 				<cfset EventDates = "">
-				<cfif GetSelectedEventRegistrations.RegisterForEventDate1 EQ 1 and GetSelectedEventRegistrations.AttendedEventDate1 EQ 1><cfif LEN(Variables.EventDates) EQ 0><cfset EventDates = #DateFormat(GetSelectedEventRegistrations.EventDate, "mm/dd/yy")#><cfelse><cfset EventDates = #Variables.EventDates# & ", " & #DateFormat(GetSelectedEventRegistrations.EventDate, "mm/dd/yy")#></cfif><cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#></cfif>
-				<cfif GetSelectedEventRegistrations.RegisterForEventDate2 EQ 1 and GetSelectedEventRegistrations.AttendedEventDate2 EQ 1><cfif LEN(Variables.EventDates) EQ 0><cfset EventDates = #DateFormat(GetSelectedEventRegistrations.EventDate1, "mm/dd/yy")#><cfelse><cfset EventDates = #Variables.EventDates# & ", " & #DateFormat(GetSelectedEventRegistrations.EventDate1, "mm/dd/yy")#></cfif><cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#></cfif>
-				<cfif GetSelectedEventRegistrations.RegisterForEventDate3 EQ 1 and GetSelectedEventRegistrations.AttendedEventDate3 EQ 1><cfif LEN(Variables.EventDates) EQ 0><cfset EventDates = #DateFormat(GetSelectedEventRegistrations.EventDate2, "mm/dd/yy")#><cfelse><cfset EventDates = #Variables.EventDates# & ", " & #DateFormat(GetSelectedEventRegistrations.EventDate2, "mm/dd/yy")#></cfif><cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#></cfif>
-				<cfif GetSelectedEventRegistrations.RegisterForEventDate4 EQ 1 and GetSelectedEventRegistrations.AttendedEventDate4 EQ 1><cfif LEN(Variables.EventDates) EQ 0><cfset EventDates = #DateFormat(GetSelectedEventRegistrations.EventDate3, "mm/dd/yy")#><cfelse><cfset EventDates = #Variables.EventDates# & ", " & #DateFormat(GetSelectedEventRegistrations.EventDate3, "mm/dd/yy")#></cfif><cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#></cfif>
-				<cfif GetSelectedEventRegistrations.RegisterForEventDate5 EQ 1 and GetSelectedEventRegistrations.AttendedEventDate5 EQ 1><cfif LEN(Variables.EventDates) EQ 0><cfset EventDates = #DateFormat(GetSelectedEventRegistrations.EventDate4, "mm/dd/yy")#><cfelse><cfset EventDates = #Variables.EventDates# & ", " & #DateFormat(GetSelectedEventRegistrations.EventDate4, "mm/dd/yy")#></cfif><cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#></cfif>
-				<cfif GetSelectedEventRegistrations.RegisterForEventDate6 EQ 1 and GetSelectedEventRegistrations.AttendedEventDate6 EQ 1><cfif LEN(Variables.EventDates) EQ 0><cfset EventDates = #DateFormat(GetSelectedEventRegistrations.EventDate5, "mm/dd/yy")#><cfelse><cfset EventDates = #Variables.EventDates# & ", " & #DateFormat(GetSelectedEventRegistrations.EventDate5, "mm/dd/yy")#></cfif><cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#></cfif>
+				<cfif Session.EventNumberRegistrations.RegisterForEventDate1 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate1 EQ 1>
+					<cfif LEN(Session.getSelectedEvent.PGPPoints)>
+						<cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#>
+						<cfset ParticipantNumberOfDaysAttended = #Variables.ParticipantNumberOfDaysAttended# + 1>
+					</cfif>	
+				</cfif>
+				<cfif Session.EventNumberRegistrations.RegisterForEventDate2 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate2 EQ 1>
+					<cfif LEN(Session.getSelectedEvent.PGPPoints)>
+						<cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#>
+						<cfset ParticipantNumberOfDaysAttended = #Variables.ParticipantNumberOfDaysAttended# + 1>
+					</cfif>	
+				</cfif>
+				<cfif Session.EventNumberRegistrations.RegisterForEventDate3 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate3 EQ 1>
+					<cfif LEN(Session.getSelectedEvent.PGPPoints)>
+						<cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#>
+						<cfset ParticipantNumberOfDaysAttended = #Variables.ParticipantNumberOfDaysAttended# + 1>
+					</cfif>	
+				</cfif>
+				<cfif Session.EventNumberRegistrations.RegisterForEventDate4 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate4 EQ 1>
+					<cfif LEN(Session.getSelectedEvent.PGPPoints)>
+						<cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#>
+						<cfset ParticipantNumberOfDaysAttended = #Variables.ParticipantNumberOfDaysAttended# + 1>
+					</cfif>	
+				</cfif>
+				<cfif Session.EventNumberRegistrations.RegisterForEventDate5 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate5 EQ 1>
+					<cfif LEN(Session.getSelectedEvent.PGPPoints)>
+						<cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#>
+						<cfset ParticipantNumberOfDaysAttended = #Variables.ParticipantNumberOfDaysAttended# + 1>
+					</cfif>	
+				</cfif>
+				<cfif Session.EventNumberRegistrations.RegisterForEventDate6 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate6 EQ 1>
+					<cfif LEN(Session.getSelectedEvent.PGPPoints)>
+						<cfset ParticipantNumberOfPGPCertificatePoints = #Variables.ParticipantNumberOfPGPCertificatePoints# + #Session.getSelectedEvent.PGPPoints#>
+						<cfset ParticipantNumberOfDaysAttended = #Variables.ParticipantNumberOfDaysAttended# + 1>
+					</cfif>
+				</cfif>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "PGPPoints", NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9"))#>
+				<cfquery name="getOrganizationinfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+					Select OrganizationName, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode
+					From p_EventRegistration_Membership
+					Where OrganizationDomainName = <cfqueryparam value="#Session.EventNumberRegistrations.Domain#" cfsqltype="cf_sql_varchar">
+				</cfquery>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "OrganizationName", getOrganizationInfo.OrganizationName, Session.EventNumberRegistrations.CurrentRow)#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "Mailing_Address", getOrganizationInfo.Mailing_Address, Session.EventNumberRegistrations.CurrentRow)#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "Mailing_City", getOrganizationInfo.Mailing_City, Session.EventNumberRegistrations.CurrentRow)#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "Mailing_State", getOrganizationInfo.Mailing_State, Session.EventNumberRegistrations.CurrentRow)#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "Mailing_ZipCode", getOrganizationInfo.Mailing_ZipCode, Session.EventNumberRegistrations.CurrentRow)#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "EventDateDisplay", Session.SignInSheet.EventDates, Session.EventNumberRegistrations.CurrentRow)#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "EventNumberOfDays", ListLen(Session.SignInSheet.EventDates, ","), Session.EventNumberRegistrations.CurrentRow)#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "ParticipantDaysAttended", Variables.ParticipantNumberOfDaysAttended, Session.EventNumberRegistrations.CurrentRow)#>
 
-				<cfset ParticipantName = #GetSelectedEventRegistrations.FName# & " " & #GetSelectedEventRegistrations.LName#>
-				<cfset ParticipantFilename = #Replace(Variables.ParticipantName, " ", "", "all")#>
-				<cfset ParticipantFilename = #Replace(Variables.ParticipantFilename, ".", "", "all")#>
-				<cfset PGPEarned = "PGP Earned: " & #NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9")#>
-				<cfset CertificateCompletedFile = #Variables.CertificateExportTemplateDir# & #FORM.EventID# & "-" & #Variables.ParticipantFilename# & ".pdf">
+				<cfif (Session.EventNumberRegistrations.RegisterForEventDate1 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate1 EQ 1) OR (Session.EventNumberRegistrations.RegisterForEventDate2 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate2 EQ 1) OR (Session.EventNumberRegistrations.RegisterForEventDate3 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate3 EQ 1) OR (Session.EventNumberRegistrations.RegisterForEventDate4 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate4 EQ 1) OR (Session.EventNumberRegistrations.RegisterForEventDate5 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate5 EQ 1) OR (Session.EventNumberRegistrations.RegisterForEventDate6 EQ 1 and Session.EventNumberRegistrations.AttendedEventDate6 EQ 1)>
 
-				<cfscript>
-					PDFCompletedCertificate = CreateObject("java", "java.io.FileOutputStream").init(CertificateCompletedFile);
-					PDFMasterCertificateTemplate = CreateObject("java", "com.itextpdf.text.pdf.PdfReader").init(CertificateMasterTemplate);
-					PDFStamper = CreateObject("java", "com.itextpdf.text.pdf.PdfStamper").init(PDFMasterCertificateTemplate, PDFCompletedCertificate);
-					PDFStamper.setFormFlattening(true);
-					PDFFormFields = PDFStamper.getAcroFields();
-					PDFFormFields.setField("PGPEarned", Variables.PGPEarned);
-					PDFFormFields.setField("ParticipantName", Variables.ParticipantName);
-					PDFFormFields.setField("EventTitle", GetSelectedEventRegistrations.ShortTitle);
-					PDFFormFields.setField("EventDate", Variables.EventDates);
-					PDFFormFields.setField("SignDate", DateFormat(Now(), "mm/dd/yyyy"));
-					PDFStamper.close();
-				</cfscript>
+					<cfset ParticipantName = #Session.EventNumberRegistrations.FName# & " " & #Session.EventNumberRegistrations.LName#>
+					<cfset ParticipantFilename = #Replace(Variables.ParticipantName, " ", "", "all")#>
+					<cfset ParticipantFilename = #Replace(Variables.ParticipantFilename, ".", "", "all")#>
+					<cfset PGPEarned = "PGP Earned: " & #NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9")#>
+					<cfset CertificateCompletedFile = #Variables.CertificateExportTemplateDir# & #FORM.EventID# & "-" & #Variables.ParticipantFilename# & ".pdf">
+					<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NIESCRisePGPCertificateTemplate.pdf">
 
-				<cfset ParticipantInfo = StructNew()>
-				<cfset ParticipantInfo.FName = #GetSelectedEventRegistrations.Fname#>
-				<cfset ParticipantInfo.LName = #GetSelectedEventRegistrations.Lname#>
-				<cfset ParticipantInfo.Email = #GetSelectedEventRegistrations.Email#>
-				<cfset ParticipantInfo.EventShortTitle = #GetSelectedEventRegistrations.ShortTitle#>
-				<cfset ParticipantInfo.EmailMessageBody = #FORM.EmailMsg#>
-				<cfset ParticipantInfo.NumberPGPPoints = #NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9")#>
-				<cfset ParticipantInfo.PGPCertificateFilename = #Variables.CertificateCompletedFile#>
-				<cfset temp = #SendEMailCFC.SendPGPCertificateToIndividual(rc, Variables.ParticipantInfo)#>
+					<cfscript>
+						PDFCompletedCertificate = CreateObject("java", "java.io.FileOutputStream").init(CertificateCompletedFile);
+						PDFMasterCertificateTemplate = CreateObject("java", "com.itextpdf.text.pdf.PdfReader").init(CertificateMasterTemplate);
+						PDFStamper = CreateObject("java", "com.itextpdf.text.pdf.PdfStamper").init(PDFMasterCertificateTemplate, PDFCompletedCertificate);
+						PDFStamper.setFormFlattening(true);
+						PDFFormFields = PDFStamper.getAcroFields();
+						PDFFormFields.setField("PGPEarned", Variables.PGPEarned);
+						PDFFormFields.setField("ParticipantName", Variables.ParticipantName);
+						PDFFormFields.setField("EventTitle", Session.EventNumberRegistrations.ShortTitle);
+						PDFFormFields.setField("EventDate", Session.SignInSheet.EventDates);
+						PDFFormFields.setField("SignDate", DateFormat(Now(), "mm/dd/yyyy"));
+						PDFStamper.close();
+					</cfscript>
+
+					<cfset ParticipantInfo = StructNew()>
+					<cfset ParticipantInfo.FName = #Session.EventNumberRegistrations.Fname#>
+					<cfset ParticipantInfo.LName = #Session.EventNumberRegistrations.Lname#>
+					<cfset ParticipantInfo.Email = #Session.EventNumberRegistrations.Email#>
+					<cfset ParticipantInfo.EventShortTitle = #Session.EventNumberRegistrations.ShortTitle#>
+					<cfset ParticipantInfo.EmailMessageBody = #FORM.EmailMsg#>
+					<cfset ParticipantInfo.NumberPGPPoints = #NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9")#>
+					<cfset ParticipantInfo.PGPCertificateFilename = #Variables.CertificateCompletedFile#>
+					<cfset temp = #SendEMailCFC.SendPGPCertificateToIndividual(rc, Variables.ParticipantInfo)#>
+				</cfif>
+			</cfloop>
+
+			<cfset LogoPath = ArrayNew(1)>
+			<cfloop from="1" to="#Session.EventNumberRegistrations.RecordCount#" step="1" index="i">
+				<cfswitch expression="#rc.$.siteConfig('siteID')#">
+					<cfcase value="NIESCEvents">
+						<cfset LogoPath[i] = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/images/NIESC_Logo.png")#>
+					</cfcase>
+					<cfcase value="NWIESCEvents">
+						<cfset LogoPath[i] = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/images/NWIESC_Logo.png")#>
+					</cfcase>
+				</cfswitch>
+			</cfloop>
+			<cfset temp = QueryAddColumn(Session.EventNumberRegistrations, "NIESCLogoPath", "VarChar", Variables.LogoPath)>
+
+			<cfquery name="GetOrganizations" dbtype="query">
+				Select Domain
+				From Session.EventNumberRegistrations
+				Group By Domain
+			</cfquery>
+
+			<cfloop query="GetOrganizations">
+				<cfquery name="GetOrganizationRegistrations" dbtype="query">
+					Select *
+					From Session.EventNumberRegistrations
+					Where Domain = <cfqueryparam value="#GetOrganizations.Domain#" cfsqltype="cf_sql_varchar">
+				</cfquery>
+				<cfimport taglib="/plugins/EventRegistration/library/cfjasperreports/tag/cfjasperreport" prefix="jr">
+				<cfset ReportDirectory = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/reports/")# >
+				<cfset OrgFileName = #Replace(GetOrganizationRegistrations.OrganizationName, " ", "", "ALL")#>
+				<cfset ReportExportLoc = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/")# & #URL.EventID# & "-" & #Variables.OrgFileName# & "EventStatementOfAttendance.pdf" >
+
+				<cfswitch expression="#rc.$.siteConfig('siteID')#">
+					<cfcase value="NIESCEvents">
+						<jr:jasperreport jrxml="#ReportDirectory#/NIESCEventAttendanceRecord.jrxml" query="#GetOrganizationRegistrations#" exportfile="#ReportExportLoc#" exportType="pdf" />
+					</cfcase>
+					<cfcase value="NWIESCEvents">
+						<jr:jasperreport jrxml="#ReportDirectory#/NWIESCEventAttendanceRecord.jrxml" query="#getParticipants#" exportfile="# ReportExportLoc#" exportType="pdf" />
+					</cfcase>
+				</cfswitch>
+				<cfset FacilitatorName = #Session.GetSelectedEventFacilitator.Fname# & " " & #Session.GetSelectedEventFacilitator.Lname#>
+				
+				<cfset Temp = SendEmailCFC.SendStatementofAttendanceToFacilitator(rc, Variables.ReportExportLoc, GetOrganizationRegistrations.ShortTitle, Variables.FacilitatorName, Session.GetSelectedEventFacilitator.EMail, GetOrganizationRegistrations.OrganizationName)>
 			</cfloop>
 			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default&UserAction=SentPGPCertificates&Successful=True" addtoken="false">
 		</cfif>

@@ -3361,7 +3361,7 @@
 					<cfset ParticipantFilename = #Replace(Variables.ParticipantFilename, ".", "", "all")#>
 					<cfset PGPEarned = "PGP Earned: " & #NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9")#>
 					<cfset CertificateCompletedFile = #Variables.CertificateExportTemplateDir# & #FORM.EventID# & "-" & #Variables.ParticipantFilename# & ".pdf">
-					<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NIESCRisePGPCertificateTemplate.pdf">
+					<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NIESCPGPCertificateTemplate.pdf">
 
 					<cfscript>
 						PDFCompletedCertificate = CreateObject("java", "java.io.FileOutputStream").init(CertificateCompletedFile);

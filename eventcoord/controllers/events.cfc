@@ -681,8 +681,8 @@
 							Update p_EventRegistration_Events
 							Set LocationID = <cfqueryparam value="#FORM.LocationID#" cfsqltype="cf_sql_integer">,
 								LocationRoomID = <cfqueryparam value="#FORM.LocationRoomID#" cfsqltype="cf_sql_integer">,
-								MemberCost = <cfqueryparam value="#LSParseNumber(FORM.MemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
-								NonMemberCost = <cfqueryparam value="#LSParseNumber(FORM.NonMemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
+								MemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.MemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+								NonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.NonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 								lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 								lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 							Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
@@ -801,8 +801,8 @@
 								Update p_EventRegistration_Events
 								Set EarlyBird_RegistrationAvailable = <cfqueryparam value="#FORM.EarlyBird_RegistrationAvailable#" cfsqltype="cf_sql_bit">,
 									EarlyBird_RegistrationDeadline = #CreateDate(ListLast(FORM.EarlyBird_RegistrationDeadline, "/"), ListFirst(FORM.EarlyBird_RegistrationDeadline, "/"), ListGetAt(FORM.EarlyBird_RegistrationDeadline, 2, "/"))#,
-									EarlyBird_MemberCost = <cfqueryparam value="#LSParseNumber(FORM.EarlyBird_MemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
-									EarlyBird_NonMemberCost = <cfqueryparam value="#LSParseNumber(FORM.EarlyBird_NonMemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
+									EarlyBird_MemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.EarlyBird_MemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+									EarlyBird_NonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.EarlyBird_NonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
@@ -827,8 +827,8 @@
 							<cfquery name="updateNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 								Update p_EventRegistration_Events
 								Set ViewGroupPricing = <cfqueryparam value="#FORM.ViewGroupPricing#" cfsqltype="cf_sql_bit">,
-									GroupMemberCost = <cfqueryparam value="#LSParseNumber(FORM.GroupMemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
-									GroupNonMemberCost = <cfqueryparam value="#LSParseNumber(FORM.GroupNonMemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
+									GroupMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.GroupMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+									GroupNonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.GroupNonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									GroupPriceRequirements = "#FORM.GroupPriceRequirements#",
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
@@ -852,7 +852,7 @@
 								Update p_EventRegistration_Events
 								Set MealProvidedBy = <cfqueryparam value="#FORM.MealProvidedBy#" cfsqltype="CF_SQL_INTEGER">,
 									MealIncluded = <cfqueryparam value="#FORM.MealIncluded#" cfsqltype="CF_SQL_bit">,
-									MealCost = <cfqueryparam value="#LSParseNumber(FORM.MealCost, 'english (united states)')#" cfsqltype="cf_sql_DECIMAL">,
+									MealCost = <cfqueryparam value="#NumberFormat(Replace(FORM.MealCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									Meal_Notes = <cfqueryparam value="#FORM.MealInformation#" cfsqltype="cf_sql_varchar">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
@@ -866,7 +866,7 @@
 								Update p_EventRegistration_Events
 								Set AllowVideoConference = <cfqueryparam value="#FORM.AllowVideoConference#" cfsqltype="cf_sql_bit">,
 									VideoConferenceInfo = <cfqueryparam value="#FORM.VideoConferenceInfo#" cfsqltype="CF_SQL_VARCHAR">,
-									VideoConferenceCost = <cfqueryparam value="#LSParseNumber(FORM.VideoConferenceCost, 'english (united states)')#" cfsqltype="cf_sql_DECIMAL">,
+									VideoConferenceCost = <cfqueryparam value="#NumberFormat(Replace(FORM.VideoConferenceCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
@@ -878,8 +878,8 @@
 								Update p_EventRegistration_Events
 								Set WebinarAvailable = <cfqueryparam value="#FORM.WebinarEvent#" cfsqltype="cf_sql_bit">,
 									WebinarConnectInfo = <cfqueryparam value="#FORM.WebinarConnectWebInfo#" cfsqltype="CF_SQL_VARCHAR">,
-									WebinarMemberCost = <cfqueryparam value="#LSParseNumber(FORM.WebinarMemberCost, 'english (united states)')#" cfsqltype="cf_sql_DECIMAL">,
-									WebinarNonMemberCost = <cfqueryparam value="#LSParseNumber(FORM.WebinarNonMemberCost, 'english (united states)')#" cfsqltype="cf_sql_DECIMAL">,
+									WebinarMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.WebinarMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+									WebinarNonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.WebinarNonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.GENERATED_KEY#" cfsqltype="cf_sql_integer">
@@ -891,8 +891,8 @@
 							Update p_EventRegistration_Events
 							Set LocationID = <cfqueryparam value="#FORM.LocationID#" cfsqltype="cf_sql_integer">,
 								LocationRoomID = <cfqueryparam value="#FORM.LocationRoomID#" cfsqltype="cf_sql_integer">,
-								MemberCost = <cfqueryparam value="#LSParseNumber(FORM.MemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
-								NonMemberCost = <cfqueryparam value="#LSParseNumber(FORM.NonMemberCost, 'english (united states)')#" cfsqltype="cf_sql_money">,
+								MemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.MemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+								NonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.NonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 								lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 								lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 							Where TContent_ID = <cfqueryparam value="#insertNewEvent.IdentityCol#" cfsqltype="cf_sql_integer">
@@ -1011,8 +1011,8 @@
 								Update p_EventRegistration_Events
 								Set EarlyBird_RegistrationAvailable = <cfqueryparam value="#FORM.EarlyBird_RegistrationAvailable#" cfsqltype="cf_sql_bit">,
 									EarlyBird_RegistrationDeadline = #CreateDate(ListLast(FORM.EarlyBird_RegistrationDeadline, "/"), ListFirst(FORM.EarlyBird_RegistrationDeadline, "/"), ListGetAt(FORM.EarlyBird_RegistrationDeadline, 2, "/"))#,
-									EarlyBird_MemberCost = "#FORM.EarlyBird_MemberCost#",
-									EarlyBird_NonMemberCost = "#FORM.EarlyBird_NonMemberCost#",
+									EarlyBird_MemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.EarlyBird_MemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+									EarlyBird_NonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.EarlyBird_NonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.IdentityCol#" cfsqltype="cf_sql_integer">
@@ -1023,8 +1023,8 @@
 							<cfquery name="updateNewEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 								Update p_EventRegistration_Events
 								Set ViewGroupPricing = <cfqueryparam value="#FORM.ViewGroupPricing#" cfsqltype="cf_sql_bit">,
-									GroupMemberCost = "#FORM.GroupMemberCost#",
-									GroupNonMemberCost = "#FORM.GroupNonMemberCost#",
+									GroupMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.GroupMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+									GroupNonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.GroupNonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									GroupPriceRequirements = "#FORM.GroupPriceRequirements#",
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
@@ -1058,7 +1058,7 @@
 								Update p_EventRegistration_Events
 								Set AllowVideoConference = <cfqueryparam value="#FORM.AllowVideoConference#" cfsqltype="cf_sql_bit">,
 									VideoConferenceInfo = <cfqueryparam value="#FORM.VideoConferenceInfo#" cfsqltype="CF_SQL_VARCHAR">,
-									VideoConferenceCost = <cfqueryparam value="#FORM.VideoConferenceCost#" cfsqltype="CF_SQL_MONEY">,
+									VideoConferenceCost = <cfqueryparam value="#NumberFormat(Replace(FORM.VideoConferenceCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.IdentityCol#" cfsqltype="cf_sql_integer">
@@ -1070,8 +1070,8 @@
 								Update p_EventRegistration_Events
 								Set WebinarAvailable = <cfqueryparam value="#FORM.WebinarEvent#" cfsqltype="cf_sql_bit">,
 									WebinarConnectInfo = <cfqueryparam value="#FORM.WebinarConnectWebInfo#" cfsqltype="CF_SQL_VARCHAR">,
-									WebinarMemberCost = <cfqueryparam value="#FORM.WebinarMemberCost#" cfsqltype="CF_SQL_MONEY">,
-									WebinarNonMemberCost = <cfqueryparam value="#FORM.WebinarNonMemberCost#" cfsqltype="CF_SQL_MONEY">,
+									WebinarMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.WebinarMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
+									WebinarNonMemberCost = <cfqueryparam value="#NumberFormat(Replace(FORM.WebinarNonMemberCost, '$', '', 'all'), '999999.99')#" cfsqltype="cf_sql_double">,
 									lastUpdated = <cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">,
 									lastUpdateBy = <cfqueryparam value="#Session.Mura.UserID#" cfsqltype="cf_sql_varchar">
 								Where TContent_ID = <cfqueryparam value="#insertNewEvent.IdentityCol#" cfsqltype="cf_sql_integer">

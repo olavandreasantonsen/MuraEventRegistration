@@ -1183,14 +1183,14 @@
 
 			<cfif LEN(getFacebookCredientials.Facebook_AppID) and LEN(getFacebookCredientials.Facebook_AppSecretKey) and LEN(getFacebookCredientials.Facebook_PageID) and LEN(getFacebookCredientials.Facebook_AppScope)>
 				<cfset Session.PostEventToFB = StructNew()>
-				<cfset Session.PostEventToFB.RedirectURI = "http://#cgi.server_name#/#CGI.Script_name##CGI.path_info#?EventRegistrationaction=eventcoord:events.publishtofb&compactDisplay=false&EventID=#insertNewEvent.GENERATED_KEY#&PerformAction=AutomaticPost">
+				<cfset Session.PostEventToFB.RedirectURI = "http://#cgi.server_name#/#CGI.Script_name##CGI.path_info#?EventRegistrationaction=eventcoord:events.publishtofb&compactDisplay=false&EventID=#GetSelectedEvent.TContent_ID#&PerformAction=AutomaticPost">
 				<cfset Session.PostEventToFB.FacebookAppID = #getFacebookCredientials.Facebook_AppID#>
 				<cfset Session.PostEventToFB.FacebookAppSecretKey = #getFacebookCredientials.Facebook_AppSecretKey#>
 				<cfset Session.PostEventToFB.FacebookPageID = #getFacebookCredientials.Facebook_PageID#>
 				<cfset Session.PostEventToFB.FacebookAppScope = #getFacebookCredientials.Facebook_AppScope#>
 				<cfset Session.PostEventToFB.EventDate = #GetSelectedEvent.EventDate#>
 				<cfset Session.PostEventToFB.EventTitle = #GetSelectedEvent.ShortTitle#>
-				<cfset Session.PostEventToFB.LongDescription = #GetSelectedEvent.LongDescription#>
+				<cfset Session.PostEventToFB.LongDescription = #ReReplaceNoCase(GetSelectedEvent.LongDescription,"<[^>]*>","","ALL")#>
 				<cfset Session.PostEventToFB.FacilityName = #getFacilityLocation.FacilityName#>
 				<cfset Session.PostEventToFB.FacilityAddress = #getFacilityLocation.PhysicalAddress#>
 				<cfset Session.PostEventToFB.FacilityCity = #getFacilityLocation.PhysicalCity#>

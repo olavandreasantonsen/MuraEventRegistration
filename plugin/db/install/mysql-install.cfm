@@ -51,7 +51,7 @@
 </cfquery>
 
 <cfquery name="Create-p_EventRegistration_UserMatrix" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
-	CREATE TABLE `p_EventRegistration_UserMatrix` ( `TContent_ID` INT(11) NOT NULL AUTO_INCREMENT, `Site_ID` TINYTEXT NOT NULL, `User_ID` CHAR(35) NOT NULL, `School_District` INT(11) NULL DEFAULT NULL, `created` DATETIME NOT NULL, `lastUpdateBy` VARCHAR(35) NOT NULL, `lastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, `TeachingGrade` INT(11) NULL DEFAULT NULL, `TeachingSubject` INT(11) NULL DEFAULT NULL, `ReceiveMarketingFlyers` BIT(1) NOT NULL DEFAULT b'0', PRIMARY KEY (`TContent_ID`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB AUTO_INCREMENT=1;
+	CREATE TABLE `p_EventRegistration_UserMatrix` ( `TContent_ID` INT(11) NOT NULL AUTO_INCREMENT, `Site_ID` TINYTEXT NOT NULL, `User_ID` CHAR(35) NOT NULL, `School_District` INT(11) NULL DEFAULT NULL, `dateCreated` DATETIME NOT NULL, `lastUpdateBy` VARCHAR(35) NOT NULL, `lastUpdated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, `TeachingGrade` INT(11) NULL DEFAULT NULL, `TeachingSubject` INT(11) NULL DEFAULT NULL, `ReceiveMarketingFlyers` BIT(1) NOT NULL DEFAULT b'0', PRIMARY KEY (`TContent_ID`) ) COLLATE='latin1_swedish_ci' ENGINE=InnoDB AUTO_INCREMENT=1;
 </cfquery>
 
 <cfquery name="Create-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">

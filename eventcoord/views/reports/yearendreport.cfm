@@ -34,6 +34,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<label for="EndYearDate" class="control-label col-sm-3">Year End Date:&nbsp;</label>
 						<div class="col-sm-8"><cfinput type="text" class="form-control" id="EndYearDate" name="EndYearDate" required="no"></div>
 					</div>
+					<div class="form-group">
+						<label for="Membership" class="control-label col-sm-3">Membership Agency:&nbsp;</label>
+						<div class="col-sm-8"><cfselect name="MembershipID" class="form-control" Required="Yes" Multiple="No" query="Session.QueryForReport.GetMembershipAgencies" value="TContent_ID" Display="OrganizationName"  queryposition="below">
+							<option value="----">Select Which Membership Agnecy you want to base report on</option></cfselect>
+						</div>
+					</div>
 				</div>
 				<div class="panel-footer">
 					<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Main Menu">
@@ -109,16 +115,34 @@ http://www.apache.org/licenses/LICENSE-2.0
 		</div>
 	<cfelse>
 		<div class="panel panel-default">
+			<cffile action="Write" file="ReportExport.csv" output="'Corporation','Domain'" addnewline="no">
+			<cfloop array="#Session.ReportQuery.YearlyEvents#" index="e" from="1" to="#ArrayLen(Session.ReportQuery.YearlyEvents)#">
+				<cffile action="Append" file="ReportExport.csv" output=",#chr(34)##e[2]##CHR(34)#" addnewline="no">
+			</cfloop>
+			<cffile action="Append" file="ReportExport.csv" output="" addnewline="yes">
+			<cfloop array="#Session.ReportQuery.Corporations#" index="s" from="1" to="#ArrayLen(Session.ReportQuery.Corporations)#">
+				<cffile action="Append" addnewline="true" file="ReportExport.csv" output="#ArrayToList(s,',')#">
+			</cfloop>
+
 			<div class="panel-body">
 				<fieldset>
 					<legend><h2>Year End Report</h2></legend>
 				</fieldset>
+				<!--- 
 				<cfimport taglib="/plugins/EventRegistration/library/cfjasperreports/tag/cfjasperreport" prefix="jr">
 				<cfset ReportDirectory = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/reports/")# >
 				<cfset ReportName = #DateFormat(Session.FormData.BegYearDate, "yyyy")# & "-" & #DateFormat(Session.FormData.EndYearDate, "yyyy")# & "-YearEndReport.pdf">
 				<cfset ReportExportLoc = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/")# & #Variables.ReportName#>
-				<jr:jasperreport jrxml="#ReportDirectory#/YearEndEventReport.jrxml" query="#Session.QueryForReport#" exportfile="#ReportExportLoc#" exportType="pdf" />
+				<cfset ReportQuery = QueryNew('ShortTitle,EventDate,Domain,NoRegistered,NoAttended')>
+				<cfset EventRecordID = ValueList(Session.QueryForReport.TContent_ID)>
+				#Variables.EventRecordID#
+				<cfloop query="#Session.QueryForReport#">
+
+				</cfloop>
+				<cfdump var="#Session.QueryForReport#">
+				<jr:jasperreport jrxml="#ReportDirectory#/YearEndReportByWorkshop.jrxml" query="#Session.QueryForReport#" exportfile="#ReportExportLoc#" exportType="pdf" />
 				<embed src="/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/#Variables.ReportName#" width="100%" height="650">
+				--->
 			</div>
 		</div>
 		<div class="panel-footer">

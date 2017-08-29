@@ -69,9 +69,9 @@
 				Order by OrganizationName ASC
 			</cfquery>
 			<cfquery name="GetYearlyEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-				Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, EarlyBird_RegistrationDeadline, EarlyBird_MemberCost, EarlyBird_NonMemberCost, WebinarAvailable, WebinarMemberCost, WebinarNonMemberCost, Active, EventCancelled
+				Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, MemberCost, NonMemberCost, EarlyBird_RegistrationAvailable, EarlyBird_RegistrationDeadline, EarlyBird_MemberCost, EarlyBird_NonMemberCost, WebinarAvailable, WebinarMemberCost, WebinarNonMemberCost, PGPAvailable, PGPPoints, Active, EventCancelled
 				From p_EventRegistration_Events
-				Where EventDate BETWEEN '#Variables.BegYearDate#' and '#Variables.EndYearDate#'
+				Where (EventDate BETWEEN '#Variables.BegYearDate#' and '#Variables.EndYearDate#') and EventCancelled = 0
 				Order by EventDate ASC
 			</cfquery>
 
@@ -80,12 +80,15 @@
 			<cfloop query="GetAllMemberships">
 				<cfset Variables.ReportQuery[GetAllMemberships.CurrentRow][1] = #GetAllMemberships.OrganizationName#>
 				<cfset Variables.ReportQuery[GetAllMemberships.CurrentRow][2] = #GetAllMemberships.OrganizationDomainName#>
+				<cfset Variables.ReportQuery[GetAllMemberships.CurrentRow][3] = 0>
 			</cfloop>
 			<cfloop query="GetYearlyEvents">
 				<cfset Variables.ReportYearlyEvents[GetYearlyEvents.CurrentRow][1] = #GetYearlyEvents.TContent_ID#>
 				<cfset Variables.ReportYearlyEvents[GetYearlyEvents.CurrentRow][2] = #GetYearlyEvents.ShortTitle#>
 				<cfset Variables.ReportYearlyEvents[GetYearlyEvents.CurrentRow][3] = #GetYearlyEvents.EventDate#>
-				<cfset Variables.ReportYearlyEvents[GetYearlyEvents.CurrentRow][4] = #GetYearlyEvents.CurrentRow# + 2>
+				<cfset Variables.ReportYearlyEvents[GetYearlyEvents.CurrentRow][4] = #GetYearlyEvents.CurrentRow# + 3>
+				<cfset Variables.ReportYearlyEvents[GetYearlyEvents.CurrentRow][5] = #GetYearlyEvents.PGPAvailable#>
+				<cfset Variables.ReportYearlyEvents[GetYearlyEvents.CurrentRow][6] = #GetYearlyEvents.PGPPoints#>
 			</cfloop>
 
 			<cfset eRecord = 1>
@@ -100,12 +103,21 @@
 							Where p_EventRegistration_UserRegistrations.EventID = #Variables.ReportYearlyEvents[eRecord][1]# and tusers.Email LIKE '%#Variables.ReportQuery[sRecord][2]#'
 						</cfquery>
 						<cfset TotalCorporationAttendees = 0>
+						<cfset TotalCorporationEventPGPPoints = 0>
 
 						<cfloop query="GetCorporationAttendeesByEvent">
 							<cfset TotalCorporationAttendees = #Variables.TotalCorporationAttendees# + #GetCorporationAttendeesByEvent.AttendedEventDate1# + #GetCorporationAttendeesByEvent.AttendedEventDate2# + #GetCorporationAttendeesByEvent.AttendedEventDate3# + #GetCorporationAttendeesByEvent.AttendedEventDate4# + #GetCorporationAttendeesByEvent.AttendedEventDate5# + #GetCorporationAttendeesByEvent.AttendedEventDate6# + #GetCorporationAttendeesByEvent.AttendedEventSessionAM# + #GetCorporationAttendeesByEvent.AttendedEventSessionPM#>
+							<cfif e[5] EQ 1>
+								<cfset TotalCorporationEventPGPPoints = #Variables.TotalCorporationEventPGPPoints# + ((#GetCorporationAttendeesByEvent.AttendedEventDate1# + #GetCorporationAttendeesByEvent.AttendedEventDate2# + #GetCorporationAttendeesByEvent.AttendedEventDate3# + #GetCorporationAttendeesByEvent.AttendedEventDate4# + #GetCorporationAttendeesByEvent.AttendedEventDate5# + #GetCorporationAttendeesByEvent.AttendedEventDate6# + #GetCorporationAttendeesByEvent.AttendedEventSessionAM# + #GetCorporationAttendeesByEvent.AttendedEventSessionPM#) * #e[6]#)>
+							</cfif>
 						</cfloop>
 						<cfset EventColumn = #Variables.ReportYearlyEvents[eRecord][4]#>
 						<cfset Variables.ReportQuery[Variables.sRecord][Variables.EventColumn] = #Variables.TotalCorporationAttendees#>
+						<cfif Variables.ReportQuery[Variables.sRecord][3] EQ 0>
+							<cfset Variables.ReportQuery[Variables.sRecord][3] = #Variables.TotalCorporationEventPGPPoints#>
+						<cfelse>
+							<cfset Variables.ReportQuery[Variables.sRecord][3] = #Variables.ReportQuery[Variables.sRecord][3]# + #Variables.TotalCorporationEventPGPPoints#>
+						</cfif>
 						<cfcatch type="any">
 							<cfdump var="#CFCATCH#">
 							<cfdump var="#Variables.ReportQuery#" abort="true">
@@ -115,9 +127,25 @@
 				</cfloop>
 				<cfset eRecord = #Variables.eRecord# + 1>
 			</cfloop>
+
+			<cfset YearEndReportExportDir = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/")#>
+			<cfset YearBegin = #DateFormat(CreateDate(ListLast(FORM.BegYearDate, "/"), ListFirst(FORM.BegYearDate, "/"), ListGetAt(FORM.BegYearDate, 2, "/")), "mm-yy")#>
+			<cfset YearEnd = #DateFormat(CreateDate(ListLast(FORM.EndYearDate, "/"), ListFirst(FORM.EndYearDate, "/"), ListGetAt(FORM.EndYearDate, 2, "/")), "mm-yy")#>
+			<cfset CompletdYearEndReportFile = #Variables.YearEndReportExportDir# & #Variables.YearBegin# & "_" & #Variables.YearEnd# & "-" & #FORM.MembershipID# & "YearlyEventReport.csv">
+
+			<cffile action="Write" file="#Variables.CompletdYearEndReportFile#" output="Corporation,Domain,PGP Total" addnewline="no">
+			<cfloop array="#Variables.ReportYearlyEvents#" index="e" from="1" to="#ArrayLen(Variables.ReportYearlyEvents)#">
+				<cffile action="Append" file="#Variables.CompletdYearEndReportFile#" output=",#chr(34)##e[2]##CHR(34)#" addnewline="no">
+			</cfloop>
+			<cffile action="Append" file="#Variables.CompletdYearEndReportFile#" output="" addnewline="yes">
+			<cfloop array="#Variables.ReportQuery#" index="s" from="1" to="#ArrayLen(Variables.ReportQuery)#">
+				<cffile action="Append" addnewline="true" file="#Variables.CompletdYearEndReportFile#" output="#ArrayToList(s,',')#">
+			</cfloop>
 			<cfset Session.ReportQuery = #StructNew()#>
 			<cfset Session.ReportQuery.YearlyEvents = #Variables.ReportYearlyEvents#>
 			<cfset Session.ReportQuery.Corporations = #Variables.ReportQuery#>
+			<cfset Session.ReportQuery.ReportFileName = #Variables.YearBegin# & "_" & #Variables.YearEnd# & "-" & #FORM.MembershipID# & "YearlyEventReport.csv">
+			<cfset Session.ReportQuery.ReportURLLocation = "/plugins/" & #HTMLEditFormat(rc.pc.getPackage())# & "/library/ReportExports/">
 			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:reports.yearendreport&DisplayReport=True">
 		</cfif>
 	</cffunction>

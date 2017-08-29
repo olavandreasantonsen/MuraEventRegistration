@@ -25,7 +25,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<fieldset>
 						<legend><h2>Year End Report</h2></legend>
 					</fieldset>
-					<div class="alert alert-info">Please complete the following information to display this report for the selected year period.</div>
+					<div class="alert alert-info">Please complete the following information to display this report for the selected year period. This will create a CSV (Comma Seperated Value) file that can be read by Microsoft Excell or compatible program to view the information.</div>
 					<div class="form-group">
 						<label for="BeginYearDate" class="control-label col-sm-3">Year Start Date:&nbsp;</label>
 						<div class="col-sm-8"><cfinput type="text" class="form-control" id="BegYearDate" name="BegYearDate" required="no"></div>
@@ -97,7 +97,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<fieldset>
 						<legend><h2>Year End Report</h2></legend>
 					</fieldset>
-					<div class="alert alert-info">Please complete the following information to display this report for the selected year period.</div>
+					<div class="alert alert-info">Please complete the following information to display this report for the selected year period. The report will only show events that have not been cancelled.</div>
 					<div class="form-group">
 						<label for="BeginYearDate" class="control-label col-sm-3">Year Start Date:&nbsp;</label>
 						<div class="col-sm-8"><cfinput type="text" class="form-control" id="BegYearDate" value="#Session.FormData.BegYearDate#" name="BegYearDate" required="no"></div>
@@ -115,38 +115,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 		</div>
 	<cfelse>
 		<div class="panel panel-default">
-			<cffile action="Write" file="ReportExport.csv" output="'Corporation','Domain'" addnewline="no">
-			<cfloop array="#Session.ReportQuery.YearlyEvents#" index="e" from="1" to="#ArrayLen(Session.ReportQuery.YearlyEvents)#">
-				<cffile action="Append" file="ReportExport.csv" output=",#chr(34)##e[2]##CHR(34)#" addnewline="no">
-			</cfloop>
-			<cffile action="Append" file="ReportExport.csv" output="" addnewline="yes">
-			<cfloop array="#Session.ReportQuery.Corporations#" index="s" from="1" to="#ArrayLen(Session.ReportQuery.Corporations)#">
-				<cffile action="Append" addnewline="true" file="ReportExport.csv" output="#ArrayToList(s,',')#">
-			</cfloop>
-
 			<div class="panel-body">
 				<fieldset>
 					<legend><h2>Year End Report</h2></legend>
 				</fieldset>
-				<!--- 
-				<cfimport taglib="/plugins/EventRegistration/library/cfjasperreports/tag/cfjasperreport" prefix="jr">
-				<cfset ReportDirectory = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/reports/")# >
-				<cfset ReportName = #DateFormat(Session.FormData.BegYearDate, "yyyy")# & "-" & #DateFormat(Session.FormData.EndYearDate, "yyyy")# & "-YearEndReport.pdf">
-				<cfset ReportExportLoc = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/")# & #Variables.ReportName#>
-				<cfset ReportQuery = QueryNew('ShortTitle,EventDate,Domain,NoRegistered,NoAttended')>
-				<cfset EventRecordID = ValueList(Session.QueryForReport.TContent_ID)>
-				#Variables.EventRecordID#
-				<cfloop query="#Session.QueryForReport#">
-
-				</cfloop>
-				<cfdump var="#Session.QueryForReport#">
-				<jr:jasperreport jrxml="#ReportDirectory#/YearEndReportByWorkshop.jrxml" query="#Session.QueryForReport#" exportfile="#ReportExportLoc#" exportType="pdf" />
-				<embed src="/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/ReportExports/#Variables.ReportName#" width="100%" height="650">
-				--->
+				<p>Your report has been generated and ready to be downloaded. Please click <a href="#Session.ReportQuery.ReportURLLocation##Session.ReportQuery.ReportFileName#" target="_blank">#Session.ReportQuery.ReportFileName#</a> to download your report</p>
 			</div>
 		</div>
 		<div class="panel-footer">
-			<a href="" class="btn btn-primary pull-left">Back to Main Menu</a><br /><br />
+			<a href="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:main.default" class="btn btn-primary pull-left">Back to Main Menu</a><br /><br />
 		</div>
 	</cfif>
 </cfoutput>

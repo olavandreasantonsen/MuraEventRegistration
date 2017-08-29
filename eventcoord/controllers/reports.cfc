@@ -149,4 +149,53 @@
 			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:reports.yearendreport&DisplayReport=True">
 		</cfif>
 	</cffunction>
+
+	<cffunction name="membership" returntype="any" output="false">
+		<cfargument name="rc" required="true" type="struct" default="#StructNew()#">
+
+		<cfif not isDefined("FORM.formSubmit")>
+			<cfquery name="GetAllMemberships" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select OrganizationName, Active, OrganizationDomainName, StateDOE_ESCESAMembership
+				From p_EventRegistration_Membership
+			</cfquery>
+
+			<cfquery name="GetAllMembershipAgencies" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Select TContent_ID, OrganizationName, OrganizationDomainName
+				From p_EventRegistration_StateESCOrganizations
+			</cfquery>
+			<cfset ReportQuery = #QueryNew('OrganizationName,Active,OrganizationDomainName,AffilitationName')#>
+			<cfloop query="GetAllMemberships">
+				<cfset temp = QueryAddRow(Variables.ReportQuery, 1)>
+				<cfset temp = QuerySetCell(Variables.ReportQuery, "OrganizationName", GetAllMemberships.OrganizationName)>
+				<cfif GetAllMemberships.Active EQ 1>
+					<cfset temp = QuerySetCell(Variables.ReportQuery, "Active", "Yes")>
+				<cfelse>
+					<cfset temp = QuerySetCell(Variables.ReportQuery, "Active", "No")>
+				</cfif>
+				<cfset temp = QuerySetCell(Variables.ReportQuery, "OrganizationDomainName", GetAllMemberships.OrganizationDomainName)>
+				<cfif GetAllMemberships.StateDOE_ESCESAMembership EQ 0>
+					<cfset temp = QuerySetCell(Variables.ReportQuery, "AffilitationName", "No ESC/ESA Membership")>	
+				<cfelse>
+					<cfquery name="GetAffiliationInfo" dbtype="query">
+						Select * from GetAllMembershipAgencies
+						Where TContent_ID = #GetAllMemberships.StateDOE_ESCESAMembership#
+					</cfquery>
+					<cfset temp = QuerySetCell(Variables.ReportQuery, "AffilitationName", GetAffiliationInfo.OrganizationName)>
+				</cfif>
+			</cfloop>
+			<cfset LogoPath = ArrayNew(1)>
+			<cfloop from="1" to="#Variables.ReportQuery.RecordCount#" step="1" index="i">
+				<cfswitch expression="#rc.$.siteConfig('siteID')#">
+					<cfcase value="NIESCEvents">
+						<cfset LogoPath[i] = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/images/NIESC_Logo.png")#>
+					</cfcase>
+					<cfcase value="NWIESCEvents">
+						<cfset LogoPath[i] = #ExpandPath("/plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/images/NWIESC_Logo.png")#>
+					</cfcase>
+				</cfswitch>
+			</cfloop>
+			<cfset temp = QueryAddColumn(Variables.ReportQuery, "LogoPath", "VarChar", Variables.LogoPath)>	
+			<cfset Session.ReportQuery = #Variables.ReportQuery#>
+		</cfif>
+	</cffunction>
 </cfcomponent>

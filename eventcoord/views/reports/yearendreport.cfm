@@ -37,7 +37,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 					<div class="form-group">
 						<label for="Membership" class="control-label col-sm-3">Membership Agency:&nbsp;</label>
 						<div class="col-sm-8"><cfselect name="MembershipID" class="form-control" Required="Yes" Multiple="No" query="Session.QueryForReport.GetMembershipAgencies" value="TContent_ID" Display="OrganizationName"  queryposition="below">
-							<option value="----">Select Which Membership Agnecy you want to base report on</option></cfselect>
+							<option value="----">Select Which Membership Agnecy you want to base report on</option>
+							<option value="0">Not a Member of ESC/ESA</option></cfselect>
 						</div>
 					</div>
 				</div>

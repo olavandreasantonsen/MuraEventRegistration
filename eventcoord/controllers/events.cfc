@@ -3272,6 +3272,12 @@
 				
 				<cfset Temp = SendEmailCFC.SendStatementofAttendanceToFacilitator(rc, Variables.ReportExportLoc, GetOrganizationRegistrations.ShortTitle, Variables.FacilitatorName, Session.GetSelectedEventFacilitator.EMail, GetOrganizationRegistrations.OrganizationName)>
 			</cfloop>
+			<cfquery name="UpdateEventPGPCertificateFlag" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
+				Update p_EventRegistration_Events
+				Set PGPCertificatesGenerated = <cfqueryparam cfsqltype="cf_sql_bit" value="1">
+				Where TContent_ID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.EventID#">
+			</cfquery>
+
 			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.default&UserAction=SentPGPCertificates&Successful=True" addtoken="false">
 		</cfif>
 	</cffunction>

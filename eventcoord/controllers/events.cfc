@@ -7,7 +7,7 @@
 
 		<!--- <cfset PriorDate = #DateAdd("m", -8, Now())#> --->
 		<cfquery name="Session.getAvailableEvents" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-			Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, PGPAvailable, MemberCost, NonMemberCost, Presenters, Active, EventCancelled, AcceptRegistrations, Registration_Deadline, MaxParticipants, EventInvoicesGenerated
+			Select TContent_ID, ShortTitle, EventDate, EventDate1, EventDate2, EventDate3, EventDate4, EventDate5, LongDescription, PGPAvailable, MemberCost, NonMemberCost, Presenters, Active, EventCancelled, AcceptRegistrations, Registration_Deadline, MaxParticipants, EventInvoicesGenerated, PGPCertificatesGenerated
 			From p_EventRegistration_Events
 			Where Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar"> and
 				EventDate >= <cfqueryparam value="#Variables.PriorDate#" cfsqltype="cf_sql_date">
@@ -4639,9 +4639,10 @@
 			<cfset temp = QueryAddColumn(Session.GetSelectedEventRegistrations,"ReceiveInvoicesByEmail")>
 			<cfset temp = QueryAddColumn(Session.GetSelectedEventRegistrations,"AttendeePriceDisplay")>
 			<cfset temp = QueryAddColumn(Session.GetSelectedEventRegistrations,"EventDateDisplay")>
+			<cfset temp = QueryAddColumn(Session.GetSelectedEventRegistrations,"InvoiceID")>
 			<cfloop query="Session.GetSelectedEventRegistrations">
 				<cfquery name="getOrganizationinfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
-					Select OrganizationName, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode, Primary_PhoneNumber, AccountsPayable_EmailAddress, AccountsPayable_ContactName, ReceiveInvoicesByEmail
+					Select TContent_ID, OrganizationName, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode, Primary_PhoneNumber, AccountsPayable_EmailAddress, AccountsPayable_ContactName, ReceiveInvoicesByEmail
 					From p_EventRegistration_Membership
 					Where OrganizationDomainName = <cfqueryparam value="#Session.GetSelectedEventRegistrations.Domain#" cfsqltype="cf_sql_varchar">
 				</cfquery>
@@ -4656,6 +4657,8 @@
 				<cfset temp = #QuerySetCell(Session.GetSelectedEventRegistrations, "ReceiveInvoicesByEmail", getOrganizationInfo.ReceiveInvoicesByEmail, Session.GetSelectedEventRegistrations.CurrentRow)#>
 				<cfset temp = #QuerySetCell(Session.GetSelectedEventRegistrations, "AttendeePriceDisplay", DollarFormat(Session.GetSelectedEventRegistrations.AttendeePrice), Session.GetSelectedEventRegistrations.CurrentRow)#>
 				<cfset temp = #QuerySetCell(Session.GetSelectedEventRegistrations, "EventDateDisplay", DateFormat(Session.GetSelectedEventRegistrations.EventDate, "mmm dd, yyyy"), Session.GetSelectedEventRegistrations.CurrentRow)#>
+				<cfset CorporationInvoiceID = #Session.GetSelectedEventRegistrations.EventID# & "-" & #getOrganizationinfo.TContent_ID#>
+				<cfset temp = #QuerySetCell(Session.GetSelectedEventRegistrations, "InvoiceID", Variables.CorporationInvoiceID, Session.GetSelectedEventRegistrations.CurrentRow)#>
 			</cfloop>
 			<cfset LogoPath = ArrayNew(1)>
 			<cfloop from="1" to="#Session.GetSelectedEventRegistrations.RecordCount#" step="1" index="i">

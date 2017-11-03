@@ -210,7 +210,16 @@
 		</cfif>
 
 		<cfset reportQuery = QueryNew("ParticipantFName,ParticipantLName,RegistrationDate,RegisteredBy,EventTitle,EventDates,LogoPath,DistantEdParticipant,RequestsMeal,EventLocation,LocationQRCode,PGPPoints,EventSessionTimes")>
-		<cfset LogoPathLoc = "/plugins/" & #rc.pc.getPackage()# & "/library/images/NIESC_Logo.png">
+
+		<cfswitch expression="#rc.$.siteConfig('siteID')#">
+			<cfcase value="NIESCEvents">
+				<cfset LogoPathLoc = "/plugins/" & #rc.pc.getPackage()# & "/library/images/NIESC_Logo.png">
+			</cfcase>
+			<cfcase value="NWIESCEvents">
+				<cfset LogoPathLoc = "/plugins/" & #rc.pc.getPackage()# & "/library/images/NWIESC_Logo.png">
+			</cfcase>
+		</cfswitch>
+
 		<cfset temp = QueryAddRow(reportQuery, 1)>
 		<cfset temp = QuerySetCell(reportQuery, "ParticipantFName", getRegisteredUserInfo.Fname)>
 		<cfset temp = QuerySetCell(reportQuery, "ParticipantLName", getRegisteredUserInfo.Lname)>
@@ -240,7 +249,15 @@
 			<cfset temp = QueryAddColumn(getRegistration, "LogoPath", "VarChar", Variables.LogoPath)>
 			<cfset ReportDirectory = #ExpandPath(ReportDirLoc)# >
 			<cfset ReportExportLoc = #ExpandPath(ReportExportDirLoc)# & #getRegistration.RegistrationID# & "-EventConfirmation.pdf" >
-			<jr:jasperreport jrxml="#ReportDirLoc#/EventConfirmationPageWithSessions.jrxml" query="#reportQuery#" exportfile="#ReportExportLoc#" exportType="pdf" />
+
+			<cfswitch expression="#rc.$.siteConfig('siteID')#">
+				<cfcase value="NIESCEvents">
+					<jr:jasperreport jrxml="#ReportDirLoc#/NIESCEventConfirmationPageWithSessions.jrxml" query="#reportQuery#" exportfile="#ReportExportLoc#" exportType="pdf" />
+				</cfcase>
+				<cfcase value="NWIESCEvents">
+					<jr:jasperreport jrxml="#ReportDirLoc#/NWIESCEventConfirmationPageWithSessions.jrxml" query="#reportQuery#" exportfile="#ReportExportLoc#" exportType="pdf" />
+				</cfcase>
+			</cfswitch>
 		<cfelse>
 			<cfset temp = QuerySetCell(reportQuery, "EventSessionTimes", "")>
 			<cfimport taglib="/plugins/EventRegistration/library/cfjasperreports/tag/cfjasperreport" prefix="jr">
@@ -250,7 +267,14 @@
 			<cfset temp = QueryAddColumn(getRegistration, "LogoPath", "VarChar", Variables.LogoPath)>
 			<cfset ReportDirectory = #ExpandPath(ReportDirLoc)# >
 			<cfset ReportExportLoc = #ExpandPath(ReportExportDirLoc)# & #getRegistration.RegistrationID# & "-EventConfirmation.pdf" >
-			<jr:jasperreport jrxml="#ReportDirLoc#/EventConfirmationPage.jrxml" query="#reportQuery#" exportfile="#ReportExportLoc#" exportType="pdf" />
+			<cfswitch expression="#rc.$.siteConfig('siteID')#">
+				<cfcase value="NIESCEvents">
+					<jr:jasperreport jrxml="#ReportDirLoc#/NIESCEventConfirmationPage.jrxml" query="#reportQuery#" exportfile="#ReportExportLoc#" exportType="pdf" />
+				</cfcase>
+				<cfcase value="NWIESCEvents">
+					<jr:jasperreport jrxml="#ReportDirLoc#/NWIESCEventConfirmationPage.jrxml" query="#reportQuery#" exportfile="#ReportExportLoc#" exportType="pdf" />
+				</cfcase>
+			</cfswitch>
 		</cfif>
 
 		<cfswitch expression="#Variables.RegisteredBy#">

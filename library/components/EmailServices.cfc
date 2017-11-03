@@ -13,6 +13,10 @@
 		<cfset EncryptedValue = #Tobase64(Variables.ValueToEncrypt)#>
 		<cfset AccountVars = "Key=" & #Variables.EncryptedValue#>
 		<cfset AccountActiveLink = "http://" & #CGI.Server_Name# & "#CGI.Script_name##CGI.path_info#?#rc.pc.getPackage()#action=public:registeruser.activateaccount&" & #Variables.AccountVars#>
+
+		<cfset EventServicesComponent = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EventServices")>
+		<cfset ShortenedURL = EventServicesComponent.insertShortURLContent(rc, AccountActiveLink)>
+		<cfset AccountActiveLink = "http://" & #CGI.Server_Name# & "?ShortURL=" & #Variables.ShortenedURL#>
 		<cfinclude template="EmailTemplates/SendAccountActivationEmailToIndividual.cfm">
 	</cffunction>
 
@@ -30,6 +34,11 @@
 		<cfset EncryptedValue = #Tobase64(Variables.ValueToEncrypt)#>
 		<cfset AccountVars = "Key=" & #Variables.EncryptedValue#>
 		<cfset AccountActiveLink = "http://" & #CGI.Server_Name# & "#CGI.Script_name##CGI.path_info#?#rc.DBINfo.PackageName#action=public:registeruser.activateaccount&" & #Variables.AccountVars#>
+
+		<cfset EventServicesComponent = createObject("component","plugins/#HTMLEditFormat(rc.pc.getPackage())#/library/components/EventServices")>
+		<cfset ShortenedURL = EventServicesComponent.insertShortURLContent(rc, AccountActiveLink)>
+		<cfset AccountActiveLink = "http://" & #CGI.Server_Name# & "?ShortURL=" & #Variables.ShortenedURL#>
+
 		<cfinclude template="EmailTemplates/SendAccountActivationEmailToIndividualFromOrganizationPerson.cfm">
 	</cffunction>
 

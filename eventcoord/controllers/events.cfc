@@ -2592,7 +2592,7 @@
 						FROM p_EventRegistration_UserRegistrations INNER JOIN tusers ON tusers.UserID = p_EventRegistration_UserRegistrations.User_ID INNER JOIN p_EventRegistration_Events ON p_EventRegistration_Events.TContent_ID = p_EventRegistration_UserRegistrations.EventID
 						WHERE p_EventRegistration_UserRegistrations.EventID = <cfqueryparam value="#URL.EventID#" cfsqltype="cf_sql_integer"> and
 							p_EventRegistration_UserRegistrations.Site_ID = <cfqueryparam value="#rc.$.siteConfig('siteID')#" cfsqltype="cf_sql_varchar">
-						ORDER BY tusers.Lname ASC, tusers.Fname ASC
+						ORDER BY Domain ASC, tusers.Lname ASC, tusers.Fname ASC
 					</cfquery>
 				</cfcase>
 				<cfcase value="mssql">
@@ -3266,11 +3266,10 @@
 					</cfcase>
 					<cfcase value="NWIESCEvents">
 						<jr:jasperreport jrxml="#ReportDirectory#/NWIESCEventAttendanceRecord.jrxml" query="#getParticipants#" exportfile="# ReportExportLoc#" exportType="pdf" />
+						<cfset FacilitatorName = #Session.GetSelectedEventFacilitator.Fname# & " " & #Session.GetSelectedEventFacilitator.Lname#>	
+						<cfset Temp = SendEmailCFC.SendStatementofAttendanceToFacilitator(rc, Variables.ReportExportLoc, GetOrganizationRegistrations.ShortTitle, Variables.FacilitatorName, Session.GetSelectedEventFacilitator.EMail, GetOrganizationRegistrations.OrganizationName)>
 					</cfcase>
 				</cfswitch>
-				<cfset FacilitatorName = #Session.GetSelectedEventFacilitator.Fname# & " " & #Session.GetSelectedEventFacilitator.Lname#>
-				
-				<cfset Temp = SendEmailCFC.SendStatementofAttendanceToFacilitator(rc, Variables.ReportExportLoc, GetOrganizationRegistrations.ShortTitle, Variables.FacilitatorName, Session.GetSelectedEventFacilitator.EMail, GetOrganizationRegistrations.OrganizationName)>
 			</cfloop>
 			<cfquery name="UpdateEventPGPCertificateFlag" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 				Update p_EventRegistration_Events

@@ -41,6 +41,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<cfif Session.getSelectedEvent.WebinarAvailable EQ 1>
 					<div class="alert alert-warning"><p><strong>Webinar Information:</strong><br><strong>Member Cost:</strong> #DollarFormat(Session.getSelectedEvent.WebinarMemberCost)# - or - <strong>Non Member Cost:</strong> #DollarFormat(Session.getSelectedEvent.WebinarNonMemberCost)#</p></div>
 				</cfif>
+				<cfif Session.getSelectedEvent.BillForNoShow EQ 1>
+					<div class="alert alert-warning"><p><strong>Bill For No Show Information:</strong><br>This Event was configured to Bill Participants who did not show up to the event.</p></div>
+				</cfif>
 				<div class="alert alert-warning"><p><strong>General Pricing Information:</strong><br><strong>Member Cost:</strong> #DollarFormat(Session.getSelectedEvent.MemberCost)# -or- <strong>Non Member Cost:</strong> #DollarFormat(Session.getSelectedEvent.NonMemberCost)#</p></div>
 				<cfset CurrentCorporation = "">
 				<cfset TotalIncome = 0>
@@ -92,18 +95,20 @@ http://www.apache.org/licenses/LICENSE-2.0
 						<div class="col-sm-2"><p class="form-control-static"><strong>Days Attended</strong></p></div>
 						<div class="col-sm-1"><p class="form-control-static">
 							<cfset NumberDaysAttended = 0>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate1 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate2 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate3 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate4 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate5 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate6 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventSessionAM EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
-							<cfif Session.GetSelectedEventRegistrations.AttendedEventSessionPM EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate1 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventDate1 EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventDate1 EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate2 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventDate2 EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventDate2 EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate3 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventDate3 EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventDate3 EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate4 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventDate4 EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventDate4 EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate5 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventDate5 EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventDate5 EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventDate6 EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventDate6 EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventDate6 EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventSessionAM EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventSessionAM EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventSessionAM EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
+							<cfif Session.GetSelectedEventRegistrations.AttendedEventSessionPM EQ 1><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1><cfelseif Session.getSelectedEvent.BillForNoShow EQ 1 and Session.GetSelectedEventRegistrations.RegisterForEventSessionPM EQ 1 and Session.GetSelectedEventRegistrations.AttendedEventSessionPM EQ 0><cfset NumberDaysAttended = #Variables.NumberDaysAttended# + 1></cfif>
 							#Variables.NumberDaysAttended#
 						</p></div>
 					</div>
 					<cfset GrandTotalDays = #Variables.GrandTotalDays# + 1>
+
+
 					<cfset TotalIncome = #Variables.TotalIncome# + (#Session.GetSelectedEventRegistrations.AttendeePrice# * #Variables.NumberDaysAttended#)>
 					<cfset GrandTotalIncome = #Variables.GrandTotalDays# * #Session.GetSelectedEventRegistrations.AttendeePrice#>
 				</cfloop>

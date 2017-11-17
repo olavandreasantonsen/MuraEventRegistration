@@ -60,12 +60,16 @@
 		<cfreturn (Arguments.Radians * 180 / PI()) />
 	</cffunction>
 
-	<cffunction name="ConvertCurrencyToDecimal" returntype="numeric" output="false" hint="I convert currency values to decimal for database">
+	<cffunction name="ConvertCurrencyToDecimal" returntype="string" output="false" hint="I convert currency values to decimal for database">
 		<cfargument name="Amount" type="string" required="true" hint="I am the currency amount to convert.">
 
 		<cfset temp = #Replace(Arguments.Amount, '$', '', 'all')#>
 		<cfset temp = #Replace(variables.temp, ',', '', 'all')#>
-		<cfset newnumber = #NumberFormat(Variables.temp, '99999999.9999')#>
+		<cfif isNumeric(variables.temp)>
+			<cfset newnumber = #NumberFormat(Variables.temp, '-999999.99')#>
+		<cfelse>
+			<cfset newnumber = #variables.temp#>
+		</cfif>
 		<cfreturn variables.newnumber>
 	</cffunction>
 

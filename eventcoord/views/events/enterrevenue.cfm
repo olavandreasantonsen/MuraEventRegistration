@@ -74,7 +74,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 					</cfif>
 					<div class="form-group">
 						<label for="ParticipantName" class="control-label col-sm-3">#Session.GetSelectedEventRegistrations.Lname#, #Session.GetSelectedEventRegistrations.FName#:&nbsp;</label>
-						<div class="col-sm-2"><cfinput type="text" class="form-control" id="Participants_#Session.GetSelectedEventRegistrations.TContent_ID#" name="Participants_#Session.GetSelectedEventRegistrations.TContent_ID#" value="#NumberFormat(Session.GetSelectedEventRegistrations.AttendeePrice, '9999.99')#" required="no"></div>
+						<div class="col-sm-2">
+							<cfif Session.GetSelectedEventRegistrations.AttendeePriceVerified EQ 1>
+								<cfinput type="text" class="form-control" id="Participants_#Session.GetSelectedEventRegistrations.TContent_ID#" name="Participants_#Session.GetSelectedEventRegistrations.TContent_ID#" value="#NumberFormat(Session.GetSelectedEventRegistrations.AttendeePrice, '9999.99')#" required="no" disabled="yes">
+							<cfelse>
+								<cfinput type="text" class="form-control" id="Participants_#Session.GetSelectedEventRegistrations.TContent_ID#" name="Participants_#Session.GetSelectedEventRegistrations.TContent_ID#" value="#NumberFormat(Session.GetSelectedEventRegistrations.AttendeePrice, '9999.99')#" required="no">
+							</cfif>
+						</div>
 						<div class="col-sm-2"><p class="form-control-static"><strong>Date Registered</strong></p></div>
 						<div class="col-sm-2"><p class="form-control-static">#DateFormat(Session.GetSelectedEventRegistrations.RegistrationDate, "mm/dd/yyyy")#
 							<cfif Session.getSelectedEvent.EarlyBird_RegistrationAvailable EQ 1>
@@ -114,7 +120,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</div>
 			<div class="panel-footer">
 				<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-left" value="Back to Event Listing">
-`				<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Save Revenue and Update Total"><br /><br />
+`				<cfinput type="Submit" name="UserAction" class="btn btn-primary pull-right" value="Generate Profit/Loss Report"><br /><br />
 			</div>
 		</cfform>
 	</div>

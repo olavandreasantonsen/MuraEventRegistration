@@ -437,12 +437,14 @@
 					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
 				</cfif>
 
-				<cfif FORM.MealAvailable EQ 1 and FORM.MealIncluded EQ "----">
-					<cfscript>
-						eventdate = {property="Registration_Deadline",message="Please enter if the meal is included in the registration price or not."};
-						arrayAppend(Session.FormErrors, eventdate);
-					</cfscript>
-					<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+				<cfif FORM.MealAvailable EQ 1 and isDefined("FORM.MealIncluded")>
+					<cfif FORM.MealIncluded EQ "----">
+						<cfscript>
+							eventdate = {property="Registration_Deadline",message="Please enter if the meal is included in the registration price or not."};
+							arrayAppend(Session.FormErrors, eventdate);
+						</cfscript>
+						<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.addevent_review&FormRetry=True" addtoken="false">
+					</cfif>
 				</cfif>
 			</cfif>
 
@@ -3487,7 +3489,7 @@
 					Where TContent_ID = <cfqueryparam value="#Variables.Participant[RecNo]['RecordID']#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfloop>
-			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.enterrevenue&EventID=#URL.EventID#" addtoken="false">
+			<cflocation url="#CGI.Script_name##CGI.path_info#?#HTMLEditFormat(rc.pc.getPackage())#action=eventcoord:events.viewprofitlossreport&EventID=#URL.EventID#" addtoken="false">
 		</cfif>
 	</cffunction>
 
@@ -3628,7 +3630,8 @@
 				<cfset EventTotalRevenue = #EventServicesCFC.ConvertCurrencyToDecimal(getSelectedEvent.TotalRevenue)#>
 				<cfset EventTotalExpenses = #EventServicesCFC.ConvertCurrencyToDecimal(getSelectedEvent.TotalExpenses)#>
 				<cfset EventTotalProfitLoss = #EventServicesCFC.ConvertCurrencyToDecimal(getSelectedEvent.ProfitOrLoss)#>
-
+				<cfset EventTotalProfitLoss = #Replace(variables.EventTotalProfitLoss, ' ', '', 'all')#>
+				
 				<cfquery name="EventInfoCreateTemporaryTable_EventProfitLossReport" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Insert into p_EventRegistration_EventProfitLossReport(TContent_ID,Site_ID,ShortTitle,EventDate,EventDate1,EventDate2,EventDate3,EventDate4,EventDate5,EventDateDisplay,TotalRevenue,TotalExpenses,ProfitOrLoss,ImagePath)
 					Values(
@@ -3642,9 +3645,9 @@
 						<cfqueryparam value="#getSelectedEvent.EventDate4#" cfsqltype="cf_sql_date">,
 						<cfqueryparam value="#getSelectedEvent.EventDate5#" cfsqltype="cf_sql_date">,
 						<cfqueryparam value="#getSelectedEvent.EventDateDisplay#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#NumberFormat(Variables.EventTotalRevenue, '99999999.9999')#" cfsqltype="cf_sql_decimal">,
-						<cfqueryparam value="#NumberFormat(Variables.EventTotalExpenses, '99999999.9999')#" cfsqltype="cf_sql_decimal">,
-						<cfqueryparam value="#NumberFormat(Variables.EventTotalProfitLoss, '99999999.9999')#" cfsqltype="cf_sql_decimal">,
+						<cfqueryparam value="#NumberFormat(Variables.EventTotalRevenue, '999999.99')#" cfsqltype="cf_sql_decimal">,
+						<cfqueryparam value="#NumberFormat(Variables.EventTotalExpenses, '999999.99')#" cfsqltype="cf_sql_decimal">,
+						<cfqueryparam value="#Variables.EventTotalProfitLoss#" cfsqltype="cf_sql_decimal">,
 						<cfqueryparam value="#getSelectedEvent.ImagePath#" cfsqltype="cf_sql_varchar">
 					)
 				</cfquery>

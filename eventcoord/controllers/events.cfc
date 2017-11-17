@@ -3182,7 +3182,7 @@
 						<cfset ParticipantNumberOfDaysAttended = #Variables.ParticipantNumberOfDaysAttended# + 1>
 					</cfif>
 				</cfif>
-				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "PGPPoints", NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9"))#>
+				<cfset temp = #QuerySetCell(Session.EventNumberRegistrations, "PGPPoints", NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9"), Session.EventNumberRegistrations.CurrentRow)#>
 				<cfquery name="getOrganizationinfo" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 					Select OrganizationName, Mailing_Address, Mailing_City, Mailing_State, Mailing_ZipCode
 					From p_EventRegistration_Membership
@@ -3204,7 +3204,14 @@
 					<cfset ParticipantFilename = #Replace(Variables.ParticipantFilename, ".", "", "all")#>
 					<cfset PGPEarned = "PGP Earned: " & #NumberFormat(Variables.ParticipantNumberOfPGPCertificatePoints, "99.9")#>
 					<cfset CertificateCompletedFile = #Variables.CertificateExportTemplateDir# & #FORM.EventID# & "-" & #Variables.ParticipantFilename# & ".pdf">
-					<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NIESCPGPCertificateTemplate.pdf">
+					<cfswitch expression="#rc.$.siteConfig('siteID')#">
+						<cfcase value="NIESCEvents">
+							<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NIESCPGPCertificateTemplate.pdf">
+						</cfcase>
+						<cfcase value="NWIESCEvents">
+							<cfset CertificateMasterTemplate = #Variables.CertificateTemplateDir# & "NWIESCPGPCertificateTemplate.pdf">
+						</cfcase>
+					</cfswitch>
 
 					<cfscript>
 						PDFCompletedCertificate = CreateObject("java", "java.io.FileOutputStream").init(CertificateCompletedFile);
@@ -3267,7 +3274,7 @@
 						<jr:jasperreport jrxml="#ReportDirectory#/NIESCEventAttendanceRecord.jrxml" query="#GetOrganizationRegistrations#" exportfile="#ReportExportLoc#" exportType="pdf" />
 					</cfcase>
 					<cfcase value="NWIESCEvents">
-						<jr:jasperreport jrxml="#ReportDirectory#/NWIESCEventAttendanceRecord.jrxml" query="#getParticipants#" exportfile="# ReportExportLoc#" exportType="pdf" />
+						<jr:jasperreport jrxml="#ReportDirectory#/NWIESCEventAttendanceRecord.jrxml" query="#GetOrganizationRegistrations#" exportfile="# ReportExportLoc#" exportType="pdf" />
 						<cfset FacilitatorName = #Session.GetSelectedEventFacilitator.Fname# & " " & #Session.GetSelectedEventFacilitator.Lname#>	
 						<cfset Temp = SendEmailCFC.SendStatementofAttendanceToFacilitator(rc, Variables.ReportExportLoc, GetOrganizationRegistrations.ShortTitle, Variables.FacilitatorName, Session.GetSelectedEventFacilitator.EMail, GetOrganizationRegistrations.OrganizationName)>
 					</cfcase>

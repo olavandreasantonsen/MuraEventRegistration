@@ -30,6 +30,14 @@
 		ALTER TABLE `p_EventRegistration_Facility` Add COLUMN `Physical_DST` BIT(1) NOT NULL DEFAULT b'0' after `Physical_UTCOffset`
 	</cfquery>
 </cfif>
+<cfquery name="CheckColumnNameCreated" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+	Show Columns From p_EventRegistration_Events Like 'BillForNoShow'
+</cfquery>
+<cfif CheckColumnNameCreated.RecordCount EQ 0>
+	<cfquery name="AlterSiteConfigAddColumn" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+		ALTER TABLE `p_EventRegistration_Events` Add COLUMN `BillForNoShow` BIT(1) NOT NULL DEFAULT b'0' after `EventHasDailySessions`
+	</cfquery>
+</cfif>
 
 <cfquery name="ShowMembershipBuildingsTables" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	Show Tables LIKE 'p_EventRegistration_MembershipBuildings'

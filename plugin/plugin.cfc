@@ -57,6 +57,17 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 				break;
 		}
 	}
+	
+	private string function getDropTableStatement(required string tableName) {
+       		// 
+	       switch(application.configbean.getDBType()) {
+	       case "mssql":                                    
+			       return "IF OBJECT_ID('#arguments.tableName#', 'U') IS NOT NULL DROP TABLE #arguments.tableName#;";
+	       case "mysql":
+			       return "Drop Table if Exists #arguments.tableName#";
+	       }
+	}
+	
 
 	public void function delete() {
 		// triggered by the pluginManager when the plugin is DELETED.
@@ -64,7 +75,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_Membership");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_Membership"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -73,7 +84,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_UserMatrix");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_UserMatrix"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -82,7 +93,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_UserRegistrations");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_UserRegistrations"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -91,7 +102,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_Events");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_Events"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -100,7 +111,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventExpenses");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_EventExpenses"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -109,7 +120,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_ExpenseList");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_ExpenseList"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -118,7 +129,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_Facility");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_Facility"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -127,7 +138,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_FacilityRooms");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_FacilityRooms"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -136,7 +147,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_Caterers");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_Caterers"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -145,7 +156,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_SiteConfig");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_SiteConfig"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -154,7 +165,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventProfitLossReport");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_EventProfitLossReport"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -163,7 +174,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventProfitLossReportExpenses");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_EventProfitLossReportExpenses"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -172,7 +183,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventProfitLossReportRevenue");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_EventProfitLossReportRevenue"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -181,7 +192,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_GradeLevels");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_GradeLevels"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -190,7 +201,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_GradeSubjects");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_GradeSubjects"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -199,7 +210,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_StateESCOrganizations");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_StateESCOrganizations"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -208,7 +219,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventEmailLog");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_EventEmailLog"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());
@@ -217,7 +228,7 @@ component persistent="false" accessors="true" output="false" extends="mura.plugi
 
 		var dbDropTable = new query();
 		dbDropTable.setDatasource("#application.configBean.getDatasource()#");
-		dbDropTable.setSQL("Drop Table if Exists p_EventRegistration_EventResources");
+		dbDropTable.setSQL(getDropTableStatement("p_EventRegistration_EventResources"));
 		var dbDropTableResults = dbDropTable.execute();
 		if (len(dbDropTableResults.getResult()) neq 0) {
 			writedump(dbDropTableResults.getResult());

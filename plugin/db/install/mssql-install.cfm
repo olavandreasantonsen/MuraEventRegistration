@@ -229,7 +229,7 @@
 </cfquery>
 <cfif CheckGroups.RecordCount EQ 0>
 	<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Facilitator");
 		NewGroupEventFacilitator.setType(1);
@@ -237,7 +237,7 @@
 		NewGroupEventFacilitatorStatus = #Application.userManager.create(NewGroupEventFacilitator)#;
 	</cfscript>
 	<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Presenter");
 		NewGroupEventFacilitator.setType(1);
@@ -257,7 +257,7 @@
 	</cfloop>
 	<cfif GroupFacilitatorExists EQ 0>
 		<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Facilitator");
 		NewGroupEventFacilitator.setType(1);
@@ -267,7 +267,7 @@
 	</cfif>
 	<cfif GroupPresenterExists EQ 0>
 		<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Presenter");
 		NewGroupEventFacilitator.setType(1);

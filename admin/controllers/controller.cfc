@@ -1,4 +1,4 @@
-/*
+<!---
 
 This file is part of MuraFW1
 
@@ -9,7 +9,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 	NOTES:
 		All ADMIN controllers should EXTEND this file.
 
-*/
+--->
 component persistent="false" accessors="true" output="false" extends="mura.cfobject" {
 
 	property name='$';

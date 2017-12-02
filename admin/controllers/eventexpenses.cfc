@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<cfif isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfset Session.FormData = #StructCopy(FORM)#>
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfif not isDefined("Session.UserSuppliedInfo")>
 					<cfset Session.UserSuppliedInfo = StructNew()>
 					<cfset Session.UserSuppliedInfo.NewRecNo = 0>

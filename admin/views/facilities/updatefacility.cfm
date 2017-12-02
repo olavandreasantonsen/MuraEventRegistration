@@ -47,7 +47,7 @@
 		<cfcase value="Edit">
 			<cflock timeout="60" scope="SESSION" type="Exclusive">
 				<cfset Session.FormData = #StructNew()#>
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfset Session.UserSuppliedInfo = #StructNew()#>
 			</cflock>
 

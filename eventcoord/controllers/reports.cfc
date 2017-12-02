@@ -30,7 +30,7 @@
 			<cfset Session.QueryForReport.GetMembershipAgencies = StructCopy(GetAllMembershipAgencies)>
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cfset Session.FormData = #StructCopy(FORM)#>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 
 			<cfif FORM.UserAction EQ "Back to Main Menu">
 				<cfset temp = StructDelete(Session, "FormData")>

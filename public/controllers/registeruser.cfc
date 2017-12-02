@@ -75,7 +75,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 			<cfset Session.Captcha = #makeRandomString()#>
 		<cfelseif isDefined("FORM.formSubmit")>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 			<cfset Session.FormData = #StructCopy(FORM)#>
 
 			<cfif FORM.Password NEQ FORM.VerifyPassword>

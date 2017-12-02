@@ -24,7 +24,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<cfif isDefined("FORM.formSubmit") and isDefined("FORM.PerformAction")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfset Session.FormData = #StructCopy(FORM)#>
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfset Session.UserSuppliedInfo.MemberOrganization = StructNew()>
 			</cflock>
 
@@ -226,7 +226,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 		<cfelseif isDefined("FORM.formSubmit") and isDefined("FORM.PerformAction")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfset Session.FormData = #StructCopy(FORM)#>
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 			</cflock>
 			<cfset UpdateInfo = #StructNew()#>
 			<cfparam name="UpdateInfo.NameUpdated" type="boolean" default="0">

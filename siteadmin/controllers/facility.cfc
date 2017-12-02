@@ -104,7 +104,7 @@
 			</cfquery>
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfset Session.FormInput = #StructCopy(FORM)#>
 			</cflock>
 			<cfif FORM.UserAction EQ "Back to Main Menu">
@@ -205,7 +205,7 @@
 			</cfquery>
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfset Session.FormInput = #StructCopy(FORM)#>
 			</cflock>
 			<cfif FORM.UserAction EQ "Back to Main Menu">
@@ -253,7 +253,7 @@
 			</cfquery>
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfset Session.FormInput = #StructCopy(FORM)#>
 			</cflock>
 			<cfif FORM.UserAction EQ "Back to Main Menu">
@@ -299,7 +299,7 @@
 
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfset Session.FormInput = #StructCopy(FORM)#>
 			</cflock>
 			<cfif FORM.UserAction EQ "Back to Main Menu">

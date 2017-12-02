@@ -13,7 +13,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 <cfimport taglib="/plugins/EventRegistration/library/uniForm/tags/" prefix="uForm">
 <cflock timeout="60" scope="SESSION" type="Exclusive">
 	<cfset Session.FormData = #StructNew()#>
-	<cfset Session.FormErrors = #ArrayNew()#>
+	<cfset Session.FormErrors = #ArrayNew(1)#>
 	<cfif not isDefined("Session.UserSuppliedInfo.MemberOrganization")><cfset Session.UserSuppliedInfo.MemberOrganization = #StructNew()#></cfif>
 </cflock>
 

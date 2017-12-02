@@ -10,7 +10,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 <cflock timeout="60" scope="SESSION" type="Exclusive">
 	<cfset Session.FormData = #StructNew()#>
-	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
+	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew(1)#></cfif>
 </cflock>
 
 <cfquery name="getSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">

@@ -47,7 +47,7 @@
 
 			<cfset Session.getUserProfile = #StructCopy(getUserProfile)#>
 		<cfelseif isDefined("FORM.formSubmit")>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 			<cfset Session.FormData = #StructCopy(FORM)#>
 
 			<cfif FORM.UserAction EQ "Back to Event Listing">

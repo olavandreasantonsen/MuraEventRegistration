@@ -11,7 +11,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 <cfimport taglib="/plugins/EventRegistration/library/uniForm/tags/" prefix="uForm">
 <cflock timeout="60" scope="SESSION" type="Exclusive">
 	<cfset Session.FormData = #StructNew()#>
-	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
+	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew(1)#></cfif>
 </cflock>
 
 <cfquery name="getSelectedEvent" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
@@ -47,7 +47,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<hr>
 				<cfif ArrayLen(Session.FormErrors)>
 					<div class="alert-box error">Please select atleast one participant that needs to be removed from this event.</div>
-					<cfset Session.FormErrors = #ArrayNew()#>
+					<cfset Session.FormErrors = #ArrayNew(1)#>
 				</cfif>
 				<Form method="Post" action="" id="">
 					<input type="hidden" name="SiteID" value="#rc.$.siteConfig('siteID')#">

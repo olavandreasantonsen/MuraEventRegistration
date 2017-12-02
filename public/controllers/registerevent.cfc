@@ -141,7 +141,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</cflock>
 		<cfelseif isDefined("FORM.EventID") and isNumeric(FORM.EventID) and Session.Mura.IsLoggedIn EQ "true" and isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
-				<cfset Session.FormErrors = #ArrayNew()#>
+				<cfset Session.FormErrors = #ArrayNew(1)#>
 				<cfset Session.FormInput = #StructCopy(FORM)#>
 			</cflock>
 

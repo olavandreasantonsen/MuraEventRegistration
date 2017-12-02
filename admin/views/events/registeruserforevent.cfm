@@ -14,7 +14,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<cfif not isDefined("URL.EventStatus") and not isDefined("URL.Records")>
 		<cflock timeout="60" scope="SESSION" type="Exclusive">
 			<cfset Session.FormData = #StructNew()#>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 		</cflock>
 		<cfquery name="GetMembershipOrganizations" Datasource="#rc.$.globalConfig('datasource')#" username="#rc.$.globalConfig('dbusername')#" password="#rc.$.globalConfig('dbpassword')#">
 			Select TContent_ID, OrganizationName, OrganizationDomainName, StateDOE_IDNumber, StateDOE_State, Active

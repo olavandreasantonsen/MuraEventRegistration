@@ -134,7 +134,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				</cfquery>
 			</cfif>
 		<cfelseif isDefined("FORM.formSubmit")>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 			<cfset Session.FormData = #StructCopy(FORM)#>
 
 			<cfif FORM.UserAction EQ "Back to Manage Registrations">
@@ -265,7 +265,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 			</cfif>
 
 		<cfelseif isDefined("FORM.formSubmit") and not isDefined("FORM.submitPasswordChange")>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 			<cfset Session.FormData = #StructCopy(FORM)#>
 
 			<cfif not isValid("email", FORM.Email)>
@@ -371,7 +371,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 			<cfset Session.getUserProfile = #StructCopy(getUserProfile)#>
 		<cfelseif isDefined("FORM.formSubmit")>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 			<cfset Session.FormData = #StructCopy(FORM)#>
 
 			<cfif FORM.UserAction EQ "Back to Event Listing">

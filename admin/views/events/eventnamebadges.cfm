@@ -19,7 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 	<cfif not isDefined("FORM.PaperTemplate")>
 		<cflock timeout="60" scope="SESSION" type="Exclusive">
 			<cfset Session.FormData = #StructNew()#>
-			<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
+			<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew(1)#></cfif>
 		</cflock>
 		<div class="art-block clearfix">
 			<div class="art-blockheader">

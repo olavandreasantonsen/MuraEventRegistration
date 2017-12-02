@@ -13,7 +13,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 <cfif isDefined("URL.EventID")>
 	<cfif not isDefined("FORM.FormErrors")>
 		<cflock timeout="60" scope="SESSION" type="Exclusive">
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 		</cflock>
 	</cfif>
 	

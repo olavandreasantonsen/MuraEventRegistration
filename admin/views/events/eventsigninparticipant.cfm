@@ -10,7 +10,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 <cflock timeout="60" scope="SESSION" type="Exclusive">
 	<cfset Session.FormData = #StructNew()#>
-	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew()#></cfif>
+	<cfif not isDefined("Session.FormErrors")><cfset Session.FormErrors = #ArrayNew(1)#></cfif>
 </cflock>
 
 <cfoutput>
@@ -32,7 +32,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<hr>
 				<cfif ArrayLen(Session.FormErrors)>
 					<div class="alert-box error">Please select atleast one participant that needs to be electronically signin to this event.</div>
-					<cfset Session.FormErrors = #ArrayNew()#>
+					<cfset Session.FormErrors = #ArrayNew(1)#>
 				</cfif>
 				<cfif isDefined("URL.Successful") and isDefined("URL.UserAction")>
 					<cfif URL.Successful EQ "True" and URL.UserAction EQ "SignInParticipant">
@@ -93,7 +93,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 				<hr>
 				<cfif ArrayLen(Session.FormErrors)>
 					<div class="alert-box error">Please select atleast one participant that needs to be electronically signin to this event.</div>
-					<cfset Session.FormErrors = #ArrayNew()#>
+					<cfset Session.FormErrors = #ArrayNew(1)#>
 				</cfif>
 				<cfif isDefined("URL.Successful") and isDefined("URL.UserAction")>
 					<cfif URL.Successful EQ "True" and URL.UserAction EQ "SignInParticipant">

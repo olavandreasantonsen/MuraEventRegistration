@@ -9,13 +9,13 @@
 		<cfif not isDefined("FORM.formSubmit")>
 			<cflock timeout="60" scope="Session" type="Exclusive">
 				<cfif not isDefined("Session.FormErrors")>
-					<cfset Session.FormErrors = #ArrayNew()#>
+					<cfset Session.FormErrors = #ArrayNew(1)#>
 				</cfif>
 				<cfset Session.Captcha = #makeRandomString()#>
 			</cflock>
 		<cfelseif isDefined("FORM.formSubmit")>
 			<cfset Session.FormData = #StructCopy(FORM)#>
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 			<cfif #HASH(FORM.ValidateCaptcha)# NEQ FORM.CaptchaEncrypted>
 				<cflock timeout="60" scope="SESSION" type="Exclusive">
 					<cfscript>

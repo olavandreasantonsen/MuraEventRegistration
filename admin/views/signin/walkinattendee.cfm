@@ -27,7 +27,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 	#URLDecode(ListLast(ListFirst(ListLast(CGI.http_referer, "?"), "&"), "="))# EQ "admin:signin.walkinattendee" and isDefined("URL.EventID")>
 	<cfif not isDefined("FORM.FormErrors")>
 		<cflock timeout="60" scope="SESSION" type="Exclusive">
-			<cfset Session.FormErrors = #ArrayNew()#>
+			<cfset Session.FormErrors = #ArrayNew(1)#>
 		</cflock>
 	</cfif>
 	

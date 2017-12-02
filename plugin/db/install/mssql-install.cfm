@@ -1,4 +1,4 @@
-<cfquery name="Create-p_EventRegistration_Caterers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_Caterers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_Caterers](
 		[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [FacilityName] [nvarchar](50) NOT NULL, [PhysicalAddress] [nvarchar](max) NOT NULL,
 		[PhysicalCity] [nvarchar](50) NOT NULL, [PhysicalState] [nvarchar](50) NOT NULL, [PhysicalZipCode] [nvarchar](10) NOT NULL, [PhysicalZip4] [nvarchar](10) NULL,
@@ -11,7 +11,7 @@
 			) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_EventExpenses" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_EventExpenses" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_EventExpenses](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [Event_ID] [int] NOT NULL, [Expense_ID] [int] NOT NULL,
 	[Cost_Amount] [money] NOT NULL, [dateCreated] [datetime] NOT NULL, [lastUpdated] [datetime] NOT NULL, [lastUpdateBy] [nvarchar](50) NOT NULL, [Cost_Verified] [bit] NOT NULL,
@@ -19,7 +19,7 @@
 	) ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_ExpenseList" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_ExpenseList" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_ExpenseList](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [Expense_Name] [nvarchar](50) NOT NULL, [Active] [bit] NOT NULL,
 	[dateCreated] [datetime] NOT NULL, [lastUpdated] [datetime] NOT NULL, [lastUpdateBy] [nvarchar](50) NOT NULL,
@@ -27,7 +27,7 @@
 	) ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_Facility" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_Facility" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_Facility](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [FacilityName] [nvarchar](50) NOT NULL, [PhysicalAddress] [nvarchar](max) NOT NULL, [PhysicalCity] [nvarchar](50) NOT NULL,
 	[PhysicalState] [nvarchar](50) NOT NULL, [PhysicalZipCode] [nvarchar](50) NOT NULL, [PhysicalZip4] [nvarchar](10) NULL, [PrimaryVoiceNumber] [nvarchar](50) NULL, [BusinessWebsite] [nvarchar](max) NULL,
@@ -40,13 +40,13 @@
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_FacilityRooms" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_FacilityRooms" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_FacilityRooms](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [Facility_ID] [int] NOT NULL, [RoomName] [nvarchar](50) NOT NULL, [Capacity] [int] NOT NULL, [RoomFees] [money] NULL,
 	[Active] [bit] NOT NULL, [dateCreated] [datetime] NOT NULL, [lastUpdated] [datetime] NOT NULL, [lastUpdateBy] [nvarchar](50) NOT NULL ) ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_Membership" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_Membership" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_Membership](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [OrganizationName] [varchar](50) NOT NULL, [OrganizationDomainName] [nvarchar](50) NOT NULL,
 	[StateDOE_IDNumber] [nvarchar](10) NOT NULL, [StateDOE_State] [nvarchar](50) NOT NULL, [Active] [bit] NOT NULL, [dateCreated] [datetime] NOT NULL, [lastUpdateBy] [nvarchar](35) NOT NULL,
@@ -58,7 +58,7 @@
 	) ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_SiteConfig](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [dateCreated] [datetime] NOT NULL, [lastUpdateBy] [nchar](35) NULL, [lastUpdated] [datetime] NOT NULL,
 	[ProcessPayments_Stripe] [bit] NOT NULL, [Stripe_TestMode] [bit] NOT NULL, [Stripe_TestAPIKey] [nvarchar](50) NULL, [Stripe_LiveAPIKey] [nvarchar](50) NULL,
@@ -67,14 +67,14 @@
 	) ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_UserMatrix" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_UserMatrix" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_UserMatrix](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [User_ID] [nvarchar](35) NOT NULL, [School_District] [int] NOT NULL, [lastUpdateBy] [nvarchar](35) NOT NULL,
 		[lastUpdated] [datetime] NOT NULL, CONSTRAINT [PK_p_EventRegistration_UserMatrix] PRIMARY KEY CLUSTERED
 	( [TContent_ID] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ) ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_UserRegistrations](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [RegistrationID] [nvarchar](35) NOT NULL, [RegistrationDate] [datetime] NOT NULL, [User_ID] [nvarchar](35) NOT NULL,
 	[EventID] [int] NOT NULL, [RequestsMeal] [bit] NOT NULL, [IVCParticipant] [bit] NOT NULL, [AttendeePrice] [decimal](6, 2) NULL, [RegistrationIPAddr] [nvarchar](10) NULL,
@@ -87,7 +87,7 @@
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 </cfquery>
 
-<cfquery name="Create-p_EventRegistrations_Events" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="Create_p_EventRegistrations_Events" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	CREATE TABLE [dbo].[p_EventRegistration_Events](
 	[TContent_ID] [int] IDENTITY (1, 1) NOT NULL, [Site_ID] [nvarchar] (25) NOT NULL, [ShortTitle] [nvarchar](50) NULL, [EventDate] [date] NULL, [EventDate1] [date] NULL, [EventDate2] [date] NULL,
 	[EventDate3] [date] NULL, [EventDate4] [date] NULL, [EventDate5] [date] NULL, [LongDescription] [nvarchar](max) NULL, [Event_StartTime] [datetime] NOT NULL, [Event_EndTime] [datetime] NOT NULL,
@@ -102,134 +102,134 @@
 	[WebinarMemberCost] [money] NULL, [WebinarNonMemberCost] [money] NULL, [PostedTo_Facebook] [bit] NULL, [PostedTo_Twitter] [bit] NULL ) ON [PRIMARY]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_Caterers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_Caterers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_Caterers] ADD  CONSTRAINT [DF_p_EventRegistration_Caterers_isAddressVerified]  DEFAULT ((0)) FOR [isAddressVerified]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_Caterers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_Caterers" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_Caterers] ADD  CONSTRAINT [DF_p_EventRegistration_Caterers_Active]  DEFAULT ((0)) FOR [Active]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_ExpenseList" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_ExpenseList" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_EventExpenses] ADD  CONSTRAINT [DF_p_EventRegistration_EventExpenses_Cost_Verified]  DEFAULT ((0)) FOR [Cost_Verified]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_ExpenseList" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_ExpenseList" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_ExpenseList] ADD  CONSTRAINT [DF_p_EventRegistration_ExpenseList_Active]  DEFAULT ((0)) FOR [Active]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_Facility" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_Facility" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_Facility] ADD  CONSTRAINT [DF_p_EventRegistration_Facility_isAddressVerified]  DEFAULT ((0)) FOR [isAddressVerified]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_Facility" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_Facility" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_Facility] ADD  CONSTRAINT [DF_p_EventRegistration_Facility_Active]  DEFAULT ((0)) FOR [Active]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_Membership" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_Membership" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_Membership] ADD  CONSTRAINT [DF_p_EventRegistration_Membership_ReceiveInvoicesByEmail]  DEFAULT ((0)) FOR [ReceiveInvoicesByEmail]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_SiteConfig] ADD  CONSTRAINT [DF_p_EventRegistration_SiteConfig_ProcessPayments_Stripe]  DEFAULT ((0)) FOR [ProcessPayments_Stripe]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_SiteConfig" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_SiteConfig] ADD  CONSTRAINT [DF_p_EventRegistration_SiteConfig_Stripe_TestMode]  DEFAULT ((0)) FOR [Stripe_TestMode]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RequestsMeal]  DEFAULT ((0)) FOR [RequestsMeal]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_IVCParticipant]  DEFAULT ((0)) FOR [IVCParticipant]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_OnWaitingList]  DEFAULT ((0)) FOR [OnWaitingList]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_WebinarParticipant]  DEFAULT ((0)) FOR [WebinarParticipant]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendeePriceVerified]  DEFAULT ((0)) FOR [AttendeePriceVerified]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventDate1]  DEFAULT ((0)) FOR [RegisterForEventDate1]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventDate2]  DEFAULT ((0)) FOR [RegisterForEventDate2]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventDate3]  DEFAULT ((0)) FOR [RegisterForEventDate3]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventDate4]  DEFAULT ((0)) FOR [RegisterForEventDate4]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventDate5]  DEFAULT ((0)) FOR [RegisterForEventDate5]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventDate6]  DEFAULT ((0)) FOR [RegisterForEventDate6]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventSessionAM]  DEFAULT ((0)) FOR [RegisterForEventSessionAM]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_RegisterForEventSessionPM]  DEFAULT ((0)) FOR [RegisterForEventSessionPM]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventDate1]  DEFAULT ((0)) FOR [AttendedEventDate1]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventDate2]  DEFAULT ((0)) FOR [AttendedEventDate2]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventDate3]  DEFAULT ((0)) FOR [AttendedEventDate3]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventDate4]  DEFAULT ((0)) FOR [AttendedEventDate4]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventDate5]  DEFAULT ((0)) FOR [AttendedEventDate5]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventDate6]  DEFAULT ((0)) FOR [AttendedEventDate6]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventSessionAM]  DEFAULT ((0)) FOR [AttendedEventSessionAM]
 </cfquery>
 
-<cfquery name="AlterTable-p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="AlterTable_p_EventRegistration_UserRegistrations" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	ALTER TABLE [dbo].[p_EventRegistration_UserRegistrations] ADD  CONSTRAINT [DF_p_EventRegistration_UserRegistrations_AttendedEventSessionPM]  DEFAULT ((0)) FOR [AttendedEventSessionPM]
 </cfquery>
 
-<cfquery name="CheckGroups" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
+<cfquery name="CheckGroup" datasource="#application.configBean.getDatasource()#" username="#application.configBean.getDBUsername()#" password="#application.configBean.getDBPassword()#">
 	Select UserID, GroupName
 	From tusers
 	Where GroupName LIKE '%Event%'
 </cfquery>
 <cfif CheckGroups.RecordCount EQ 0>
 	<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Facilitator");
 		NewGroupEventFacilitator.setType(1);
@@ -237,7 +237,7 @@
 		NewGroupEventFacilitatorStatus = #Application.userManager.create(NewGroupEventFacilitator)#;
 	</cfscript>
 	<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Presenter");
 		NewGroupEventFacilitator.setType(1);
@@ -257,7 +257,7 @@
 	</cfloop>
 	<cfif GroupFacilitatorExists EQ 0>
 		<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Facilitator");
 		NewGroupEventFacilitator.setType(1);
@@ -267,7 +267,7 @@
 	</cfif>
 	<cfif GroupPresenterExists EQ 0>
 		<cfscript>
-		var NewGroupEventFacilitator = #application.userManager.read("")#;
+		NewGroupEventFacilitator = #application.userManager.read("")#;
 		NewGroupEventFacilitator.setSiteID(Session.SiteID);
 		NewGroupEventFacilitator.setGroupName("Event Presenter");
 		NewGroupEventFacilitator.setType(1);
